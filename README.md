@@ -25,5 +25,4 @@ AwesomeWM (git-master) configuration with new Amazing Theme.
 ![Awesome Amazing 2](/images/awesome-amazing2.png)
 
 # Video
-![Youtube Theme Preview](https://youtu.be/YwvnJqN5s90)
-
+[![Youtube Theme Preview](https://img.youtube.com/vi/YwvnJqN5s90/0.jpg)](https://www.youtube.com/watch?v=YwvnJqN5s90)
