@@ -22,6 +22,7 @@ local lain = require("lain")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require('menubar')
+local xdg_menu = require("archmenu")
 
 -- {{{ Main
 local theme = {}
@@ -84,6 +85,9 @@ theme.fg_widget        = "#cacaca"
 --theme.fg_end_widget    = "#FF5656"
 --theme.bg_widget        = "#494B4F"
 --theme.border_widget    = "#3F3F3F"
+
+theme.arrow1_bg = "#4d614d"
+theme.arrow2_bg = "#273450"
 -- }}}
 
 -- {{{ Mouse finder
@@ -185,11 +189,11 @@ theme.widget_keyboard = theme.dir .. "/icons/hdd.png"
 -- Set according to wallpaper directory
 wppath = os.getenv("HOME") .."/Pictures/manga-wallpapers/"
 -- Set wallpaper for each tag
-wp_selected = {
+local wp_selected = {
     "random",
     "lone-samurai-wallpaper.jpg",
     "wallhaven-xlmlmo.jpg",
-    "wallhaven-yjd97g.jpg",
+    "wallhaven-95j8kw.jpg",
     "wallhaven-zx5xwv.jpg",
     "wallhaven-w8ppk6.jpg",
     "wallhaven-oxlpj9.png",
@@ -197,8 +201,11 @@ wp_selected = {
     "wallhaven-lqekzp.jpg",
 }
 -- Feature: place random wallpaper if the wp_selected has "random" text
-wp_random = {
+local wp_random = {
     "anime-streets-wallpaper.jpg",
+    "dragon-fire-girl.jpg",
+    "wallhaven-q67my5.jpg",
+    "wallhaven-r7j781.jpg",
     "6330.jpg",
     "alone-sad-girl.jpg",
     "24525.jpg",
@@ -331,6 +338,7 @@ myawesomemenu = {
 }
 
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, theme.awesome_icon },
+                                    { "Applications", xdgmenu },
                                     { "open terminal", terminal }
                                   }
                         })
@@ -459,7 +467,21 @@ naughty.connect_signal('request::icon', function(n, context, hints)
 
 screen.connect_signal("request::desktop_decoration", function(s)
     -- Each screen has its own tag table.
-    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+    --awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+    names = { "main", "www", "apps", "idea", "air", "water", "fire", "earth", "love" }
+    l = awful.layout.suit  -- Just to save some typing: use an alias.
+    layouts = { 
+      awful.layout.layouts[1], --main
+      awful.layout.layouts[2], --www
+      awful.layout.layouts[2], --apps
+      l.floating,              --idea
+      l.magnifier,             --air
+      l.max,                   --water
+      awful.layout.layouts[5], --fire
+      awful.layout.layouts[6], --earth
+      l.max.fullscreen         --love
+    }
+    awful.tag(names, s, layouts)
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -547,25 +569,25 @@ screen.connect_signal("request::desktop_decoration", function(s)
             separator,
             wibox.widget.systray(),
             separator,
-            arrow("alpha", "#273450"),
-            wibox.container.background(wibox.container.margin(wibox.widget { keyboardText, theme.mykeyboardlayout, layout = wibox.layout.align.horizontal }, 3, 6), "#273450"),
-            arrow("#273450", "#4f395e"),
-            wibox.container.background(wibox.container.margin(wibox.widget { fsicon, theme.fs.widget, layout = wibox.layout.align.horizontal }, 2, 3), "#4f395e"),
-            arrow("#4f395e", "#273450"),
-            wibox.container.background(wibox.container.margin(wibox.widget { memicon, mem.widget, layout = wibox.layout.align.horizontal }, 2, 3), "#273450"),
-            arrow("#273450", "#4f395e"),
-            wibox.container.background(wibox.container.margin(wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.align.horizontal }, 3, 4), "#4f395e"),
-            arrow("#4f395e", "#273450"),
-            wibox.container.background(wibox.container.margin(wibox.widget { tempicon, tempcpu.widget, tempgpu.widget, layout = wibox.layout.align.horizontal }, 4, 4), "#273450"),
-            arrow("#273450", "#4f395e"),
-            wibox.container.background(wibox.container.margin(myWeather, 3, 3), "#4f395e"),
-            arrow("#4f395e", "#273450"),
-            wibox.container.background(wibox.container.margin(wibox.widget { volicon, theme.volume.widget, layout = wibox.layout.align.horizontal }, 3, 3), "#273450"),
-            arrow("#273450", "#4f395e"),
-            wibox.container.background(wibox.container.margin(wibox.widget { nil, neticon, net.widget, layout = wibox.layout.align.horizontal }, 3, 3), "#4f395e"),
-            arrow("#4f395e", "#273450"),
-            wibox.container.background(wibox.container.margin(mytextclock, 4, 8), "#273450"),
-            arrow("#273450", "alpha"),
+            arrow("alpha", theme.arrow2_bg),
+            wibox.container.background(wibox.container.margin(wibox.widget { keyboardText, theme.mykeyboardlayout, layout = wibox.layout.align.horizontal }, 3, 6), theme.arrow2_bg),
+            arrow(theme.arrow2_bg, theme.arrow1_bg),
+            wibox.container.background(wibox.container.margin(wibox.widget { fsicon, theme.fs.widget, layout = wibox.layout.align.horizontal }, 2, 3), theme.arrow1_bg),
+            arrow(theme.arrow1_bg, theme.arrow2_bg),
+            wibox.container.background(wibox.container.margin(wibox.widget { memicon, mem.widget, layout = wibox.layout.align.horizontal }, 2, 3), theme.arrow2_bg),
+            arrow(theme.arrow2_bg, theme.arrow1_bg),
+            wibox.container.background(wibox.container.margin(wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.align.horizontal }, 3, 4), theme.arrow1_bg),
+            arrow(theme.arrow1_bg, theme.arrow2_bg),
+            wibox.container.background(wibox.container.margin(wibox.widget { tempicon, tempcpu.widget, tempgpu.widget, layout = wibox.layout.align.horizontal }, 4, 4), theme.arrow2_bg),
+            arrow(theme.arrow2_bg, theme.arrow1_bg),
+            wibox.container.background(wibox.container.margin(myWeather, 3, 3), theme.arrow1_bg),
+            arrow(theme.arrow1_bg, theme.arrow2_bg),
+            wibox.container.background(wibox.container.margin(wibox.widget { volicon, theme.volume.widget, layout = wibox.layout.align.horizontal }, 3, 3), theme.arrow2_bg),
+            arrow(theme.arrow2_bg, theme.arrow1_bg),
+            wibox.container.background(wibox.container.margin(wibox.widget { nil, neticon, net.widget, layout = wibox.layout.align.horizontal }, 3, 3), theme.arrow1_bg),
+            arrow(theme.arrow1_bg, theme.arrow2_bg),
+            wibox.container.background(wibox.container.margin(mytextclock, 4, 8), theme.arrow2_bg),
+            arrow(theme.arrow2_bg, "alpha"),
             --separator,
             s.mylayoutbox,
         },

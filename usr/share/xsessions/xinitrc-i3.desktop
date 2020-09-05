@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=xinitrc-i3
+Comment=Executes the .xinitrc script in your home directory
+Exec=xinitrcsession-helper-i3
+TryExec=xinitrcsession-helper-i3
+Type=Application

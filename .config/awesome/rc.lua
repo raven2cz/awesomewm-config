@@ -55,7 +55,7 @@ end)
 
 -- MainMenu XMENU
 local function xmenu()
-    awful.spawn("/home/box/.config/xmenu/xmenu.sh")
+    awful.spawn.with_shell("/home/box/.config/xmenu/xmenu.sh")
 end
 
 -- This is used later as the default terminal and editor to run.
@@ -129,7 +129,7 @@ beautiful.layout_machi = machi.get_icon()
 
 -- {{{ Mouse bindings
 awful.mouse.append_global_mousebindings({
-    awful.button({ }, 3, function () beautiful.mymainmenu:toggle() end),
+    awful.button({ }, 3, function () xmenu() end),
     awful.button({ }, 4, awful.tag.viewprev),
     awful.button({ }, 5, awful.tag.viewnext),
 })

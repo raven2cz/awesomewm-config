@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=xinitrc-kde
+Comment=Executes the .xinitrc script in your home directory
+Exec=xinitrcsession-helper-kde
+TryExec=xinitrcsession-helper-kde
+Type=Application
