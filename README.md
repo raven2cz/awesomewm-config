@@ -1,5 +1,6 @@
 # awesomewm-config
-AwesomeWM (git-master) configuration with new Amazing Theme.
+AwesomeWM (git-master) configuration with new Amazing Theme. Amazing Theme is focused to green colors with gold highlights. 
+Applications styling and additional colors are based on Nordic Colors and KDE Nordic Theme [An arctic, north-bluish color palette](https://www.nordtheme.com/).   
 
 # Dependencies
 * AwesomeWm git-master branch!
@@ -17,12 +18,14 @@ AwesomeWM (git-master) configuration with new Amazing Theme.
 * **random selection wallpaper for N.tag** - possibility to use word "random" for each tag and use new tables with random wallpapers. It is changed by tag switch.
 * sophisticated keybindings for extension of lain and machi layouts. **Many keybindings tricks** for quick work. See keybindings help.
 * **configured notification center** - notifications are configured and linked. In actual case, the history is stored to the naughty_history file.
+* **notification center component** - notification center lua component is added according to original code creator: [JavaCafe01/dotfiles](https://github.com/JavaCafe01/dotfiles) Your style is great. Notify center is best!
+* **Nice Titlebars component** - Nice wonderful titlebar component with many features added. Creator: [mut-ex/awesome-wm-nice](https://github.com/mut-ex/awesome-wm-nice) ;-)  
 * i3lock-blur for locking and suspend session.
 * optimized for hidpi (4k) monitors.
 
 # Screenshots
-![Awesome Amazing 1](/images/awesome-amazing1.png)
-![Awesome Amazing 2](/images/awesome-amazing2.png)
+![Awesome Amazing 1](/images/awesome-amazing-1.jpg)
+![Awesome Amazing 2](/images/awesome-amazing-2.jpg)
 
 # Video
 [![Youtube Theme Preview](https://img.youtube.com/vi/YwvnJqN5s90/0.jpg)](https://www.youtube.com/watch?v=YwvnJqN5s90)
