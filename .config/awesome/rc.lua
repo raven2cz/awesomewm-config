@@ -31,6 +31,8 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 local treetile = require("treetile")
 -- local treetileBindings = require("treetile.bindings")
 local machi = require("layout-machi")
+-- titlebars NICE
+local nice = require("nice")
 
 -- classes and services
 local dpi = require("beautiful.xresources").apply_dpi
@@ -126,6 +128,30 @@ beautiful.init(gears.filesystem.get_configuration_dir() .. "/themes/amazing/them
 beautiful.layout_machi = machi.get_icon()
 -- treetile layout bindings loading
 --treetileBindings.init()
+-- titlebars NICE
+nice {
+    win_shade_enabled = true,
+    titlebar_items = {
+        left = {"sticky", "ontop", "floating"},
+        middle = "title",
+        right = {"minimize", "maximize","close"},
+    },
+        tooltip_messages = {
+        close = "Close",
+        minimize = "Minimize",
+        maximize_active = "Unmaximize",
+        maximize_inactive = "Maximize",
+        floating_active = "Floating",
+        floating_inactive = "Tiling",
+        ontop_active = "OnTop",
+        ontop_inactive = "NotOnTop",
+        sticky_active = "Sticky",
+        sticky_inactive = "NotSticky",
+    }
+}
+
+-- Notification Canter
+popup = require("notifs.notif-center.notif_popup")
 
 -- {{{ Mouse bindings
 awful.mouse.append_global_mousebindings({
@@ -139,6 +165,10 @@ awful.mouse.append_global_mousebindings({
 
 -- Personal Awesome keys
 awful.keyboard.append_global_keybindings({
+    -- personal widget notification center
+    awful.key({ modkey }, "d", function() popup.visible=not popup.visible end,
+        {description = "show notification center", group = "awesome"}),
+
     -- machi layout special keybindings
     awful.key({ modkey,           }, ".", function () machi.default_editor.start_interactive() end,
         {description = "machi: edit the current machi layout", group = "layout"}),
@@ -241,7 +271,7 @@ awful.keyboard.append_global_keybindings({
     -- Lock Support
     awful.key({ modkey,           }, "Home", function () awful.spawn("i3exit lock") end,
               {description="Lock Screen", group="awesome"}),
-    awful.key({ modkey,           }, "F12", function () awful.spawn("i3exit suspend") end,
+    awful.key({ modkey,           }, "F12", function () awful.spawn("poweroff") end,
               {description="Suspend Computer", group="awesome"}),
 
     -- ROFI Support
@@ -257,31 +287,30 @@ awful.keyboard.append_global_keybindings({
     awful.key({ altkey, }, "h", function () if beautiful.fs then beautiful.fs.show(7) end end,
               {description = "show filesystem", group = "widgets"}),
     -- ALSA volume control
-    awful.key({ }, "XF86AudioRaiseVolume",
+    awful.key({ modkey, altkey }, "l",
         function ()
-            os.execute(string.format("amixer -q set %s 1%%+", beautiful.volume.channel))
+            os.execute(string.format("amixer -q set %s 5%%+", beautiful.volume.channel))
             beautiful.volume.update()
-        end),
-    awful.key({ }, "XF86AudioLowerVolume",
+        end,
+              {description="sounds volume up", group="awesome"}),
+    awful.key({ modkey, altkey }, "k",
         function ()
-            os.execute(string.format("amixer -q set %s 1%%-", beautiful.volume.channel))
+            os.execute(string.format("amixer -q set %s 5%%-", beautiful.volume.channel))
             beautiful.volume.update()
-        end),
-    awful.key({ }, "XF86AudioMute",
+        end,
+              {description="sounds volume down", group="awesome"}),
+    awful.key({ modkey, altkey }, "m",
         function ()
-            os.execute(string.format("amixer -q set %s toggle", beautiful.volume.togglechannel or beautiful.volume.channel))
+            os.execute(string.format("amixer -q set %s toggle", beautiful.volume.channel))
             beautiful.volume.update()
-        end),
-    awful.key({ modkey1, "Shift" }, "m",
-        function ()
-            os.execute(string.format("amixer -q set %s 100%%", beautiful.volume.channel))
-            beautiful.volume.update()
-        end),
-    awful.key({ modkey1, "Shift" }, "0",
+        end,
+              {description="sounds volume toggle mute", group="awesome"}),
+    awful.key({ modkey, altkey }, "0",
         function ()
             os.execute(string.format("amixer -q set %s 0%%", beautiful.volume.channel))
             beautiful.volume.update()
-        end),
+        end,
+              {description="sounds volume 0%", group="awesome"}),
 
 })
 
@@ -290,8 +319,10 @@ awful.keyboard.append_global_keybindings({
 
     awful.key({ modkey, modkey1 }, "s", hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
-    awful.key({ modkey,           }, "w", function () beautiful.mymainmenu:show() end,
+    awful.key({ modkey,           }, "w", function () xmenu() end,
               {description = "show main menu", group = "awesome"}),
+    awful.key({ modkey,           }, "a", function () awful.spawn("clipmenu") end,
+              {description = "clipboard history by rofi/clipmenud", group = "awesome"}),
     awful.key({ modkey, modkey1 }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit,
@@ -640,6 +671,7 @@ end)
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
 client.connect_signal("request::titlebars", function(c)
     -- buttons for the titlebar
+    --[[
     local buttons = {
         awful.button({ }, 1, function()
             c:activate { context = "titlebar", action = "mouse_move"  }
@@ -673,6 +705,7 @@ client.connect_signal("request::titlebars", function(c)
         },
         layout = wibox.layout.align.horizontal
     }
+    --]]
 
     awful.titlebar.hide(c)
 end)

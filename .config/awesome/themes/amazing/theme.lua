@@ -103,6 +103,22 @@ theme.menu_height = dpi(15)
 theme.menu_width  = dpi(100)
 -- }}}
 
+-- {{{ Notification Center
+theme.clear_icon = theme.dir .. "/icons/clear.png"
+theme.clear_grey_icon = theme.dir .. "/icons/clear_grey.png"
+theme.notification_icon = theme.dir .. "/icons/notification.png"
+theme.delete_icon = theme.dir .. "/icons/delete.png"
+theme.delete_grey_icon = theme.dir .. "/icons/delete_grey.png"
+theme.xcolor0 = "#4b5262"
+theme.groups_bg  = "#3F3F3F"
+theme.xbackground = "#3F3F3F"
+theme.bg_normal = theme.xbackground
+theme.bg_very_light = "#6d6d6d"
+theme.bg_light = "#494B4F"
+theme.border_radius = dpi(0)
+theme.wibar_height = dpi(27)
+-- }}}
+
 -- {{{ Icons
 -- {{{ Taglist
 theme.taglist_squares_sel   = theme.dir .. "/taglist/squarefz.png"
