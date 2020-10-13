@@ -1,0 +1,20 @@
+# Based on https://github.com/mpeterv/hererocks
+
+language: python
+sudo: false
+
+env:
+  - LUA="lua 5.3"
+
+install:
+  - pip install hererocks
+  - hererocks env --$LUA -rlatest
+  - source env/bin/activate
+  - luarocks install luacheck
+
+script:
+  - luacheck *.lua
+
+branches:
+  only:
+  - master

@@ -33,6 +33,8 @@ local treetile = require("treetile")
 local machi = require("layout-machi")
 -- titlebars NICE
 local nice = require("nice")
+-- cycle focus clients
+local cyclefocus = require('cyclefocus')
 
 -- classes and services
 local dpi = require("beautiful.xresources").apply_dpi
@@ -520,6 +522,18 @@ client.connect_signal("request::default_keybindings", function()
         -- show/hide titlebar
         awful.key({ modkey,           }, "t", awful.titlebar.toggle,
             {description = "Show/Hide Titlebars", group="client"}),
+        -- altkey+Tab: cycle through all clients.
+        awful.key({ altkey }, "Tab", function(c)
+                cyclefocus.cycle({modifier="Alt_L"})
+            end,
+            {description = "Cycle through all clients", group="client"}
+        ),
+        -- altkey+Shift+Tab: backwards
+        awful.key({ altkey, "Shift" }, "Tab", function(c)
+                cyclefocus.cycle({modifier="Alt_L"})
+            end,
+            {description = "cycle through all clients backwards", group="client"}
+        ),
     })
 end)
 --}}
