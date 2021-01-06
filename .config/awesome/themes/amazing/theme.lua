@@ -250,6 +250,7 @@ local arrow = separators.arrow_left
 local calendar_widget = require("awesome-wm-widgets.calendar-widget.calendar")
 local weather_widget = require("awesome-wm-widgets.weather-widget.weather")
 local spotify_widget = require("awesome-wm-widgets.spotify-widget.spotify")
+local todo_widget = require("awesome-wm-widgets.todo-widget.todo")
 
 -- Keyboard map indicator and switcher
 local keyboardText = wibox.widget.textbox();
@@ -582,6 +583,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
                 play_icon = '/usr/share/icons/Papirus-Light/24x24/categories/spotify.svg',
                 pause_icon = '/usr/share/icons/Papirus-Dark/24x24/panel/spotify-indicator.svg'
             }),
+            separator,
+            todo_widget(),
             separator,
             wibox.widget.systray(),
             separator,
