@@ -1,10 +1,20 @@
 # Weather widget
 
 <p align="center">
- <img src="https://github.com/streetturtle/awesome-wm-widgets/raw/master/weather-widget/screenshots/weather-widget.png" alt="screenshot" style="max-width:100%;">
+  <a href="https://github.com/streetturtle/awesome-wm-widgets/labels/weather" target="_blank"><img alt="GitHub issues by-label" src="https://img.shields.io/github/issues/streetturtle/awesome-wm-widgets/weather"></a>
+  
+  <a href="https://twitter.com/intent/tweet?text=Check%20out%20this%20awesome%20weather%20widget%20for%20Awesome%20Window%20Manager%20&url=https://github.com/streetturtle/awesome-wm-widgets/blob/master/weather-widget" target="_blank">
+  <img alt="Twitter URL" src="https://img.shields.io/twitter/url?logo=twitter&style=social&url=https%3A%2F%2Fgithub.com%2Fstreetturtle%2Fawesome-wm-widgets%2Fblob%2Fmaster%2Fweather-widget">
+   </a>
 </p>
 
-Widget consists of three sections:
+The widget showing current, hourly and daily weather forecast.
+
+<p align="center">
+ <img src="https://github.com/streetturtle/awesome-wm-widgets/raw/master/weather-widget/weather-widget.png" alt="screenshot" style="max-width:100%;">
+</p>
+
+The widget consists of three sections:
  - current weather, including humidity, wind speed, UV index
  - hourly forecast for the next 24 hours
  - daily forecast for the next five days
@@ -25,11 +35,11 @@ It is possible to customize widget by providing a table with all or some of the 
 | show_daily_forecast | false | Show daily forecast section |
 | icon_pack_name | weather-underground-icons | Name of the icon pack, could be `weather-underground-icon` or `VitalyGorbachev` or create your own, more details below |
 | icons_extension | `.svg` | File extension of icons in the pack |
-
+| timeout | 120 | How often in seconds the widget refreshes |
 
 ### Icons:
 
-Widget comes with two predefined icon packs:
+The widget comes with two predefined icon packs:
 
  - weather-underground-icons taken from [here](https://github.com/manifestinteractive/weather-underground-icons)
  - VitalyGorbachev taken from [here](https://www.flaticon.com/authors/vitaly-gorbachev)
@@ -38,10 +48,9 @@ To add your custom icons, create a folder with the pack name under `/icons` and 
 
 ### Examples:
 
-
 #### Custom font, icons
 
-![example1](./screenshots/example1.png)
+![example1](./example1.png)
 
 ```lua
 weather_curl_widget({
@@ -59,7 +68,7 @@ weather_curl_widget({
 
 #### Only current weather
 
-![example2](./screenshots/example2.png)
+![example2](./example2.png)
 
 ```lua
 weather_curl_widget({
@@ -67,8 +76,6 @@ weather_curl_widget({
     coordinates = {45.5017, -73.5673},
 }),
 ```
-
-
 
 ## Installation
 
@@ -120,6 +127,15 @@ weather_curl_widget({
             ...
     ```
 
+## More screenshots
+
+Only negative temperature:
+
+![negative](./negative.png)
+
+Both positive and negative tempertature:
+
+![both](./both.png)
 
 ## How it works
 

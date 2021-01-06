@@ -6,9 +6,10 @@ local gears = require("gears")
 
 local storage_bar_widget = {}
 
-local function worker(args)
-    local args = args or {}
+local function worker(user_args)
+    local args = user_args or {}
     local mounts = args.mounts or {'/'}
+    local timeout = args.timeout or 60
 
     storage_bar_widget = wibox.widget {
         max_value = 100,
@@ -16,7 +17,8 @@ local function worker(args)
         forced_width = 35,
         paddings = 1,
         margins = 4,
-        border_width = 0.5,
+        border_width = 1,
+        border_radius = 2,
         border_color = beautiful.fg_normal,
         background_color = beautiful.bg_normal,
         bar_border_width = 1,
@@ -34,7 +36,7 @@ local function worker(args)
         layout = wibox.layout.fixed.vertical,
     }
 
-    local disk_header = {
+    local disk_header = wibox.widget{
       {
         markup = '<b>Mount</b>',
         forced_width = 150,
@@ -46,8 +48,9 @@ local function worker(args)
         align  = 'left',
         widget = wibox.widget.textbox,
       },
-      layout = wibox.layout.align.horizontal
+      layout = wibox.layout.ratio.horizontal
     }
+    disk_header:ajust_ratio(1, 0, 0.3, 0.7)
 
     local popup = awful.popup{
         ontop         = true,
@@ -55,13 +58,10 @@ local function worker(args)
         shape         = gears.shape.rounded_rect,
         border_width  = 1,
         border_color  = beautiful.bg_normal,
-        bg            = beautiful.bg_focus,
         maximum_width = 400,
         offset        = { y = 5 },
         widget        = {}
     }
-    popup:connect_signal("mouse::enter", function(c) is_update = false end)
-    popup:connect_signal("mouse::leave", function(c) is_update = true end)
 
     storage_bar_widget:buttons(
       awful.util.table.join(
@@ -78,7 +78,7 @@ local function worker(args)
     local disk_widget = wibox.container.margin(storage_bar_widget, 0, 0, 0, 0)
 
     local disks = {}
-    watch([[bash -c "df | tail -n +2"]], 60,
+    watch([[bash -c "df | tail -n +2"]], timeout,
         function(widget, stdout)
           for line in stdout:gmatch("[^\r\n$]+") do
             local filesystem, size, used, avail, perc, mount =
@@ -130,8 +130,9 @@ local function worker(args)
                     .. math.floor(disks[v].perc) .. '%)',
                   widget = wibox.widget.textbox
               },
-              layout = wibox.layout.align.horizontal
+              layout = wibox.layout.ratio.horizontal
             }
+            row:ajust_ratio(2, 0.3, 0.3, 0.4)
 
             disk_rows[k] = row
           end

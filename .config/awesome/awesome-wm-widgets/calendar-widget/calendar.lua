@@ -16,7 +16,7 @@ local naughty = require("naughty")
 
 local calendar_widget = {}
 
-local function worker(args)
+local function worker(user_args)
 
     local calendar_themes = {
         nord = {
@@ -68,21 +68,33 @@ local function worker(args)
             weekday_fg = '#FD971F',
             header_fg = '#F92672',
             border = '#75715E'
+        },
+        naughty = {
+            bg = beautiful.notification_bg or beautiful.bg,
+            fg = beautiful.notification_fg or beautiful.fg,
+            focus_date_bg = beautiful.notification_fg or beautiful.fg,
+            focus_date_fg = beautiful.notification_bg or beautiful.bg,
+            weekend_day_bg = beautiful.bg_focus,
+            weekday_fg = beautiful.fg,
+            header_fg = beautiful.fg,
+            border = beautiful.border_normal
         }
+
     }
 
-    local args = args or {}
+    local args = user_args or {}
 
     if args.theme ~= nil and calendar_themes[args.theme] == nil then
         naughty.notify({
             preset = naughty.config.presets.critical,
             title = 'Calendar Widget',
             text = 'Theme "' .. args.theme .. '" not found, fallback to default'})
-        args.theme = 'nord'
+        args.theme = 'naughty'
     end
 
-    local theme = args.theme or 'nord'
+    local theme = args.theme or 'naughty'
     local placement = args.placement or 'top'
+    local radius = args.radius or 8
 
 
     local styles = {}
@@ -142,7 +154,9 @@ local function worker(args)
         -- Change bg color for weekends
         local d = { year = date.year, month = (date.month or 1), day = (date.day or 1) }
         local weekday = tonumber(os.date('%w', os.time(d)))
-        local default_bg = (weekday == 0 or weekday == 6) and calendar_themes[theme].weekend_day_bg or calendar_themes[theme].bg
+        local default_bg = (weekday == 0 or weekday == 6)
+            and calendar_themes[theme].weekend_day_bg
+            or calendar_themes[theme].bg
         local ret = wibox.widget {
             {
                 {
@@ -175,7 +189,7 @@ local function worker(args)
     local popup = awful.popup {
         ontop = true,
         visible = false,
-        shape = gears.shape.rounded_rect,
+        shape = rounded_shape(radius),
         offset = { y = 5 },
         border_width = 1,
         border_color = calendar_themes[theme].border,
@@ -216,7 +230,8 @@ local function worker(args)
             elseif placement == 'top_right' then
                 awful.placement.top_right(popup, { margins = { top = 30, right = 10}, parent = awful.screen.focused() })
             elseif placement == 'bottom_right' then
-                awful.placement.bottom_right(popup, { margins = { bottom = 30, right = 10}, parent = awful.screen.focused() })
+                awful.placement.bottom_right(popup, { margins = { bottom = 30, right = 10},
+                    parent = awful.screen.focused() })
             else
                 awful.placement.top(popup, { margins = { top = 30 }, parent = awful.screen.focused() })
             end

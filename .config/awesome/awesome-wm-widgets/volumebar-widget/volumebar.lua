@@ -22,9 +22,9 @@ local TOG_VOLUME_CMD = 'amixer -D pulse sset Master toggle'
 
 local widget = {}
 
-local function worker(args)
+local function worker(user_args)
 
-    local args = args or {}
+    local args = user_args or {}
 
     local main_color = args.main_color or beautiful.fg_normal
     local mute_color = args.mute_color or beautiful.fg_urgent
@@ -32,6 +32,7 @@ local function worker(args)
     local width = args.width or 50
     local shape = args.shape or 'bar'
     local margins = args.margins or 10
+    local timeout = args.timeout or 1
 
     local get_volume_cmd = args.get_volume_cmd or GET_VOLUME_CMD
     local inc_volume_cmd = args.inc_volume_cmd or INC_VOLUME_CMD
@@ -51,7 +52,7 @@ local function worker(args)
         widget = wibox.widget.progressbar
     }
 
-    local update_graphic = function(widget, stdout, _, _, _)
+    local update_graphic = function(_, stdout, _, _, _)
         local mute = string.match(stdout, "%[(o%D%D?)%]")    -- \[(o\D\D?)\] - [on] or [off]
         local volume = string.match(stdout, "(%d?%d?%d)%%")  -- (\d?\d?\d)\%)
         volume = tonumber(string.format("% 3d", volume))
@@ -77,7 +78,7 @@ local function worker(args)
         end)
     end)
 
-    watch(get_volume_cmd, 1, update_graphic, volumebar_widget)
+    watch(get_volume_cmd, timeout, update_graphic, volumebar_widget)
 
     return volumebar_widget
 end

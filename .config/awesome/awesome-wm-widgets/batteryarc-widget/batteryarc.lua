@@ -15,17 +15,20 @@ local wibox = require("wibox")
 local watch = require("awful.widget.watch")
 
 local HOME = os.getenv("HOME")
+local WIDGET_DIR = HOME .. '/.config/awesome/awesome-wm-widgets/batteryarc-widget'
 
-local widget = {}
+local batteryarc_widget = {}
 
-local function worker(args)
+local function worker(user_args)
 
-    local args = args or {}
+    local args = user_args or {}
 
     local font = args.font or 'Play 6'
     local arc_thickness = args.arc_thickness or 2
     local show_current_level = args.show_current_level or false
     local size = args.size or 18
+    local timeout = args.timeout or 10
+    local show_notification_mode = args.show_notification_mode or 'on_hover' -- on_hover / on_click
 
     local main_color = args.main_color or beautiful.fg_color
     local bg_color = args.bg_color or '#ffffff11'
@@ -33,10 +36,10 @@ local function worker(args)
     local medium_level_color = args.medium_level_color or '#c0ca33'
     local charging_color = args.charging_color or '#43a047'
 
-    local warning_msg_title = args.warning_msg_title or 'Huston, we have a problem'
+    local warning_msg_title = args.warning_msg_title or 'Houston, we have a problem'
     local warning_msg_text = args.warning_msg_text or 'Battery is dying'
     local warning_msg_position = args.warning_msg_position or 'bottom_right'
-    local warning_msg_icon = args.warning_msg_icon or HOME .. '/.config/awesome/awesome-wm-widgets/batteryarc-widget/spaceman.jpg'
+    local warning_msg_icon = args.warning_msg_icon or WIDGET_DIR .. '/spaceman.jpg'
     local enable_battery_warning = args.enable_battery_warning
     if enable_battery_warning == nil then
         enable_battery_warning = true
@@ -51,7 +54,7 @@ local function worker(args)
 
     local text_with_background = wibox.container.background(text)
 
-    widget = wibox.widget {
+    batteryarc_widget = wibox.widget {
         text_with_background,
         max_value = 100,
         rounded_edge = true,
@@ -66,11 +69,27 @@ local function worker(args)
 
     local last_battery_check = os.time()
 
+    --[[ Show warning notification ]]
+    local function show_battery_warning()
+        naughty.notify {
+            icon = warning_msg_icon,
+            icon_size = 100,
+            text = warning_msg_text,
+            title = warning_msg_title,
+            timeout = 25, -- show the warning for a longer time
+            hover_timeout = 0.5,
+            position = warning_msg_position,
+            bg = "#F06060",
+            fg = "#EEE9EF",
+            width = 300,
+        }
+    end
+
     local function update_widget(widget, stdout)
         local charge = 0
         local status
         for s in stdout:gmatch("[^\r\n]+") do
-            local cur_status, charge_str, time = string.match(s, '.+: (%a+), (%d?%d?%d)%%,?(.*)')
+            local cur_status, charge_str, _ = string.match(s, '.+: (%a+), (%d?%d?%d)%%,?(.*)')
             if cur_status ~= nil and charge_str ~=nil then
                 local cur_charge = tonumber(charge_str)
                 if cur_charge > charge then
@@ -114,11 +133,11 @@ local function worker(args)
         end
     end
 
-    watch("acpi", 10, update_widget, widget)
+    watch("acpi", timeout, update_widget, batteryarc_widget)
 
     -- Popup with battery info
     local notification
-    function show_battery_status()
+    local function show_battery_status()
         awful.spawn.easy_async([[bash -c 'acpi']],
                 function(stdout, _, _, _)
                     naughty.destroy(notification)
@@ -126,39 +145,24 @@ local function worker(args)
                         text = stdout,
                         title = "Battery status",
                         timeout = 5,
-                        hover_timeout = 0.5,
                         width = 200,
                     }
                 end)
     end
 
-    widget:connect_signal("mouse::enter", function()
-        show_battery_status()
-    end)
-    widget:connect_signal("mouse::leave", function()
-        naughty.destroy(notification)
-    end)
-
-    --[[ Show warning notification ]]
-    function show_battery_warning()
-        naughty.notify {
-            icon = warning_msg_icon,
-            icon_size = 100,
-            text = warning_msg_text,
-            title = warning_msg_title,
-            timeout = 25, -- show the warning for a longer time
-            hover_timeout = 0.5,
-            position = warning_msg_position,
-            bg = "#F06060",
-            fg = "#EEE9EF",
-            width = 300,
-        }
+    if show_notification_mode == 'on_hover' then
+        batteryarc_widget:connect_signal("mouse::enter", function() show_battery_status() end)
+        batteryarc_widget:connect_signal("mouse::leave", function() naughty.destroy(notification) end)
+    elseif show_notification_mode == 'on_click' then
+        batteryarc_widget:connect_signal('button::press', function(_, _, _, button)
+            if (button == 1) then show_battery_status() end
+        end)
     end
 
-    return widget
+    return batteryarc_widget
 
 end
 
-return setmetatable(widget, { __call = function(_, ...)
+return setmetatable(batteryarc_widget, { __call = function(_, ...)
     return worker(...)
 end })

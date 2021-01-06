@@ -17,12 +17,12 @@ local naughty = require("naughty")
 local gears = require("gears")
 local beautiful = require("beautiful")
 local gfs = require("gears.filesystem")
-local gs = require("gears.string")
 local color = require("gears.color")
 
 local HOME_DIR = os.getenv("HOME")
 
-local GET_ISSUES_CMD = [[bash -c "curl -s --show-error -X GET -n '%s/rest/api/2/search?%s&fields=id,assignee,summary,status'"]]
+local GET_ISSUES_CMD =
+    [[bash -c "curl -s --show-error -X GET -n '%s/rest/api/2/search?%s&fields=id,assignee,summary,status'"]]
 local DOWNLOAD_AVATAR_CMD = [[bash -c "curl -n --create-dirs -o  %s/.cache/awmw/jira-widget/avatars/%s %s"]]
 
 local function show_warning(message)
@@ -41,9 +41,9 @@ local jira_widget = wibox.widget {
             },
             {
                 id = 'd',
-                draw = function(self, context, cr, width, height)
+                draw = function(_, _, cr, width, height)
                     cr:set_source(color(beautiful.fg_urgent))
-                    cr:arc(height/4, height/4, height/4, 0, math.pi*2)
+                    cr:arc(width - height/6, height/6, height/6, 0, math.pi*2)
                     cr:fill()
                 end,
                 visible = false,
@@ -65,18 +65,18 @@ local jira_widget = wibox.widget {
         self.txt.text = new_value
     end,
     set_icon = function(self, path)
-        self.a.b.c.image = path
+        self:get_children_by_id('c')[1]:set_image(path)
     end,
     is_everything_ok = function(self, is_ok)
         if is_ok then
-            self.a.b.d:set_visible(false)
-            self.a.b.c:set_opacity(1)
-            self.a.b.c:emit_signal('widget:redraw_needed')
+            self:get_children_by_id('d')[1]:set_visible(false)
+            self:get_children_by_id('c')[1]:set_opacity(1)
+            self:get_children_by_id('c')[1]:emit_signal('widget:redraw_needed')
         else
             self.txt:set_text('')
-            self.a.b.d:set_visible(true)
-            self.a.b.c:set_opacity(0.2)
-            self.a.b.c:emit_signal('widget:redraw_needed')
+            self:get_children_by_id('d')[1]:set_visible(true)
+            self:get_children_by_id('c')[1]:set_opacity(0.2)
+            self:get_children_by_id('c')[1]:emit_signal('widget:redraw_needed')
         end
     end
 }
@@ -92,7 +92,6 @@ local popup = awful.popup{
     widget = {}
 }
 
-
 local number_of_issues
 
 local warning_shown = false
@@ -101,13 +100,14 @@ local tooltip = awful.tooltip {
     preferred_positions = {'bottom'},
  }
 
-local function worker(args)
+local function worker(user_args)
 
-    local args = args or {}
+    local args = user_args or {}
 
     local icon = args.icon or HOME_DIR .. '/.config/awesome/awesome-wm-widgets/jira-widget/jira-mark-gradient-blue.svg'
     local host = args.host or show_warning('Jira host is unknown')
     local query = args.query or 'jql=assignee=currentuser() AND resolution=Unresolved'
+    local timeout = args.timeout or 10
 
     jira_widget:set_icon(icon)
 
@@ -117,7 +117,7 @@ local function worker(args)
                 show_warning(stderr)
                 warning_shown = true
                 widget:is_everything_ok(false)
-                tooltip:add_to_object(jira_widget)
+                tooltip:add_to_object(widget)
 
                 widget:connect_signal('mouse::enter', function()
                     tooltip.text = stderr
@@ -127,7 +127,7 @@ local function worker(args)
         end
 
         warning_shown = false
-        tooltip:remove_from_object(jira_widget)
+        tooltip:remove_from_object(widget)
         widget:is_everything_ok(true)
 
         local result = json.decode(stdout)
@@ -149,7 +149,7 @@ local function worker(args)
 
         for i = 0, #rows do rows[i]=nil end
         for _, issue in ipairs(result.issues) do
-            local path_to_avatar = os.getenv("HOME") ..'/.cache/awmw/jira-widget/avatars/' .. issue.fields.assignee.accountId
+            local path_to_avatar = HOME_DIR ..'/.cache/awmw/jira-widget/avatars/' .. issue.fields.assignee.accountId
 
             if not gfs.file_readable(path_to_avatar) then
                 spawn.easy_async(string.format(
@@ -230,7 +230,7 @@ local function worker(args)
             )
     )
     watch(string.format(GET_ISSUES_CMD, host, query:gsub(' ', '+')),
-            10, update_widget, jira_widget)
+            timeout, update_widget, jira_widget)
     return jira_widget
 end
 
