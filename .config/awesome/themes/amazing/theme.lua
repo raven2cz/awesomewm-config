@@ -31,8 +31,8 @@ theme.dir = os.getenv("HOME") .. "/.config/awesome/themes/" .. theme_name
 
 -- {{{ Styles
 -- Global font
-theme.font          = "Hack Nerd Font 8"
-theme.font_larger   = "Hack Nerd Font 9"
+theme.font          = "Play 9"
+theme.font_larger   = "Play 11"
 theme.font_notify   = "mononoki Nerd Font 11"
 
 -- {{{ Colors
@@ -496,7 +496,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
       l.max,                   --water
       awful.layout.layouts[5], --fire
       awful.layout.layouts[6], --earth
-      l.max.fullscreen         --love
+      l.max                    --love
     }
     awful.tag(names, s, layouts)
 

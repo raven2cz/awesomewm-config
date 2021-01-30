@@ -522,6 +522,7 @@ client.connect_signal("request::default_keybindings", function()
         -- show/hide titlebar
         awful.key({ modkey,           }, "t", awful.titlebar.toggle,
             {description = "Show/Hide Titlebars", group="client"}),
+
         -- altkey+Tab: cycle through all clients.
         awful.key({ altkey }, "Tab", function(c)
                 cyclefocus.cycle({modifier="Alt_L"})

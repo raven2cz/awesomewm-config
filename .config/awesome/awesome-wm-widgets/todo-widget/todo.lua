@@ -17,7 +17,7 @@ local gfs = require("gears.filesystem")
 
 local HOME_DIR = os.getenv("HOME")
 local WIDGET_DIR = HOME_DIR .. '/.config/awesome/awesome-wm-widgets/todo-widget'
-local STORAGE = HOME_DIR .. '/.cache/awmw/todo-widget/todos.json'
+local STORAGE = HOME_DIR .. '/SynologyDrive/OneCloud/linux/data/todos.json'
 
 local GET_TODO_ITEMS = 'bash -c "cat ' .. STORAGE .. '"'
 
