@@ -167,6 +167,13 @@ awful.mouse.append_global_mousebindings({
 
 -- Personal Awesome keys
 awful.keyboard.append_global_keybindings({
+
+    -- user directory wallpapers change by keybindings - NEXT/PREVIOUS WALLPAPER
+    awful.key({ modkey, "Shift" }, "w", function() beautiful.change_wallpaper_user(1) end,
+        {description = "set next user wallpaper", group = "awesome"}),
+    awful.key({ modkey, modkey1 }, "w", function() beautiful.change_wallpaper_user(-1) end,
+        {description = "set previous user wallpaper", group = "awesome"}),
+
     -- personal widget notification center
     awful.key({ modkey }, "d", function() popup.visible=not popup.visible end,
         {description = "show notification center", group = "awesome"}),

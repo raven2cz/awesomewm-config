@@ -202,8 +202,9 @@ theme.widget_keyboard = theme.dir .. "/icons/hdd.png"
 
 -- Wallpaper
 -- {{{ Tag Wallpaper
--- Set according to wallpaper directory
+-- CONFIGURE IT: Set according to wallpaper directory
 wppath = os.getenv("HOME") .."/Pictures/manga-wallpapers/"
+wppath_user = os.getenv("HOME") .."/Pictures/wallpapers-user/"
 -- Set wallpaper for each tag
 local wp_selected = {
     "random",
@@ -233,9 +234,48 @@ local wp_random = {
     "gamer-girl.jpg",
 }
 
+-- Feature: User wallpaper folder - the wallpaper can be set for active tag by keybinding
+-- The directory is defined in the configuration settings in this theme file
+local wp_user = {}
+-- settings for currecnt user wallpaper
+local wp_user_idx = 1
+
 -- default wallpaper
 theme.wallpaper = theme.dir.."/zenburn-background.png"
 
+-- }}}
+
+-- {{{ Wallpaper Changer
+local function scandir(directory)
+    local i, t, popen = 0, {}, io.popen
+    local pfile = popen('ls -a "'..directory..'"')
+    for filename in pfile:lines() do
+        i = i + 1
+        if i > 2 then t[i-2] = filename end
+    end
+    pfile:close()
+    return t
+end
+
+theme.change_wallpaper_user = function(direction)
+    local maxIdx = #wp_user
+    wp_user_idx = wp_user_idx + direction
+    if wp_user_idx < 1 then wp_user_idx = 1 end
+    if wp_user_idx > maxIdx then wp_user_idx = maxIdx end
+
+    local wp = wp_user[wp_user_idx]
+
+    for s in screen do
+      for i = 1,#s.tags do
+        local tag = s.tags[i]
+        if tag.selected then
+            theme.wallpaper_user = wppath_user .. wp
+            theme.wallpaper_user_tag = tag
+            gears.wallpaper.maximized(theme.wallpaper_user, s, false)
+        end
+      end
+    end
+end
 -- }}}
 
 -- {{{ Wibar
@@ -578,7 +618,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
             layout = wibox.layout.fixed.horizontal,
             separator,
             spotify_widget({
-                font = 'Hack Nerd Font 9',
+                font = 'Play 9',
                 max_length = 50,
                 play_icon = '/usr/share/icons/Papirus-Light/24x24/categories/spotify.svg',
                 pause_icon = '/usr/share/icons/Papirus-Dark/24x24/panel/spotify-indicator.svg'
@@ -620,9 +660,15 @@ screen.connect_signal("request::desktop_decoration", function(s)
     for i = 1,10 do
         math.random()
     end
+
+    -- Set actual wallpeper for first tag and screen
     local wp = wp_selected[1]
     if wp == "random" then wp = wp_random[1] end
     gears.wallpaper.maximized(wppath .. wp, s, false)
+
+    -- Try to load user wallpapers
+    wp_user = scandir(wppath_user)
+
     -- For each screen
     for scr in screen do
       -- Go over each tab
@@ -632,14 +678,16 @@ screen.connect_signal("request::desktop_decoration", function(s)
           -- And if selected
           if not tag.selected then return end
           -- Set random wallpaper
-          if wp_selected[t] == "random" then 
+          if theme.wallpaper_user_tag == tag then
+              wp = theme.wallpaper_user
+          elseif wp_selected[t] == "random" then
               local position = math.random(1, #wp_random)
-              wp = wp_random[position]
+              wp = wppath .. wp_random[position]
           else 
-              wp = wp_selected[t]
+              wp = wppath .. wp_selected[t]
           end
           --gears.wallpaper.fit(wppath .. wp_selected[t], s)
-          gears.wallpaper.maximized(wppath .. wp, s, false)
+          gears.wallpaper.maximized(wp, s, false)
         end)
       end
     end
