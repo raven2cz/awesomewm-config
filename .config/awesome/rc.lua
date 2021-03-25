@@ -85,6 +85,7 @@ tag.connect_signal("request::default_layouts", function()
     awful.layout.append_default_layouts({
         treetile,
         machi.default_layout,
+        --machi.layout.create{ new_placement_cb = machi.layout.placement.empty_then_fair },
         awful.layout.suit.tile,
         awful.layout.suit.floating,
         lain.layout.centerwork,

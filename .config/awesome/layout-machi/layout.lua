@@ -1,10 +1,8 @@
-local machi = {
-   editor = require((...):match("(.-)[^%.]+$") .. "editor"),
-}
-
-local api = {
-   screen = screen,
-   awful = require("awful"),
+local this_package = ... and (...):match("(.-)[^%.]+$") or ""
+local machi_editor = require(this_package.."editor")
+local awful = require("awful")
+local capi = {
+    screen = screen
 }
 
 local ERROR = 2
@@ -13,108 +11,124 @@ local INFO = 0
 local DEBUG = -1
 
 local module = {
-   log_level = WARNING,
-   global_default_cmd = "dw66.",
-   allowing_shrinking_by_mouse_moving = false,
+    log_level = WARNING,
+    global_default_cmd = "w66.",
+    allow_shrinking_by_mouse_moving = false,
 }
 
 local function log(level, msg)
-   if level > module.log_level then
-      print(msg)
-   end
+    if level > module.log_level then
+        print(msg)
+    end
 end
 
 local function min(a, b)
-   if a < b then return a else return b end
+    if a < b then return a else return b end
 end
 
 local function max(a, b)
-   if a < b then return b else return a end
+    if a < b then return b else return a end
 end
 
 local function get_screen(s)
-    return s and api.screen[s]
+    return s and capi.screen[s]
 end
 
-api.awful.mouse.resize.add_enter_callback(
-   function (c)
-      c.full_width_before_move = c.width + c.border_width * 2
-      c.full_height_before_move = c.height + c.border_width * 2
-   end, 'mouse.move')
+awful.mouse.resize.add_enter_callback(
+    function (c)
+        c.full_width_before_move = c.width + c.border_width * 2
+        c.full_height_before_move = c.height + c.border_width * 2
+    end, 'mouse.move')
 
---- find the best region for the area-like object
+--- find the best area for the area-like object
 -- @param c       area-like object - table with properties x, y, width, and height
--- @param regions array of area-like objects
--- @return the index of the best region
-local function find_region(c, regions)
-   local choice = 1
-   local choice_value = nil
-   local c_area = c.width * c.height
-   for i, a in ipairs(regions) do
-      local x_cap = max(0, min(c.x + c.width, a.x + a.width) - max(c.x, a.x))
-      local y_cap = max(0, min(c.y + c.height, a.y + a.height) - max(c.y, a.y))
-      local cap = x_cap * y_cap
-      -- -- a cap b / a cup b
-      -- local cup = c_area + a.width * a.height - cap
-      -- if cup > 0 then
-      --    local itx_ratio = cap / cup
-      --    if choice_value == nil or choice_value < itx_ratio then
-      --       choice_value = itx_ratio
-      --       choice = i
-      --    end
-      -- end
-      -- a cap b
-      if choice_value == nil or choice_value < cap then
-         choice = i
-         choice_value = cap
-      end
-   end
-   return choice
+-- @param areas   array of area objects
+-- @return the index of the best area
+local function find_area(c, areas)
+    local choice = 1
+    local choice_value = nil
+    local c_area = c.width * c.height
+    for i, a in ipairs(areas) do
+        if a.habitable then
+            local x_cap = max(0, min(c.x + c.width, a.x + a.width) - max(c.x, a.x))
+            local y_cap = max(0, min(c.y + c.height, a.y + a.height) - max(c.y, a.y))
+            local cap = x_cap * y_cap
+            -- -- a cap b / a cup b
+            -- local cup = c_area + a.width * a.height - cap
+            -- if cup > 0 then
+            --    local itx_ratio = cap / cup
+            --    if choice_value == nil or choice_value < itx_ratio then
+            --       choice_value = itx_ratio
+            --       choice = i
+            --    end
+            -- end
+            -- a cap b
+            if choice_value == nil or choice_value < cap then
+                choice = i
+                choice_value = cap
+            end
+        end
+    end
+    return choice
 end
 
 local function distance(x1, y1, x2, y2)
-   -- use d1
-   return math.abs(x1 - x2) + math.abs(y1 - y2)
+    -- use d1
+    return math.abs(x1 - x2) + math.abs(y1 - y2)
 end
 
-local function find_lu(c, regions, rd)
-   local lu = nil
-   for i, a in ipairs(regions) do
-      if rd == nil or (a.x < regions[rd].x + regions[rd].width and a.y < regions[rd].y + regions[rd].height) then
-         if lu == nil or distance(c.x, c.y, a.x, a.y) < distance(c.x, c.y, regions[lu].x, regions[lu].y) then
-            lu = i
-         end
-      end
-   end
-   return lu
+local function find_lu(c, areas, rd)
+    local lu = nil
+    for i, a in ipairs(areas) do
+        if a.habitable then
+            if rd == nil or (a.x < areas[rd].x + areas[rd].width and a.y < areas[rd].y + areas[rd].height) then
+                if lu == nil or distance(c.x, c.y, a.x, a.y) < distance(c.x, c.y, areas[lu].x, areas[lu].y) then
+                    lu = i
+                end
+            end
+        end
+    end
+    return lu
 end
 
-local function find_rd(c, regions, lu)
-   local x, y
-   x = c.x + c.width + (c.border_width or 0)
-   y = c.y + c.height + (c.border_width or 0)
-   local rd = nil
-   for i, a in ipairs(regions) do
-      if lu == nil or (a.x + a.width > regions[lu].x and a.y + a.height > regions[lu].y) then
-         if rd == nil or distance(x, y, a.x + a.width, a.y + a.height) < distance(x, y, regions[rd].x + regions[rd].width, regions[rd].y + regions[rd].height) then
-            rd = i
-         end
-      end
-   end
-   return rd
+local function find_rd(c, border_width, areas, lu)
+    local x, y
+    x = c.x + c.width + (border_width or 0) * 2
+    y = c.y + c.height + (border_width or 0) * 2
+    local rd = nil
+    for i, a in ipairs(areas) do
+        if a.habitable then
+            if lu == nil or (a.x + a.width > areas[lu].x and a.y + a.height > areas[lu].y) then
+                if rd == nil or distance(x, y, a.x + a.width, a.y + a.height) < distance(x, y, areas[rd].x + areas[rd].width, areas[rd].y + areas[rd].height) then
+                    rd = i
+                end
+            end
+        end
+    end
+    return rd
 end
 
-function module.set_geometry(c, region_lu, region_rd, useless_gap, border_width)
-   -- We try to negate the gap of outer layer
-   if region_lu ~= nil then
-      c.x = region_lu.x - useless_gap
-      c.y = region_lu.y - useless_gap
-   end
+function module.set_geometry(c, area_lu, area_rd, useless_gap, border_width)
+    -- We try to negate the gap of outer layer
+    if area_lu ~= nil then
+        c.x = area_lu.x - useless_gap
+        c.y = area_lu.y - useless_gap
+    end
 
-   if region_rd ~= nil then
-      c.width = region_rd.x + region_rd.width - c.x + useless_gap - border_width * 2
-      c.height = region_rd.y + region_rd.height - c.y + useless_gap - border_width * 2
-   end
+    if area_rd ~= nil then
+        c.width = area_rd.x + area_rd.width - c.x + useless_gap - border_width * 2
+        c.height = area_rd.y + area_rd.height - c.y + useless_gap - border_width * 2
+    end
+end
+
+-- TODO: the string need to be updated when its screen geometry changed.
+local function get_machi_tag_string(tag)
+    if tag.machi_tag_string == nil then
+        tag.machi_tag_string =
+            tostring(tag.screen.geometry.width) .. "x" .. tostring(tag.screen.geometry.height) .. "+" ..
+            tostring(tag.screen.geometry.x) .. "+" .. tostring(tag.screen.geometry.y) .. '+' .. tag.name
+    end
+    return tag.machi_tag_string
 end
 
 function module.create(args_or_name, editor, default_cmd)
@@ -132,199 +146,404 @@ function module.create(args_or_name, editor, default_cmd)
     else
         return nil
     end
-    args.editor = args.editor or editor or machi.editor.default_editor
+    if args.name == nil and args.name_func == nil then
+        local prefix = args.icon_name and (args.icon_name.."-") or ""
+        args.name_func = function (tag)
+            return prefix..get_machi_tag_string(tag)
+        end
+    end
+    args.editor = args.editor or editor or machi_editor.default_editor
     args.default_cmd = args.default_cmd or default_cmd or global_default_cmd
     args.persistent = args.persistent == nil or args.persistent
 
+    local layout = {}
     local instances = {}
 
     local function get_instance_info(tag)
         return (args.name_func and args.name_func(tag) or args.name), args.persistent
     end
 
-   local function get_instance_(tag)
-       local name, persistent = get_instance_info(tag)
-       if instances[name] == nil then
-           instances[name] = {
-               cmd = persistent and args.editor.get_last_cmd(name) or nil,
-               regions_cache = {},
-           }
-         if instances[name].cmd == nil then
-             instances[name].cmd = args.default_cmd
-         end
-      end
-      return instances[name]
-   end
-
-   local function get_regions(workarea, tag)
-      local instance = get_instance_(tag)
-      local cmd = instance.cmd or module.global_default_cmd
-      if cmd == nil then return {}, false end
-
-      local key = tostring(workarea.width) .. "x" .. tostring(workarea.height) .. "+" .. tostring(workarea.x) .. "+" .. tostring(workarea.y)
-      if instance.regions_cache[key] == nil then
-         instance.regions_cache[key] = args.editor.run_cmd(workarea, cmd)
-      end
-      return instance.regions_cache[key], cmd:sub(1,1) == "d"
-   end
-
-   local function set_cmd(cmd, tag)
-      local instance = get_instance_(tag)
-      if instance.cmd ~= cmd then
-         instance.cmd = cmd
-         instance.regions_cache = {}
-      end
-   end
-
-   local function arrange(p)
-      local useless_gap = p.useless_gap
-      local wa = get_screen(p.screen).workarea -- get the real workarea without the gap (instead of p.workarea)
-      local cls = p.clients
-      local regions, draft_mode = get_regions(wa, get_screen(p.screen).selected_tag)
-
-      if #regions == 0 then return end
-
-      if draft_mode then
-         for i, c in ipairs(cls) do
-            if c.floating or c.immobilized then
-                 log(DEBUG, "Ignore client " .. tostring(c))
-            else
-               local skip = false
-               if c.machi_lu ~= nil and c.machi_rd ~= nil and
-                  c.machi_lu <= #regions and c.machi_rd <= #regions
-               then
-                  if regions[c.machi_lu].x == c.x and
-                     regions[c.machi_lu].y == c.y and
-                     regions[c.machi_rd].x + regions[c.machi_rd].width - c.border_width * 2 == c.x + c.width and
-                     regions[c.machi_rd].y + regions[c.machi_rd].height - c.border_width * 2 == c.y + c.height
-                  then
-                     skip = true
-                  end
-               end
-
-               local lu = nil
-               local rd = nil
-               if not skip then
-                  log(DEBUG, "Compute regions for " .. (c.name or ("<untitled:" .. tostring(c) .. ">")))
-                  lu = find_lu(c, regions)
-                  if lu ~= nil then
-                     c.x = regions[lu].x
-                     c.y = regions[lu].y
-                     rd = find_rd(c, regions, lu)
-                  end
-               end
-
-               if lu ~= nil and rd ~= nil then
-                  c.machi_lu, c.machi_rd = lu, rd
-                  p.geometries[c] = {}
-                  module.set_geometry(p.geometries[c], regions[lu], regions[rd], useless_gap, 0)
-               end
+    local function get_instance_(tag)
+        local name, persistent = get_instance_info(tag)
+        if instances[name] == nil then
+            instances[name] = {
+                layout = layout,
+                cmd = persistent and args.editor.get_last_cmd(name) or nil,
+                areas_cache = {},
+                tag_data = {},
+                client_data = setmetatable({}, {__mode="k"}),
+            }
+            if instances[name].cmd == nil then
+                instances[name].cmd = args.default_cmd
             end
-         end
-      else
-         for i, c in ipairs(cls) do
-            if c.floating or c.immobilized then
-               log(DEBUG, "Ignore client " .. tostring(c))
-            else
-               if c.machi_region ~= nil and
-                  regions[c.machi_region].x == c.x and
-                  regions[c.machi_region].y == c.y and
-                  regions[c.machi_region].width - c.border_width * 2 == c.width and
-                  regions[c.machi_region].height - c.border_width * 2 == c.height
-               then
-               else
-                  log(DEBUG, "Compute regions for " .. (c.name or ("<untitled:" .. tostring(c) .. ">")))
-                  local region = find_region(c, regions)
-                  c.machi_region = region
-                  p.geometries[c] = {}
-                  module.set_geometry(p.geometries[c], regions[region], regions[region], useless_gap, 0)
-               end
+        end
+        return instances[name]
+    end
+
+    local function get_instance_data(screen, tag)
+        local workarea = screen.workarea
+        local instance = get_instance_(tag)
+        local cmd = instance.cmd or module.global_default_cmd
+        if cmd == nil then return end
+
+        local key = tostring(workarea.width) .. "x" .. tostring(workarea.height) .. "+" .. tostring(workarea.x) .. "+" .. tostring(workarea.y)
+        if instance.areas_cache[key] == nil then
+            instance.areas_cache[key] = args.editor.run_cmd(cmd, screen, tag)
+            if instance.areas_cache[key] == nil then
+                return
             end
-         end
-      end
-   end
+        end
+        return instance.client_data, instance.tag_data, instance.areas_cache[key], instance, args.new_placement_cb
+    end
 
-   local function resize_handler (c, context, h)
-      local workarea = c.screen.workarea
-      local regions, draft_mode = get_regions(workarea, c.screen.selected_tag)
+    local function set_cmd(cmd, tag, keep_instance_data)
+        local instance = get_instance_(tag)
+        if instance.cmd ~= cmd then
+            instance.cmd = cmd
+            instance.areas_cache = {}
+            if not keep_instance_data then
+                instance.tag_data = {}
+                instance.client_data = setmetatable({}, {__mode="k"})
+            end
+        end
+    end
 
-      if #regions == 0 then return end
+    local function arrange(p)
+        local useless_gap = p.useless_gap
+        local screen = get_screen(p.screen)
+        local wa = screen.workarea -- get the real workarea without the gap (instead of p.workarea)
+        local cls = p.clients
+        local tag = screen.selected_tag
+        local cd, td, areas, instance, new_placement_cb = get_instance_data(screen, tag)
 
-      if draft_mode then
-         local lu = find_lu(h, regions)
-         local rd = nil
-         if lu ~= nil then
-            if context == "mouse.move" then
-               -- Use the initial width and height since it may change in undesired way.
-               local hh = {}
-               hh.x = regions[lu].x
-               hh.y = regions[lu].y
-               hh.width = c.full_width_before_move
-               hh.height = c.full_height_before_move
-               rd = find_rd(hh, regions, lu)
+        if areas == nil then return end
+        local nested_clients = {}
 
-               if rd ~= nil and not module.allowing_shrinking_by_mouse_moving and
-                  (regions[rd].x + regions[rd].width - regions[lu].x < c.full_width_before_move or
-                   regions[rd].y + regions[rd].height - regions[lu].y < c.full_height_before_move) then
-                     hh.x = regions[rd].x + regions[rd].width - c.full_width_before_move
-                     hh.y = regions[rd].y + regions[rd].height - c.full_height_before_move
-                     lu = find_lu(hh, regions, rd)
-               end
+        local function place_client_in_area(c, area)
+            if machi_editor.nested_layouts[areas[area].layout] ~= nil then
+                local clients = nested_clients[area]
+                if clients == nil then clients = {}; nested_clients[area] = clients end
+                clients[#clients + 1] = c
             else
-               local hh = {}
-               hh.x = h.x
-               hh.y = h.y
-               hh.width = h.width
-               hh.height = h.height
-               hh.border_width = c.border_width
-               rd = find_rd(hh, regions, lu)
+                p.geometries[c] = {}
+                module.set_geometry(p.geometries[c], areas[area], areas[area], useless_gap, 0)
+            end
+        end
+
+        -- Make clients calling new_placement_cb appear in the end.
+        local j = 0
+        for i = 1, #cls do
+            cd[cls[i]] = cd[cls[i]] or {}
+            if cd[cls[i]].placement then
+                j = j + 1
+                cls[j], cls[i] = cls[i], cls[j]
+            end
+        end
+
+        for i, c in ipairs(cls) do
+            if c.floating or c.immobilized then
+                log(DEBUG, "Ignore client " .. tostring(c))
+            else
+                local geo = {
+                    x = c.x,
+                    y = c.y,
+                    width = c.width + c.border_width * 2,
+                    height = c.height + c.border_width * 2,
+                }
+
+                if not cd[c].placement and new_placement_cb then
+                    cd[c].placement = true
+                    new_placement_cb(c, instance, areas, geo)
+                end
+
+                local in_draft = cd[c].draft
+                if cd[c].draft ~= nil then
+                    in_draft = cd[c].draft
+                elseif cd[c].lu then
+                    in_draft = true
+                elseif cd[c].area then
+                    in_draft = false
+                else
+                    in_draft = nil
+                end
+
+                local skip = false
+
+                if in_draft ~= false then
+                    if cd[c].lu ~= nil and cd[c].rd ~= nil and
+                        cd[c].lu <= #areas and cd[c].rd <= #areas and
+                        areas[cd[c].lu].habitable and areas[cd[c].rd].habitable
+                    then
+                        if areas[cd[c].lu].x == geo.x and
+                            areas[cd[c].lu].y == geo.y and
+                            areas[cd[c].rd].x + areas[cd[c].rd].width == geo.x + geo.width and
+                            areas[cd[c].rd].y + areas[cd[c].rd].height == geo.y + geo.height
+                        then
+                            skip = true
+                        end
+                    end
+
+                    local lu = nil
+                    local rd = nil
+                    if not skip then
+                        log(DEBUG, "Compute areas for " .. (c.name or ("<untitled:" .. tostring(c) .. ">")))
+                        lu = find_lu(geo, areas)
+                        if lu ~= nil then
+                            geo.x = areas[lu].x
+                            geo.y = areas[lu].y
+                            rd = find_rd(geo, 0, areas, lu)
+                        end
+                    end
+
+                    if lu ~= nil and rd ~= nil then
+                        if lu == rd and cd[c].lu == nil then
+                            cd[c].area = lu
+                            place_client_in_area(c, lu)
+                        else
+                            cd[c].lu = lu
+                            cd[c].rd = rd
+                            cd[c].area = nil
+                            p.geometries[c] = {}
+                            module.set_geometry(p.geometries[c], areas[lu], areas[rd], useless_gap, 0)
+                        end
+                    end
+                else
+                    if cd[c].area ~= nil and
+                        cd[c].area <= #areas and
+                        areas[cd[c].area].habitable and
+                        areas[cd[c].area].layout == nil and
+                        areas[cd[c].area].x == geo.x and
+                        areas[cd[c].area].y == geo.y and
+                        areas[cd[c].area].width == geo.width and
+                        areas[cd[c].area].height == geo.height
+                    then
+                        skip = true
+                    else
+                        log(DEBUG, "Compute areas for " .. (c.name or ("<untitled:" .. tostring(c) .. ">")))
+                        local area = find_area(geo, areas)
+                        cd[c].area, cd[c].lu, cd[c].rd = area, nil, nil
+                        place_client_in_area(c, area)
+                    end
+                end
+
+                if skip then
+                    if geo.x ~= c.x or geo.y ~= c.y or
+                        geo.width ~= c.width + c.border_width * 2 or
+                        geo.height ~= c.height + c.border_width * 2 then
+                        p.geometries[c] = {}
+                        module.set_geometry(p.geometries[c], geo, geo, useless_gap, 0)
+                    end
+                end
+            end
+        end
+
+        for area, clients in pairs(nested_clients) do
+            if td[area] == nil then
+                -- TODO: Make the default more flexible.
+                td[area] = {
+                    column_count = 1,
+                    master_count = 1,
+                    master_fill_policy = "expand",
+                    gap = 0,
+                    master_width_factor = 0.5,
+                    _private = {
+                        awful_tag_properties = {
+                        },
+                    },
+                }
+            end
+            local nested_params = {
+                tag = td[area],
+                screen = p.screen,
+                clients = clients,
+                padding = 0,
+                geometry = {
+                    x = areas[area].x,
+                    y = areas[area].y,
+                    width = areas[area].width,
+                    height = areas[area].height,
+                },
+                -- Not sure how useless_gap adjustment works here. It seems to work anyway.
+                workarea = {
+                    x = areas[area].x - useless_gap,
+                    y = areas[area].y - useless_gap,
+                    width = areas[area].width + useless_gap * 2,
+                    height = areas[area].height + useless_gap * 2,
+                },
+                useless_gap = 0,
+                geometries = {},
+            }
+            machi_editor.nested_layouts[areas[area].layout].arrange(nested_params)
+            for _, c in ipairs(clients) do
+                p.geometries[c] = {
+                    x = nested_params.geometries[c].x,
+                    y = nested_params.geometries[c].y,
+                    width = nested_params.geometries[c].width,
+                    height = nested_params.geometries[c].height,
+                }
+            end
+        end
+    end
+
+    local function resize_handler (c, context, h)
+        local tag = c.screen.selected_tag
+        local instance = get_instance_(tag)
+        local cd = instance.client_data
+        local cd, td, areas, _placement_cb = get_instance_data(c.screen, tag)
+
+        if areas == nil then return end
+
+        if context == "mouse.move" then
+            local in_draft = cd[c].draft
+            if cd[c].draft ~= nil then
+                in_draft = cd[c].draft
+            elseif cd[c].lu then
+                in_draft = true
+            elseif cd[c].area then
+                in_draft = false
+            else
+                log(ERROR, "Assuming in_draft for unhandled client "..tostring(c))
+                in_draft = true
+            end
+            if in_draft then
+                local lu = find_lu(h, areas)
+                local rd = nil
+                if lu ~= nil then
+                    -- Use the initial width and height since it may change in undesired way.
+                    local hh = {}
+                    hh.x = areas[lu].x
+                    hh.y = areas[lu].y
+                    hh.width = c.full_width_before_move
+                    hh.height = c.full_height_before_move
+                    rd = find_rd(hh, 0, areas, lu)
+
+                    if rd ~= nil and not module.allowing_shrinking_by_mouse_moving and
+                        (areas[rd].x + areas[rd].width - areas[lu].x < c.full_width_before_move or
+                         areas[rd].y + areas[rd].height - areas[lu].y < c.full_height_before_move) then
+                        hh.x = areas[rd].x + areas[rd].width - c.full_width_before_move
+                        hh.y = areas[rd].y + areas[rd].height - c.full_height_before_move
+                        lu = find_lu(hh, areas, rd)
+                    end
+
+                    if lu ~= nil and rd ~= nil then
+                        cd[c].lu = lu
+                        cd[c].rd = rd
+                        cd[c].area = nil
+                        module.set_geometry(c, areas[lu], areas[rd], 0, c.border_width)
+                    end
+                end
+            else
+                local center_x = h.x + h.width / 2
+                local center_y = h.y + h.height / 2
+
+                local choice = nil
+                local choice_value = nil
+
+                for i, a in ipairs(areas) do
+                    if a.habitable then
+                        local ac_x = a.x + a.width / 2
+                        local ac_y = a.y + a.height / 2
+                        local dis = (ac_x - center_x) * (ac_x - center_x) + (ac_y - center_y) * (ac_y - center_y)
+                        if choice_value == nil or choice_value > dis then
+                            choice = i
+                            choice_value = dis
+                        end
+                    end
+                end
+
+                if choice and cd[c].area ~= choice then
+                    cd[c].lu = nil
+                    cd[c].rd = nil
+                    cd[c].area = choice
+                    module.set_geometry(c, areas[choice], areas[choice], 0, c.border_width)
+                end
+            end
+        elseif cd[c].draft ~= false then
+            local lu = find_lu(h, areas)
+            local rd = nil
+            if lu ~= nil then
+                local hh = {}
+                hh.x = h.x
+                hh.y = h.y
+                hh.width = h.width
+                hh.height = h.height
+                rd = find_rd(hh, c.border_width, areas, lu)
             end
 
             if lu ~= nil and rd ~= nil then
-               c.machi_lu = lu
-               c.machi_rd = rd
-               module.set_geometry(c, regions[lu], regions[rd], 0, c.border_width)
+                if lu == rd and cd[c].draft ~= true then
+                    cd[c].lu = nil
+                    cd[c].rd = nil
+                    cd[c].area = lu
+                    awful.layout.arrange(c.screen)
+                else
+                    cd[c].lu = lu
+                    cd[c].rd = rd
+                    cd[c].area = nil
+                    module.set_geometry(c, areas[lu], areas[rd], 0, c.border_width)
+                end
             end
-         end
-      else
-         if context ~= "mouse.move" then return end
+        end
+    end
 
-         local workarea = c.screen.workarea
-         local regions = get_regions(workarea, c.screen.selected_tag)
+    layout.name = args.icon_name or "machi"
+    layout.arrange = arrange
+    layout.resize_handler = resize_handler
+    layout.machi_editor = args.editor
+    layout.machi_get_instance_info = get_instance_info
+    layout.machi_get_instance_data = get_instance_data
+    layout.machi_set_cmd = set_cmd
+    return layout
+end
 
-         if #regions == 0 then return end
+module.placement = {}
 
-         local center_x = h.x + h.width / 2
-         local center_y = h.y + h.height / 2
-
-         local choice = 1
-         local choice_value = nil
-
-         for i, r in ipairs(regions) do
-            local r_x = r.x + r.width / 2
-            local r_y = r.y + r.height / 2
-            local dis = (r_x - center_x) * (r_x - center_x) + (r_y - center_y) * (r_y - center_y)
-            if choice_value == nil or choice_value > dis then
-               choice = i
-               choice_value = dis
+local function empty_then_maybe_fair(c, instance, areas, geometry, do_fair)
+    local area_client_count = {}
+    for _, oc in ipairs(c.screen.tiled_clients) do
+        local cd = instance.client_data[oc]
+        if cd and cd.placement and cd.area then
+            area_client_count[cd.area] = (area_client_count[cd.area] or 0) + 1
+        end
+    end
+    local choice_client_count = nil
+    local choice_spare_score = nil
+    local choice = nil
+    for i = 1, #areas do
+        local a = areas[i]
+        if a.habitable then
+            -- +1 for the new client
+            local client_count = (area_client_count[i] or 0) + 1
+            local spare_score = a.width * a.height / client_count
+            if choice == nil or (choice_client_count > 1 and client_count == 1) then
+                choice_client_count = client_count
+                choice_spare_score = spare_score
+                choice = i
+            elseif (choice_client_count > 1) == (client_count > 1) and  choice_spare_score < spare_score then
+                choice_client_count = client_count
+                choice_spare_score = spare_score
+                choice = i
             end
-         end
+        end
+    end
+    if choice_client_count > 1 and not do_fair then
+        return
+    end
+    instance.client_data[c].lu = nil
+    instance.client_data[c].rd = nil
+    instance.client_data[c].area = choice
+    geometry.x = areas[choice].x
+    geometry.y = areas[choice].y
+    geometry.width = areas[choice].width
+    geometry.height = areas[choice].height
+end
 
-         if c.machi_region ~= choice then
-            c.machi_region = choice
-            module.set_geometry(c, regions[choice], regions[choice], 0, c.border_width)
-         end
-      end
-   end
+function module.placement.empty(c, instance, areas, geometry)
+    empty_then_maybe_fair(c, instance, areas, geometry, false)
+end
 
-   return {
-      name = "machi",
-      arrange = arrange,
-      resize_handler = resize_handler,
-      machi_get_instance_info = get_instance_info,
-      machi_set_cmd = set_cmd,
-      machi_get_regions = get_regions,
-   }
+function module.placement.empty_then_fair(c, instance, areas, geometry)
+    empty_then_maybe_fair(c, instance, areas, geometry, true)
 end
 
 return module
