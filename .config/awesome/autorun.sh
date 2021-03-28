@@ -8,6 +8,7 @@ function run {
 }
 
 run /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+run /usr/lib/kactivitymanagerd
 #run /use/lib/polkit-kde-authentication-agent-1
 run /usr/lib/pam_kwallet_init
 run nm-applet
