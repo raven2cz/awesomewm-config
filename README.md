@@ -29,3 +29,4 @@ Applications styling and additional colors are based on Nordic Colors and KDE No
 
 # Video
 [![Youtube Theme Preview](https://img.youtube.com/vi/YwvnJqN5s90/0.jpg)](https://www.youtube.com/watch?v=YwvnJqN5s90)
+[![Youtube Theme Preview](/images/youtube-machi-layout-hidden-feature.jpg)](https://youtu.be/Z0muY_lfFZU)
