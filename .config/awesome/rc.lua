@@ -32,7 +32,7 @@ local treetile = require("treetile")
 -- local treetileBindings = require("treetile.bindings")
 local machi = require("layout-machi")
 -- titlebars NICE
-local nice = require("nice")
+--local nice = require("nice")
 -- cycle focus clients
 local cyclefocus = require('cyclefocus')
 
@@ -132,26 +132,26 @@ beautiful.layout_machi = machi.get_icon()
 -- treetile layout bindings loading
 --treetileBindings.init()
 -- titlebars NICE
-nice {
-    win_shade_enabled = true,
-    titlebar_items = {
-        left = {"sticky", "ontop", "floating"},
-        middle = "title",
-        right = {"minimize", "maximize","close"},
-    },
-        tooltip_messages = {
-        close = "Close",
-        minimize = "Minimize",
-        maximize_active = "Unmaximize",
-        maximize_inactive = "Maximize",
-        floating_active = "Floating",
-        floating_inactive = "Tiling",
-        ontop_active = "OnTop",
-        ontop_inactive = "NotOnTop",
-        sticky_active = "Sticky",
-        sticky_inactive = "NotSticky",
-    }
-}
+-- nice {
+--     win_shade_enabled = true,
+--     titlebar_items = {
+--         left = {"sticky", "ontop", "floating"},
+--         middle = "title",
+--         right = {"minimize", "maximize","close"},
+--     },
+--         tooltip_messages = {
+--         close = "Close",
+--         minimize = "Minimize",
+--         maximize_active = "Unmaximize",
+--         maximize_inactive = "Maximize",
+--         floating_active = "Floating",
+--         floating_inactive = "Tiling",
+--         ontop_active = "OnTop",
+--         ontop_inactive = "NotOnTop",
+--         sticky_active = "Sticky",
+--         sticky_inactive = "NotSticky",
+--     }
+-- }
 
 -- Notification Canter
 popup = require("notifs.notif-center.notif_popup")
@@ -709,7 +709,6 @@ end)
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
 client.connect_signal("request::titlebars", function(c)
     -- buttons for the titlebar
-    --[[
     local buttons = {
         awful.button({ }, 1, function()
             c:activate { context = "titlebar", action = "mouse_move"  }
@@ -743,8 +742,6 @@ client.connect_signal("request::titlebars", function(c)
         },
         layout = wibox.layout.align.horizontal
     }
-    --]]
-
     awful.titlebar.hide(c)
 end)
 
