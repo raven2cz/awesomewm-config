@@ -203,16 +203,16 @@ theme.widget_keyboard = theme.dir .. "/icons/hdd.png"
 -- Wallpaper
 -- {{{ Tag Wallpaper
 -- CONFIGURE IT: Set according to wallpaper directory
-wppath = os.getenv("HOME") .."/Pictures/manga-wallpapers/"
-wppath_user = os.getenv("HOME") .."/Pictures/wallpapers-user/"
+wppath = os.getenv("HOME") .."/OneCloud/linux/pictures/manga-wallpapers/"
+wppath_user = os.getenv("HOME") .."/OneCloud/linux/pictures/wallpapers-user/"
 -- Set wallpaper for each tag
 local wp_selected = {
     "random",
     "lone-samurai-wallpaper.jpg",
     "wallhaven-xlmlmo.jpg",
     "wallhaven-95j8kw.jpg",
+    "purple-rain.jpg",
     "wallhaven-zx5xwv.jpg",
-    "wallhaven-w8ppk6.jpg",
     "wallhaven-oxlpj9.png",
     "wallhaven-g8y59e.jpg",
     "wallhaven-lqekzp.jpg",
@@ -525,17 +525,17 @@ naughty.connect_signal('request::icon', function(n, context, hints)
 screen.connect_signal("request::desktop_decoration", function(s)
     -- Each screen has its own tag table.
     --awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
-    names = { "main", "www", "apps", "idea", "air", "water", "fire", "earth", "love" }
+    names = { "main", "www", "apps", "idea", "water", "air", "fire", "earth", "love" }
     l = awful.layout.suit  -- Just to save some typing: use an alias.
     layouts = { 
       awful.layout.layouts[1], --main
-      awful.layout.layouts[2], --www
-      awful.layout.layouts[2], --apps
+      awful.layout.layouts[2], --www (machi)
+      awful.layout.layouts[2], --apps (machi)
       l.floating,              --idea
-      l.magnifier,             --air
-      l.max,                   --water
-      awful.layout.layouts[5], --fire
-      awful.layout.layouts[6], --earth
+      awful.layout.layouts[11],--water (machi to empty placement)
+      l.magnifier,             --air (machi)
+      awful.layout.layouts[5], --fire (center-work)
+      awful.layout.layouts[6], --earth (termfair)
       l.max                    --love
     }
     awful.tag(names, s, layouts)

@@ -85,7 +85,6 @@ tag.connect_signal("request::default_layouts", function()
     awful.layout.append_default_layouts({
         treetile,
         machi.default_layout,
-        --machi.layout.create{ new_placement_cb = machi.layout.placement.empty_then_fair },
         awful.layout.suit.tile,
         awful.layout.suit.floating,
         lain.layout.centerwork,
@@ -94,6 +93,7 @@ tag.connect_signal("request::default_layouts", function()
         awful.layout.suit.magnifier,
         awful.layout.suit.max,
         awful.layout.suit.max.fullscreen,
+        machi.layout.create{ new_placement_cb = machi.layout.placement.empty_then_fair },
         -- lain.layout.cascade,
         -- lain.layout.cascade.tile,
         -- lain.layout.termfair,
