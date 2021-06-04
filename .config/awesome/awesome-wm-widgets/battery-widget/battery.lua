@@ -60,8 +60,8 @@ local function worker(user_args)
             widget = wibox.widget.imagebox,
             resize = false
         },
-        bottom = 3,
-        layout = wibox.container.margin
+        valigh = 'center',
+        layout = wibox.container.place,
     }
     local level_widget = wibox.widget {
         font = font,
@@ -142,12 +142,14 @@ local function worker(user_args)
         local charge = 0
         local status
         for i, batt in ipairs(battery_info) do
-            if batt.charge >= charge then
-                status = batt.status -- use most charged battery status
-                -- this is arbitrary, and maybe another metric should be used
-            end
+            if capacities[i] ~= nil then
+                if batt.charge >= charge then
+                    status = batt.status -- use most charged battery status
+                    -- this is arbitrary, and maybe another metric should be used
+                end
 
-            charge = charge + batt.charge * capacities[i]
+                charge = charge + batt.charge * capacities[i]
+            end
         end
         charge = charge / capacity
 

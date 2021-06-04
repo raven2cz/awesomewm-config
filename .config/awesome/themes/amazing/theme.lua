@@ -24,6 +24,8 @@ local naughty = require("naughty")
 local menubar = require('menubar')
 local xdg_menu = require("archmenu")
 
+-- Use Polybar instead of classic Awesome Bar
+local usePolybar = false
 -- {{{ Main
 local theme = {}
 theme.dir = os.getenv("HOME") .. "/.config/awesome/themes/" .. theme_name
@@ -31,12 +33,12 @@ theme.dir = os.getenv("HOME") .. "/.config/awesome/themes/" .. theme_name
 
 -- {{{ Styles
 -- Global font
-theme.font          = "Play 9"
-theme.font_larger   = "Play 11"
+theme.font          = "Iosevka Nerd Font 9"
+theme.font_larger   = "Iosevka Nerd Font 11"
 theme.font_notify   = "mononoki Nerd Font 11"
 
 -- {{{ Colors
-theme.fg_normal  = "#DCDCCC"
+theme.fg_normal  = "#fcfae8"
 theme.fg_focus   = "#F0DFAF"
 theme.fg_urgent  = "#CC9393"
 theme.fg_minimize = "#ffffff"
@@ -56,7 +58,7 @@ theme.notification_fg = "#F0DFAF"
 theme.useless_gap   = dpi(5)
 theme.border_width  = dpi(1)
 theme.border_color_normal = "#000000"
-theme.border_color_active = "#535d6c"
+theme.border_color_active = "#e7af61"--#535d6c"
 theme.border_color_marked = "#CC9393"
 -- }}}
 
@@ -86,7 +88,7 @@ theme.fg_widget        = "#cacaca"
 --theme.bg_widget        = "#494B4F"
 --theme.border_widget    = "#3F3F3F"
 
-theme.arrow1_bg = "#4d614d"
+theme.arrow1_bg = "#4d614d" --"#4f4743" --"#4d614d"
 theme.arrow2_bg = "#273450"
 -- }}}
 
@@ -294,7 +296,7 @@ local todo_widget = require("awesome-wm-widgets.todo-widget.todo")
 
 -- Keyboard map indicator and switcher
 local keyboardText = wibox.widget.textbox();
-keyboardText:set_text(" ") 
+keyboardText:set_markup(markup.fontfg(theme.font_larger, theme.fg_minimize, " "))
 theme.mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- FS ROOT
@@ -353,7 +355,6 @@ theme.volume = lain.widget.alsa({
         widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, " " .. volume_now.level .. "% "))
     end
 })
-    
 -- Net
 local neticon = wibox.widget.imagebox(theme.widget_net)
 local net = lain.widget.net({
@@ -369,11 +370,11 @@ local myWeather = weather_widget({
     font_name = 'Carter One',
     show_hourly_forecast = true,
     show_daily_forecast = true,
-}) 
+})
 
 -- Textclock widget
 --local mytextclock = wibox.widget.textclock(" %a %d-%m-%Y %H:%M:%S ", 1)
-local mytextclock = wibox.widget.textclock(markup.fontfg(theme.font, theme.widgetbar_fg, "%a %d-%m-%Y") .. markup.fontfg(theme.font_larger, theme.fg_minimize, " %H:%M:%S "), 1)
+local mytextclock = wibox.widget.textclock(markup.fontfg(theme.font, theme.widgetbar_fg, "%a %d-%m-%Y") .. markup.fontfg(theme.font_larger, theme.fg_focus, " %H:%M:%S "), 1)
 
 -- Calendar widget
 local cw = calendar_widget({
@@ -449,9 +450,9 @@ rnotification.connect_signal('request::rules', function()
         -- Critical notifs
         rnotification.append_rule {
             rule       = { urgency = 'critical' },
-            properties = { 
+            properties = {
                 font                = theme.font_notify,
-                bg                  = '#ff0000', 
+                bg                  = '#ff0000',
                 fg                  = '#ffffff',
                 margin              = dpi(16),
                 position            = 'top_middle',
@@ -464,7 +465,7 @@ rnotification.connect_signal('request::rules', function()
             rule       = { urgency = 'normal' },
             properties = {
                 font                = theme.font_notify,
-                bg                  = theme.notification_bg, 
+                bg                  = theme.notification_bg,
                 fg                  = theme.notification_fg,
                 margin              = dpi(16),
                 position            = 'top_middle',
@@ -477,7 +478,7 @@ rnotification.connect_signal('request::rules', function()
         -- Low notifs
         rnotification.append_rule {
             rule       = { urgency = 'low' },
-            properties = { 
+            properties = {
                 font                = theme.font_notify,
                 bg                  = theme.notification_bg,
                 fg                  = theme.notification_fg,
@@ -525,9 +526,9 @@ naughty.connect_signal('request::icon', function(n, context, hints)
 screen.connect_signal("request::desktop_decoration", function(s)
     -- Each screen has its own tag table.
     --awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
-    names = { "main", "www", "apps", "idea", "water", "air", "fire", "earth", "love" }
+    names = { "/main", "/w3", "/apps", "/dev", "懲/water", "摒/air", "/fire", "/earth", "/love" }
     l = awful.layout.suit  -- Just to save some typing: use an alias.
-    layouts = { 
+    layouts = {
       awful.layout.layouts[1], --main
       awful.layout.layouts[2], --www (machi)
       awful.layout.layouts[2], --apps (machi)
@@ -591,66 +592,72 @@ screen.connect_signal("request::desktop_decoration", function(s)
         }
     }
 
-    -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s })
-
-    -- bind calendar with clock widget  
-    mytextclock:connect_signal("button::press", 
+    -- bind calendar with clock widget
+    mytextclock:connect_signal("button::press",
         function(_, _, _, button)
             if button == 1 then cw.toggle() end
         end
     )
-    
     -- separator type
     separator:set_text("   ")
 
-    -- Add widgets to the wibox
-    s.mywibox.widget = {
-        layout = wibox.layout.align.horizontal,
-        { -- Left widgets
-            layout = wibox.layout.fixed.horizontal,
-            mylauncher,
-            s.mytaglist,
-            s.mypromptbox,
-        },
-        s.mytasklist, -- Middle widget
-        { -- Right widgets
-            layout = wibox.layout.fixed.horizontal,
-            separator,
-            spotify_widget({
-                font = 'Play 9',
-                max_length = 50,
-                play_icon = '/usr/share/icons/Papirus-Light/24x24/categories/spotify.svg',
-                pause_icon = '/usr/share/icons/Papirus-Dark/24x24/panel/spotify-indicator.svg'
-            }),
-            separator,
-            todo_widget(),
-            separator,
-            wibox.widget.systray(),
-            separator,
-            arrow("alpha", theme.arrow2_bg),
-            wibox.container.background(wibox.container.margin(wibox.widget { keyboardText, theme.mykeyboardlayout, layout = wibox.layout.align.horizontal }, 3, 6), theme.arrow2_bg),
-            arrow(theme.arrow2_bg, theme.arrow1_bg),
-            wibox.container.background(wibox.container.margin(wibox.widget { fsicon, theme.fs.widget, layout = wibox.layout.align.horizontal }, 2, 3), theme.arrow1_bg),
-            arrow(theme.arrow1_bg, theme.arrow2_bg),
-            wibox.container.background(wibox.container.margin(wibox.widget { memicon, mem.widget, layout = wibox.layout.align.horizontal }, 2, 3), theme.arrow2_bg),
-            arrow(theme.arrow2_bg, theme.arrow1_bg),
-            wibox.container.background(wibox.container.margin(wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.align.horizontal }, 3, 4), theme.arrow1_bg),
-            arrow(theme.arrow1_bg, theme.arrow2_bg),
-            wibox.container.background(wibox.container.margin(wibox.widget { tempicon, tempcpu.widget, tempgpu.widget, layout = wibox.layout.align.horizontal }, 4, 4), theme.arrow2_bg),
-            arrow(theme.arrow2_bg, theme.arrow1_bg),
-            wibox.container.background(wibox.container.margin(myWeather, 3, 3), theme.arrow1_bg),
-            arrow(theme.arrow1_bg, theme.arrow2_bg),
-            wibox.container.background(wibox.container.margin(wibox.widget { volicon, theme.volume.widget, layout = wibox.layout.align.horizontal }, 3, 3), theme.arrow2_bg),
-            arrow(theme.arrow2_bg, theme.arrow1_bg),
-            wibox.container.background(wibox.container.margin(wibox.widget { nil, neticon, net.widget, layout = wibox.layout.align.horizontal }, 3, 3), theme.arrow1_bg),
-            arrow(theme.arrow1_bg, theme.arrow2_bg),
-            wibox.container.background(wibox.container.margin(mytextclock, 4, 8), theme.arrow2_bg),
-            arrow(theme.arrow2_bg, "alpha"),
-            --separator,
-            s.mylayoutbox,
-        },
-    }
+    -- Create the wibox
+    if usePolybar then
+       awful.util.spawn(os.getenv("HOME") .. "/.config/polybar/launch.sh")
+       s.mywibox = awful.wibar({ position = "top", height = 35, screen = s })
+    else
+      -- Add widgets to the wibox
+      --awful.util.spawn("killall -q polybar")
+      s.mywibox = awful.wibar({ position = "top", screen = s })
+      s.mywibox.widget = {
+          layout = wibox.layout.align.horizontal,
+          { -- Left widgets
+              layout = wibox.layout.fixed.horizontal,
+              mylauncher,
+              separator,
+              s.mytaglist,
+              separator,
+              s.mypromptbox,
+          },
+          s.mytasklist, -- Middle widget
+          { -- Right widgets
+              layout = wibox.layout.fixed.horizontal,
+              separator,
+              spotify_widget({
+                  font = 'Iosevka Nerd Font 9',
+                  max_length = 50,
+                  play_icon = '/usr/share/icons/Papirus-Light/24x24/categories/spotify.svg',
+                  pause_icon = '/usr/share/icons/Papirus-Dark/24x24/panel/spotify-indicator.svg'
+              }),
+              separator,
+              todo_widget(),
+              separator,
+              wibox.widget.systray(),
+              separator,
+              arrow("alpha", theme.arrow2_bg),
+              wibox.container.background(wibox.container.margin(wibox.widget { keyboardText, theme.mykeyboardlayout, layout = wibox.layout.align.horizontal }, 3, 6), theme.arrow2_bg),
+              arrow(theme.arrow2_bg, theme.arrow1_bg),
+              wibox.container.background(wibox.container.margin(wibox.widget { fsicon, theme.fs.widget, layout = wibox.layout.align.horizontal }, 2, 3), theme.arrow1_bg),
+              arrow(theme.arrow1_bg, theme.arrow2_bg),
+              wibox.container.background(wibox.container.margin(wibox.widget { memicon, mem.widget, layout = wibox.layout.align.horizontal }, 2, 3), theme.arrow2_bg),
+              arrow(theme.arrow2_bg, theme.arrow1_bg),
+              wibox.container.background(wibox.container.margin(wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.align.horizontal }, 3, 4), theme.arrow1_bg),
+              arrow(theme.arrow1_bg, theme.arrow2_bg),
+              wibox.container.background(wibox.container.margin(wibox.widget { tempicon, tempcpu.widget, tempgpu.widget, layout = wibox.layout.align.horizontal }, 4, 4), theme.arrow2_bg),
+              arrow(theme.arrow2_bg, theme.arrow1_bg),
+              wibox.container.background(wibox.container.margin(myWeather, 3, 3), theme.arrow1_bg),
+              arrow(theme.arrow1_bg, theme.arrow2_bg),
+              wibox.container.background(wibox.container.margin(wibox.widget { volicon, theme.volume.widget, layout = wibox.layout.align.horizontal }, 3, 3), theme.arrow2_bg),
+              arrow(theme.arrow2_bg, theme.arrow1_bg),
+              wibox.container.background(wibox.container.margin(wibox.widget { nil, neticon, net.widget, layout = wibox.layout.align.horizontal }, 3, 3), theme.arrow1_bg),
+              arrow(theme.arrow1_bg, theme.arrow2_bg),
+              wibox.container.background(wibox.container.margin(mytextclock, 4, 8), theme.arrow2_bg),
+              arrow(theme.arrow2_bg, "alpha"),
+              --separator,
+              s.mylayoutbox,
+          },
+      }
+    end
 
     -- Wallpaper Settings for each Tag
     -- Set wallpaper on first tab (else it would be empty at start up)
@@ -683,7 +690,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
           elseif wp_selected[t] == "random" then
               local position = math.random(1, #wp_random)
               wp = wppath .. wp_random[position]
-          else 
+          else
               wp = wppath .. wp_selected[t]
           end
           --gears.wallpaper.fit(wppath .. wp_selected[t], s)

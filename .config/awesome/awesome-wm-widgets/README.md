@@ -33,24 +33,6 @@ Brightness, volume and battery widgets:
 
 Some more screenshots in this reddit [post](https://www.reddit.com/r/unixporn/comments/8qijmx/awesomewm_dark_theme/)
 
-From left to right:
-
-- [spotify-widget](https://github.com/streetturtle/AwesomeWM/tree/master/spotify-widget) / [rhythmbox-widget](https://github.com/streetturtle/AwesomeWM/tree/master/rhythmbox-widget)
-- [cpu-widget](https://github.com/streetturtle/AwesomeWM/tree/master/cpu-widget)
-- [weather-widget](https://github.com/streetturtle/AwesomeWM/tree/master/weather-widget)
-- [email-widget](https://github.com/streetturtle/AwesomeWM/tree/master/email-widget)
-- [brightness-widget](https://github.com/streetturtle/AwesomeWM/tree/master/brightness-widget)
-- [volume-widget](https://github.com/streetturtle/AwesomeWM/tree/master/volume-widget)
-- [volumebar-widget](https://github.com/streetturtle/AwesomeWM/tree/master/volumebar-widget)
-- [volumearc-widget](https://github.com/streetturtle/AwesomeWM/tree/master/volumearc-widget)
-- [batteryarc-widget](https://github.com/streetturtle/AwesomeWM/tree/master/batteryarc-widget)
-- [battery-widget](https://github.com/streetturtle/AwesomeWM/tree/master/battery-widget)
-- [ram-widget](https://github.com/streetturtle/AwesomeWM/tree/master/ram-widget)
-- [translate-widget](https://github.com/streetturtle/AwesomeWM/tree/master/translate-widget) (not on the screenshot)
-- [spotify-shell](https://github.com/streetturtle/AwesomeWM/tree/master/spotify-shell) (not on the screenshot)
-- [run-shell](https://github.com/streetturtle/AwesomeWM/tree/master/run-shell) (not on the screenshot)
-- [mpris-widget](https://github.com/streetturtle/AwesomeWM/tree/master/mpris-widget) (not on the screenshot)
-
 # Installation
 
 Clone the repo under **~/.config/awesome/**, then follow an Installation section of widget's readme file.
@@ -61,7 +43,10 @@ Clone the repo under **~/.config/awesome/**, then follow an Installation section
 
 # Troubleshooting
 
-In case of any doubts/questions don't hesitate to create an issue. Or try [Discussions](https://github.com/streetturtle/awesome-wm-widgets/discussions)!
+In case of any doubts/questions/problems:
+ - create an [issue](https://github.com/streetturtle/awesome-wm-widgets/issues/new/choose)
+ - raise a question on [Discussions](https://github.com/streetturtle/awesome-wm-widgets/discussions)!
+ - ping me on  AwesomeWM's discord, here's an [invite](https://discord.gg/XYvn8R5)  
 
 # Support
 
@@ -69,3 +54,10 @@ If you find anything useful here, you can:
  - star a repo - this really motivates me to work on this project
  - or <a class="social-link" href="https://www.buymeacoffee.com/streetturtle"><img style="display:inline" src="https://img.shields.io/badge/-buy%20me%20a%20coffee-3B4252?style=flat&logo=Buy-Me-A-Coffee"></a>
  - or even become a [sponsor](https://github.com/sponsors/streetturtle)
+
+# Contributors
+
+<a href="https://github.com/streetturtle/awesome-wm-widgets/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=streetturtle/awesome-wm-widgets" />
+</a>
+

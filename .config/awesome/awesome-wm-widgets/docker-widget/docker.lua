@@ -50,7 +50,10 @@ local docker_widget = wibox.widget {
         margins = 4,
         layout = wibox.container.margin
     },
-    layout = wibox.layout.fixed.horizontal,
+    shape = function(cr, width, height)
+        gears.shape.rounded_rect(cr, width, height, 4)
+    end,
+    widget = wibox.container.background,
     set_icon = function(self, new_icon)
         self:get_children_by_id("icon")[1].image = new_icon
     end
@@ -157,7 +160,7 @@ local function worker(user_args)
                 end)
 
                 start_stop_button:buttons(
-                    awful.util.table.join( awful.button({}, 1, function()
+                    gears.table.join( awful.button({}, 1, function()
                         local command
                         if container:is_up() then command = 'stop' else command = 'start' end
 
@@ -216,7 +219,7 @@ local function worker(user_args)
                 end)
 
                 pause_unpause_button:buttons(
-                    awful.util.table.join( awful.button({}, 1, function()
+                    gears.table.join( awful.button({}, 1, function()
                         local command
                         if container:is_paused() then command = 'unpause' else command = 'pause' end
 
@@ -254,7 +257,7 @@ local function worker(user_args)
                     widget = wibox.container.background
                 }
                 delete_button:buttons(
-                        awful.util.table.join( awful.button({}, 1, function()
+                        gears.table.join( awful.button({}, 1, function()
                             awful.spawn.easy_async('docker rm ' .. container['name'], function(_, rm_stderr)
                                 if rm_stderr ~= '' then show_warning(rm_stderr) end
                                 spawn.easy_async(string.format(LIST_CONTAINERS_CMD, number_of_containers),
@@ -351,11 +354,13 @@ local function worker(user_args)
     end
 
     docker_widget:buttons(
-        awful.util.table.join(
+        gears.table.join(
                 awful.button({}, 1, function()
                     if popup.visible then
+                        docker_widget:set_bg('#00000000')
                         popup.visible = not popup.visible
                     else
+                        docker_widget:set_bg(beautiful.bg_focus)
                         spawn.easy_async(string.format(LIST_CONTAINERS_CMD, number_of_containers),
                             function(stdout, stderr)
                                 rebuild_widget(stdout, stderr)

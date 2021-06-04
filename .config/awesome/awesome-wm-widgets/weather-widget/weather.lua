@@ -149,18 +149,29 @@ local function worker(user_args)
     weather_widget = wibox.widget {
         {
             {
-                id = 'icon',
-                resize = true,
-                widget = wibox.widget.imagebox
+                {
+                    {
+                        id = 'icon',
+                        resize = true,
+                        widget = wibox.widget.imagebox
+                    },
+                    valign = 'center',
+                    widget = wibox.container.place,
+                },
+                {
+                    id = 'txt',
+                    widget = wibox.widget.textbox
+                },
+                layout = wibox.layout.fixed.horizontal,
             },
-            valign = 'center',
-            widget = wibox.container.place,
+            left = 4,
+            right = 4,
+            layout = wibox.container.margin
         },
-        {
-            id = 'txt',
-            widget = wibox.widget.textbox
-        },
-        layout = wibox.layout.fixed.horizontal,
+        shape = function(cr, width, height)
+            gears.shape.rounded_rect(cr, width, height, 4)
+        end,
+        widget = wibox.container.background,
         set_image = function(self, path)
             self:get_children_by_id('icon')[1].image = path
         end,
@@ -373,7 +384,9 @@ local function worker(user_args)
                         widget = wibox.widget.textbox
                     })
                     table.insert(temp_below, wibox.widget {
-                        markup = '<span >' .. string.format('%.0f', hour.temp) .. '°' .. '</span>',
+                        markup = '<span foreground="'
+                                .. (tonumber(hour.temp) > 0 and '#2E3440' or '#ECEFF4') .. '">'
+                                .. string.format('%.0f', hour.temp) .. '°' .. '</span>',
                         align = 'center',
                         font = font_name .. ' 9',
                         widget = wibox.widget.textbox
@@ -526,10 +539,12 @@ local function worker(user_args)
         })
     end
 
-    weather_widget:buttons(awful.util.table.join(awful.button({}, 1, function()
+    weather_widget:buttons(gears.table.join(awful.button({}, 1, function()
             if weather_popup.visible then
+                weather_widget:set_bg('#00000000')
                 weather_popup.visible = not weather_popup.visible
             else
+                weather_widget:set_bg(beautiful.bg_focus)
                 weather_popup:move_next_to(mouse.current_widget_geometry)
             end
         end)))

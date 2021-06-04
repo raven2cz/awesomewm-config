@@ -1,9 +1,9 @@
---  _ __ __ ___   _____ _ __  
+--  _ __ __ ___   _____ _ __
 -- | '__/ _` \ \ / / _ \ '_  \  Antonin Fischer (raven2cz)
 -- | | | (_| |\ V /  __/ | | |  https://tonda-fischer.online/
 -- |_|  \__,_| \_/ \___|_| |_|  https://github.com/raven2cz
---        
--- A customized rc.lua for awesomewm-git (master branch) (https://awesomewm.org//) 
+--
+-- A customized rc.lua for awesomewm-git (master branch) (https://awesomewm.org//)
 
 -- awesome_mode: api-level=4:screen=on
 -- If LuaRocks is installed, make sure that packages installed through it are
@@ -32,7 +32,7 @@ local treetile = require("treetile")
 -- local treetileBindings = require("treetile.bindings")
 local machi = require("layout-machi")
 -- titlebars NICE
---local nice = require("nice")
+local nice = require("nice")
 -- cycle focus clients
 local cyclefocus = require('cyclefocus')
 
@@ -63,7 +63,7 @@ local function xmenu()
 end
 
 -- This is used later as the default terminal and editor to run.
-terminal = "urxvt"
+terminal = "alacritty" --"urxvt"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -132,26 +132,38 @@ beautiful.layout_machi = machi.get_icon()
 -- treetile layout bindings loading
 --treetileBindings.init()
 -- titlebars NICE
--- nice {
---     win_shade_enabled = true,
---     titlebar_items = {
---         left = {"sticky", "ontop", "floating"},
---         middle = "title",
---         right = {"minimize", "maximize","close"},
---     },
---         tooltip_messages = {
---         close = "Close",
---         minimize = "Minimize",
---         maximize_active = "Unmaximize",
---         maximize_inactive = "Maximize",
---         floating_active = "Floating",
---         floating_inactive = "Tiling",
---         ontop_active = "OnTop",
---         ontop_inactive = "NotOnTop",
---         sticky_active = "Sticky",
---         sticky_inactive = "NotSticky",
---     }
--- }
+nice {
+    win_shade_enabled = true,
+    titlebar_height = 29,
+    titlebar_radius = 11,
+    titlebar_font = "Iosevka Nerd Font 9",
+    button_size = 13,
+    button_margin_horizontal = 5,
+    button_margin_top = 2,
+    minimize_color = "#ffb400",
+    maximize_color = "#4CBB17",
+    close_color = "#ee4266",
+    sticky_color = "#774f73",
+    floating_color = "#774f73",
+    ontop_color = "#774f73",
+    titlebar_items = {
+        left = {"sticky", "floating", "ontop"},
+        middle = "title",
+        right = {"minimize", "maximize","close"},
+    },
+        tooltip_messages = {
+        close = "Close",
+        minimize = "Minimize",
+        maximize_active = "Unmaximize",
+        maximize_inactive = "Maximize",
+        floating_active = "Floating",
+        floating_inactive = "Tiling",
+        ontop_active = "OnTop",
+        ontop_inactive = "NotOnTop",
+        sticky_active = "Sticky",
+        sticky_inactive = "NotSticky",
+    }
+}
 
 -- Notification Canter
 popup = require("notifs.notif-center.notif_popup")
@@ -197,39 +209,39 @@ awful.keyboard.append_global_keybindings({
         if awful.layout.get(c.screen).name ~= "treetile" then
             awful.tag.incmwfact(0.05)
         else
-            treetile.resize_horizontal(0.1) 
-            -- increase or decrease by percentage of current width or height, 
+            treetile.resize_horizontal(0.1)
+            -- increase or decrease by percentage of current width or height,
             -- the value can be from 0.01 to 0.99, negative or postive
-        end 
+        end
         end,
-        {description = "layout.extends right", group = "layout"}),   
+        {description = "layout.extends right", group = "layout"}),
         awful.key({ modkey, altkey   }, "Left", function ()
         local c = client.focus
         if awful.layout.get(c.screen).name ~= "treetile" then
-            awful.tag.incmwfact(-0.05) 
+            awful.tag.incmwfact(-0.05)
         else
-            treetile.resize_horizontal(-0.1) 
-            -- increase or decrease by percentage of current width or height, 
+            treetile.resize_horizontal(-0.1)
+            -- increase or decrease by percentage of current width or height,
             -- the value can be from 0.01 to 0.99, negative or postive
-        end 
+        end
         end,
-        {description = "layout.extends left", group = "layout"}), 
-    awful.key({ modkey, altkey   }, "Up", function () 
+        {description = "layout.extends left", group = "layout"}),
+    awful.key({ modkey, altkey   }, "Up", function ()
         local c = client.focus
         if awful.layout.get(c.screen).name ~= "treetile" then
-            awful.tag.incmwfact(0.05) 
+            awful.tag.incmwfact(0.05)
         else
             treetile.resize_vertical(-0.1)
-        end 
+        end
         end,
         {description = "layout.extends up", group = "layout"}),
-    awful.key({ modkey, altkey   }, "Down", function () 
+    awful.key({ modkey, altkey   }, "Down", function ()
         local c = client.focus
         if awful.layout.get(c.screen).name ~= "treetile" then
-            awful.tag.incmwfact(-0.05) 
+            awful.tag.incmwfact(-0.05)
         else
             treetile.resize_vertical(0.1)
-        end 
+        end
         end,
         {description = "layout.extends down", group = "layout"}),
 
@@ -237,16 +249,16 @@ awful.keyboard.append_global_keybindings({
     awful.key({ modkey, "Shift"  }, "Right", function ()
           awful.client.swap.byidx(1)
         end,
-        {description = "layout.client.swap right", group = "layout"}),   
+        {description = "layout.client.swap right", group = "layout"}),
         awful.key({ modkey, "Shift"  }, "Left", function ()
           awful.client.swap.byidx(-1)
         end,
-        {description = "layout.client.swap left", group = "layout"}), 
-    awful.key({ modkey, "Shift" }, "Up", function () 
+        {description = "layout.client.swap left", group = "layout"}),
+    awful.key({ modkey, "Shift" }, "Up", function ()
           awful.client.swap.byidx(1)
         end,
         {description = "layout.client.swap up", group = "layout"}),
-    awful.key({ modkey, "Shift" }, "Down", function () 
+    awful.key({ modkey, "Shift" }, "Down", function ()
           awful.client.swap.byidx(-1)
         end,
         {description = "layout.client.swap down", group = "layout"}),
@@ -255,16 +267,16 @@ awful.keyboard.append_global_keybindings({
     awful.key({ modkey, modkey1 }, "Right", function ()
           awful.client.focus.bydirection("right")
         end,
-        {description = "layout.client.focus right", group = "layout"}),   
+        {description = "layout.client.focus right", group = "layout"}),
     awful.key({ modkey, modkey1 }, "Left", function ()
           awful.client.focus.bydirection("left")
         end,
-        {description = "layout.client.focus left", group = "layout"}), 
-    awful.key({ modkey, modkey1 }, "Up", function () 
+        {description = "layout.client.focus left", group = "layout"}),
+    awful.key({ modkey, modkey1 }, "Up", function ()
           awful.client.focus.bydirection("up")
         end,
         {description = "layout.client.focus up", group = "layout"}),
-    awful.key({ modkey, modkey1 }, "Down", function () 
+    awful.key({ modkey, modkey1 }, "Down", function ()
           awful.client.focus.bydirection("down")
         end,
         {description = "layout.client.focus down", group = "layout"}),
@@ -272,8 +284,8 @@ awful.keyboard.append_global_keybindings({
     awful.key({ "Shift" }, "Alt_L", function () beautiful.mykeyboardlayout.next_layout(); end),
 
     -- Print Screen
-    awful.key({ }, "Print", function () 
-                  awful.util.spawn("scrot -e 'mv $f ~/Pictures/screenshots/ 2>/dev/null'", false) 
+    awful.key({ }, "Print", function ()
+                  awful.util.spawn("scrot -e 'mv $f ~/Pictures/screenshots/ 2>/dev/null'", false)
                   awful.util.spawn("notify-send \"SCROT\" \"Screenshot created!\"", false)
               end,
               {description="Make screenshot to ~/Pictures/screenshots/", group="awesome"}),
@@ -525,7 +537,7 @@ client.connect_signal("request::default_keybindings", function()
         awful.key({ modkey }, "Next", function (c) awful.util.spawn("transset-df -a --inc 0.20 --max 0.99") end,
             {description="Client Transparency Up", group="client"}),
         awful.key({ modkey }, "Prior", function (c) awful.util.spawn("transset-df -a --min 0.1 --dec 0.1") end,
-            {description="Client Transparency Down", group="client"}),  
+            {description="Client Transparency Down", group="client"}),
 
         -- show/hide titlebar
         awful.key({ modkey,           }, "t", awful.titlebar.toggle,
@@ -673,7 +685,7 @@ ruled.client.connect_signal("request::rules", function()
     -- FullHD Resolution for Specific Apps
     ruled.client.append_rule {
         id         = "dialogs",
-        rule_any   = { 
+        rule_any   = {
             instance = { "remmina",}
         },
         except_any = {
@@ -709,39 +721,39 @@ end)
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
 client.connect_signal("request::titlebars", function(c)
     -- buttons for the titlebar
-    local buttons = {
-        awful.button({ }, 1, function()
-            c:activate { context = "titlebar", action = "mouse_move"  }
-        end),
-        awful.button({ }, 3, function()
-            c:activate { context = "titlebar", action = "mouse_resize"}
-        end),
-    }
-
-    awful.titlebar(c).widget = {
-        { -- Left
-            awful.titlebar.widget.iconwidget(c),
-            buttons = buttons,
-            layout  = wibox.layout.fixed.horizontal
-        },
-        { -- Middle
-            { -- Title
-                align  = "center",
-                widget = awful.titlebar.widget.titlewidget(c)
-            },
-            buttons = buttons,
-            layout  = wibox.layout.flex.horizontal
-        },
-        { -- Right
-            awful.titlebar.widget.floatingbutton (c),
-            awful.titlebar.widget.maximizedbutton(c),
-            awful.titlebar.widget.stickybutton   (c),
-            awful.titlebar.widget.ontopbutton    (c),
-            awful.titlebar.widget.closebutton    (c),
-            layout = wibox.layout.fixed.horizontal()
-        },
-        layout = wibox.layout.align.horizontal
-    }
+    -- local buttons = {
+    --     awful.button({ }, 1, function()
+    --         c:activate { context = "titlebar", action = "mouse_move"  }
+    --     end),
+    --     awful.button({ }, 3, function()
+    --         c:activate { context = "titlebar", action = "mouse_resize"}
+    --     end),
+    -- }
+    --
+    -- awful.titlebar(c).widget = {
+    --     { -- Left
+    --         awful.titlebar.widget.iconwidget(c),
+    --         buttons = buttons,
+    --         layout  = wibox.layout.fixed.horizontal
+    --     },
+    --     { -- Middle
+    --         { -- Title
+    --             align  = "center",
+    --             widget = awful.titlebar.widget.titlewidget(c)
+    --         },
+    --         buttons = buttons,
+    --         layout  = wibox.layout.flex.horizontal
+    --     },
+    --     { -- Right
+    --         awful.titlebar.widget.floatingbutton (c),
+    --         awful.titlebar.widget.maximizedbutton(c),
+    --         awful.titlebar.widget.stickybutton   (c),
+    --         awful.titlebar.widget.ontopbutton    (c),
+    --         awful.titlebar.widget.closebutton    (c),
+    --         layout = wibox.layout.fixed.horizontal()
+    --     },
+    --     layout = wibox.layout.align.horizontal
+    -- }
     awful.titlebar.hide(c)
 end)
 
