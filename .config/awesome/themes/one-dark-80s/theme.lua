@@ -537,7 +537,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
 
   -- Each screen has its own tag table.
   for s = 1, screen.count() do
-    tags[s] = awful.tag(tags.names, s, tags.layout)
+    tags[s] = awful.tag(tags.names, s, tags.layouts)
   end
 
   -- Create a promptbox for each screen
