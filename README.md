@@ -1,11 +1,15 @@
 # awesomewm-config
-AwesomeWM (git-master) configuration with new Amazing Theme. Amazing Theme is focused to green colors with gold highlights. 
+AwesomeWM (git-master) configuration with new **80s DarkOne Theme** or **Amazing Theme**.
+
+**80s OneDark Theme** is focused to Atom colors and 80s pastel color schemes. New complex configuration of main panel with many features and additional modifications of conky, xmenu, rofi and alacritty settings.
+
+**Amazing Theme** is focused to green colors with gold highlights.
 Applications styling and additional colors are based on Nordic Colors and KDE Nordic Theme [An arctic, north-bluish color palette](https://www.nordtheme.com/).   
 
 # Dependencies
 * AwesomeWm git-master branch!
 * picom standard version (no blur)
-* fonts: Hack Nerd Font, mononoki Nerd Font, TerminessTTFNerdFontMono
+* fonts: Hack Nerd Font, Iosevka Nerd Font, mononoki Nerd Font, TerminessTTFNerdFontMono
 
 # Features
 * treetile layout (fixed) from branch [alfunx/awesome-treetile](https://github.com/alfunx/awesome-treetile) - thanks Alfunx your fixes are awesome!
@@ -23,7 +27,11 @@ Applications styling and additional colors are based on Nordic Colors and KDE No
 * i3lock-blur for locking and suspend session.
 * optimized for hidpi (4k) monitors.
 
-# Screenshots
+# 80s OneDark Theme Screenshots
+![Awesome 80s OneDark 1](/images/one-dark-80s-1.jpg)
+![Awesome 80s OneDark 2](/images/one-dark-80s-2.jpg)
+
+# Amazing Theme Screenshots
 ![Awesome Amazing 1](/images/awesome-amazing-1.jpg)
 ![Awesome Amazing 2](/images/awesome-amazing-2.jpg)
 

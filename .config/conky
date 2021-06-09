@@ -3,9 +3,9 @@ conky.config = {
     background = true,
     cpu_avg_samples = 2,
     default_color = '#F9FAF9',
-    color2 = '#9ec69e',
+    color2 = '#66cccc',
     double_buffer = true,
-    font = 'Bitstream Vera Sans:size=9',
+    font = 'Bitstream Vera Sans:size=11',
     draw_shades = false,
     gap_x = 30,
     gap_y = 30,
@@ -19,29 +19,28 @@ conky.config = {
 }
 conky.text = [[
 ${voffset 8}$color2${font Bitstream Vera Sans:size=16}${time %A}$font\
-${voffset -8}$alignr$color${font Bitstream Vera Sans:size=38}${time %e}$font
-$color${voffset -30}$color${font Bitstream Vera Sans:size=18}${time %b}$font\
+${voffset -4}$alignr$color${font Bitstream Vera Sans:size=42}${time %e}$font
+$color${voffset -21}$color${font Bitstream Vera Sans:size=18}${time %b}$font\
 ${voffset -3} $color${font Bitstream Vera Sans:size=20}${time %Y}$font$color2$hr
-${alignr}${font Bitstream Vera Sans:size=18}${color}${time %H:%M:%S}
 #
-${voffset 20}${goto 40}${color}${font Bitstream Vera Sans:size=9}CPU${font Bitstream Vera Sans:bold:size=8}$alignr$cpu%
+${voffset 20}${goto 40}${color}CPU${font Bitstream Vera Sans:bold:size=8}$alignr$cpu%
 ${voffset 5}${goto 40}$font$color2${top name 1}$alignr$color${top cpu 1}%
 ${goto 40}$color2${top name 2}$alignr$color${top cpu 2}%
 ${goto 40}$color2${top name 3}$alignr$color${top cpu 3}%
 ${goto 40}$color2${top name 4}$alignr$color${top cpu 4}%
 ${goto 40}$color2${top name 5}$alignr$color${top cpu 5}%
 #
-${voffset 10}${goto 40}${color}${font Bitstream Vera Sans:size=9}RAM${font Bitstream Vera Sans:bold:size=8}$alignr$mem$font
+${voffset 10}${goto 40}${color}RAM${font Bitstream Vera Sans:bold:size=8}$alignr$mem$font
 ${goto 40}${voffset 5}$color2${top_mem name 1}$alignr$color${top_mem mem_res 1}
 ${goto 40}$color2${top_mem name 2}$alignr$color${top_mem mem_res 2}
 ${goto 40}$color2${top_mem name 3}$alignr$color${top_mem mem_res 3}
 ${goto 40}$color2${top_mem name 4}$alignr$color${top_mem mem_res 4}
 ${goto 40}$color2${top_mem name 5}$alignr$color${top_mem mem_res 5}
 #
-${voffset 10}${goto 40}${color}${font Bitstream Vera Sans:size=9}Swap${font Bitstream Vera Sans:bold:size=9}$alignr${swap}/ ${swapfree}
+${voffset 10}${goto 40}${color}Swap${font Bitstream Vera Sans:bold:size=9}$alignr${swap}/ ${swapfree}
 ${voffset 15}$font$alignr${execi 10000 awk -F= '/TION/ {print $2}' /etc/lsb-release |sed 's/"//g'} \
 ${execi 10000 awk -F= '/EASE=/ {printf $2" "} /NAME/ {print $2}' /etc/lsb-release}
 ${voffset 10}${color2}${alignr}${execi 1200 whoami}@${nodename}
 ${alignr}${color2}${font Bitstream Vera Sans:size=10}uptime: ${color}${uptime_short}
-${voffset 5}${color2}${font Bitstream Vera Sans:size=10}${alignr}kernel: ${color}${kernel}
+${voffset 5}${color2}${font Bitstream Vera Sans:size=11}${alignr}kernel: ${color}${kernel}
 ]]

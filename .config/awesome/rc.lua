@@ -125,7 +125,7 @@ lain.layout.cascade.tile.ncol          = 2
 -- Themes define colours, icons, font and wallpapers.
 --beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 --beautiful.init(gears.filesystem.get_configuration_dir() .. "/themes/amazing/theme.lua")
-beautiful.init(gears.filesystem.get_configuration_dir() .. "/themes/amazing/theme.lua")
+beautiful.init(gears.filesystem.get_configuration_dir() .. "/themes/one-dark-80s/theme.lua")
 -- {{{ Layouts configuration
 -- machi layout config
 beautiful.layout_machi = machi.get_icon()
@@ -561,8 +561,15 @@ end)
 
 client.connect_signal("request::default_keybindings", function()
     awful.keyboard.append_client_keybindings({
-        awful.key({ modkey,           }, "f",
-            function (c)
+       -- Store debug information
+        awful.key({ modkey, "Shift" }, "d", function (c)
+                local val = awesome.systray()
+                local file = io.open(os.getenv("HOME") .. "/.config/awesome/debug.txt", "a")
+                file:write("systray.tostring=" .. val .. "\n")
+                file:close()
+            end,
+            {description = "store debug information to awesome/debug.txt", group = "client"}),
+        awful.key({ modkey }, "f", function (c)
                 c.fullscreen = not c.fullscreen
                 c:raise()
             end,
