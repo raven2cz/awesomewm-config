@@ -20,6 +20,8 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 -- Window Enhancements
 local lain = require("lain")
+-- Fishlive Enhancements
+local fishlive = require("fishlive")
 -- Notification library
 local naughty = require("naughty")
 -- Declarative object management
@@ -31,10 +33,12 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 local treetile = require("treetile")
 -- local treetileBindings = require("treetile.bindings")
 local machi = require("layout-machi")
+-- switching windows in the actual layout
+--local machina = require("machina")()
 -- titlebars NICE
 local nice = require("nice")
 -- cycle focus clients
-local cyclefocus = require('cyclefocus')
+local cyclefocus = require("cyclefocus")
 
 -- classes and services
 local dpi = require("beautiful.xresources").apply_dpi
@@ -63,7 +67,7 @@ local function xmenu()
 end
 
 -- This is used later as the default terminal and editor to run.
-terminal = "alacritty" --"urxvt"
+terminal = "alacritty" --"kitty" --"urxvt"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -94,11 +98,12 @@ tag.connect_signal("request::default_layouts", function()
         awful.layout.suit.max,
         awful.layout.suit.max.fullscreen,
         machi.layout.create{ new_placement_cb = machi.layout.placement.empty_then_fair },
+        awful.layout.suit.tile.bottom,
+        fishlive.layout.mirrored_tile.left,
         -- lain.layout.cascade,
         -- lain.layout.cascade.tile,
         -- lain.layout.termfair,
         -- awful.layout.suit.tile.left,
-        -- awful.layout.suit.tile.bottom,
         -- awful.layout.suit.tile.top,
         -- awful.layout.suit.fair,
         -- awful.layout.suit.fair.horizontal,
@@ -178,9 +183,10 @@ awful.mouse.append_global_mousebindings({
 
 -- {{{ Key bindings
 
+--awful.keyboard.append_global_keybindings(machina.bindings)
+
 -- Personal Awesome keys
 awful.keyboard.append_global_keybindings({
-
     -- user directory wallpapers change by keybindings - NEXT/PREVIOUS WALLPAPER
     awful.key({ modkey, "Shift" }, "w", function() beautiful.change_wallpaper_user(1) end,
         {description = "set next user wallpaper", group = "awesome"}),
@@ -309,31 +315,30 @@ awful.keyboard.append_global_keybindings({
     awful.key({ altkey, }, "h", function () if beautiful.fs then beautiful.fs.show(7) end end,
               {description = "show filesystem", group = "widgets"}),
     -- ALSA volume control
-    awful.key({ modkey, altkey }, "l",
+    awful.key({ modkey, altkey }, "k",
         function ()
             os.execute(string.format("amixer -q set %s 5%%+", beautiful.volume.channel))
             beautiful.volume.update()
         end,
-              {description="sounds volume up", group="awesome"}),
-    awful.key({ modkey, altkey }, "k",
+        {description="sounds volume up", group="awesome"}),
+    awful.key({ modkey, altkey }, "j",
         function ()
             os.execute(string.format("amixer -q set %s 5%%-", beautiful.volume.channel))
             beautiful.volume.update()
         end,
-              {description="sounds volume down", group="awesome"}),
+        {description="sounds volume down", group="awesome"}),
     awful.key({ modkey, altkey }, "m",
         function ()
             os.execute(string.format("amixer -q set %s toggle", beautiful.volume.channel))
             beautiful.volume.update()
         end,
-              {description="sounds volume toggle mute", group="awesome"}),
+        {description="sounds volume toggle mute", group="awesome"}),
     awful.key({ modkey, altkey }, "0",
         function ()
             os.execute(string.format("amixer -q set %s 0%%", beautiful.volume.channel))
             beautiful.volume.update()
         end,
-              {description="sounds volume 0%", group="awesome"}),
-
+        {description="sounds volume 0%", group="awesome"}),
 })
 
 -- General Awesome keys
@@ -724,6 +729,17 @@ end)
 
 -- }}}
 
+-- {{{ Manage new client
+
+client.connect_signal("manage", function(c)
+    -- Similar behaviour as other window managers DWM, XMonad.
+    -- Master-Slave layout new clinet goes to the slave, master is kept
+    -- If you need new slave as master press: ctrl + super + return
+    if not awesome.startup then awful.client.setslave(c) end
+end)
+
+-- }}}
+
 -- {{{ Titlebars
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
 client.connect_signal("request::titlebars", function(c)
@@ -763,6 +779,7 @@ client.connect_signal("request::titlebars", function(c)
     -- }
     awful.titlebar.hide(c)
 end)
+-- }}}
 
 -- {{{ Notifications
 
@@ -786,10 +803,14 @@ end)
 
 -- }}}
 
+--{{{ Focusing
+
 -- Enable sloppy focus, so that focus follows mouse.
 client.connect_signal("mouse::enter", function(c)
     c:activate { context = "mouse_enter", raise = false }
 end)
+
+--}}}
 
 --{{{ Application Starts
 awful.spawn.with_shell("~/.config/awesome/autorun.sh")

@@ -253,17 +253,13 @@ local wp_selected = {
 -- Feature: place random wallpaper if the wp_selected has "random" text
 local wp_random = {
   "anime-streets-wallpaper.jpg",
-  "dragon-fire-girl.jpg",
-  "wallhaven-q67my5.jpg",
-  "wallhaven-r7j781.jpg",
+  "wallhaven-ymz61d.jpg",
+  "wallhaven-r28dm7.jpg",
+  "beautiful-biker-anime-girl-5k.jpg",
+  "anime-girl-getting-out-of-train-4k-v8-3840x2160.jpg",
   "6330.jpg",
   "alone-sad-girl.jpg",
-  "24525.jpg",
   "41107.jpg",
-  "127009.jpg",
-  "127022.jpg",
-  "127656.jpg",
-  "381246.jpg",
   "gamer-girl.jpg",
 }
 
@@ -449,7 +445,7 @@ neticon:set_markup(markup.fontfg(theme.font_larger, wboxColor, ""))spotify_wi
         })
 local net = lain.widget.net({
   settings = function()
-    widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, string.format("%4.1f", net_now.sent) .. " ﰵ " .. string.format("%4.1f", net_now.received) .. " ﰬ "))
+    widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, string.format("%#7.1f", net_now.sent) .. " ﰵ " .. string.format("%#7.1f", net_now.received) .. " ﰬ "))
   end
 })
 local netWibox = wiboxBox1(neticon, net.widget, wboxColor, 3, 3, underLineSize, wiboxMargin)
@@ -470,7 +466,7 @@ local cw = calendar_widget({
 -- Spotify widge
 local spotifyWibox = spotify_widget({
   font = theme.font,
-  max_length = 70,
+  max_length = 150,
   play_icon = '/usr/share/icons/Papirus-Light/24x24/categories/spotify.svg',
   pause_icon = '/usr/share/icons/Papirus-Dark/24x24/panel/spotify-indicator.svg'
 })
@@ -523,7 +519,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
     },
     names = { "/main", "/w3", "/apps", "/dev", "/water", "/air", "/fire", "/earth", "/love" },
     layouts = {
-      awful.layout.layouts[1], --main
+      awful.layout.layouts[13], --main
       awful.layout.layouts[2], --www (machi)
       awful.layout.layouts[2], --apps (machi)
       awful.layout.suit.floating, --idea
@@ -538,6 +534,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
   -- Each screen has its own tag table.
   for s = 1, screen.count() do
     tags[s] = awful.tag(tags.names, s, tags.layouts)
+    -- Set additional optional parameters for each tag
+    --tags[s][1].column_count = 2
   end
 
   -- Create a promptbox for each screen
@@ -719,7 +717,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
   naughty.config.defaults.ontop = true
   naughty.config.defaults.icon_size = dpi(32)
   naughty.config.defaults.timeout = 10
-  naughty.config.defaults.title = 'System Notification'
+  naughty.config.defaults.title = 'System Notification Title'
   naughty.config.defaults.margin = dpi(16)
   naughty.config.defaults.border_width = 0
   naughty.config.defaults.position = 'top_middle'
