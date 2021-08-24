@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><strong>sharedtags</strong></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>sharedtags</code></h1>
+<p>Provides functionality to share tags across all screens in awesome WM.</p>
+<p></p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Copyright</strong>: 2016 Albert Diserholt</li>
+        <li><strong>License</strong>: MIT</li>
+        <li><strong>Author</strong>: Albert Diserholt</li>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#new">new (def)</a></td>
+	<td class="summary">Create new tag objects.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#movetag">movetag (tag[, screen=awful.screen.focused()])</a></td>
+	<td class="summary">Move the specified tag to a new screen, if necessary.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#viewonly">viewonly (tag[, screen=awful.screen.focused()])</a></td>
+	<td class="summary">View the specified tag on the specified screen.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#viewtoggle">viewtoggle (tag[, screen=awful.screen.focused()])</a></td>
+	<td class="summary">Toggle the specified tag on the specified screen.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "new"></a>
+    <strong>new (def)</strong>
+    </dt>
+    <dd>
+    Create new tag objects.
+ The first tag defined for each screen will be automatically selected.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">def</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         A list of tables with the optional keys `name`, `layout`
+ and `screen`. The `name` value is used to name the tag and defaults to the
+ list index. The `layout` value sets the starting layout for the tag and
+ defaults to the first layout. The `screen` value sets the starting screen
+ for the tag and defaults to the first screen. The tags will be sorted in this
+ order in the default taglist.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         A list of all created tags. Tags are assigned numeric values
+ corresponding to the input list, and all tags with non-numerical names are
+ also assigned to a key with the same name.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"> <span class="keyword">local</span> tags = sharedtags(
+   <span class="comment">-- "main" is the first tag starting on screen 2 with the tile layout.
+</span>   { name = <span class="string">"main"</span>, layout = awful.layout.suit.tile, screen = <span class="number">2</span> },
+   <span class="comment">-- "www" is the second tag on screen 1 with the floating layout.
+</span>   { name = <span class="string">"www"</span> },
+   <span class="comment">-- Third tag is named "3" on screen 1 with the floating layout.
+</span>   {})
+ -- tags[<span class="number">2</span>] <span class="keyword">and</span> tags[<span class="string">"www"</span>] both refer to the same tag.</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "movetag"></a>
+    <strong>movetag (tag[, screen=awful.screen.focused()])</strong>
+    </dt>
+    <dd>
+    Move the specified tag to a new screen, if necessary.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tag</span>
+         The tag to move.
+        </li>
+        <li><span class="parameter">screen</span>
+            <span class="types"><span class="type">number</span></span>
+         The screen to move the tag to.
+         (<em>default</em> awful.screen.focused())
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        Whether the tag was moved.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "viewonly"></a>
+    <strong>viewonly (tag[, screen=awful.screen.focused()])</strong>
+    </dt>
+    <dd>
+    View the specified tag on the specified screen.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tag</span>
+         The only tag to view.
+        </li>
+        <li><span class="parameter">screen</span>
+            <span class="types"><span class="type">number</span></span>
+         The screen to view the tag on.
+         (<em>default</em> awful.screen.focused())
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "viewtoggle"></a>
+    <strong>viewtoggle (tag[, screen=awful.screen.focused()])</strong>
+    </dt>
+    <dd>
+    Toggle the specified tag on the specified screen.
+ The tag will be selected if the screen changes, and toggled if it does not
+ change the screen.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tag</span>
+         The tag to toggle.
+        </li>
+        <li><span class="parameter">screen</span>
+            <span class="types"><span class="type">number</span></span>
+         The screen to toggle the tag on.
+         (<em>default</em> awful.screen.focused())
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2017-02-19 20:59:33 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
