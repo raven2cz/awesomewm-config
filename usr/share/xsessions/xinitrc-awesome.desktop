@@ -1,6 +1,0 @@
-[Desktop Entry]
-Name=xinitrc-awesome
-Comment=Executes the .xinitrc script in your home directory
-Exec=xinitrcsession-helper-awesome
-TryExec=xinitrcsession-helper-awesome
-Type=Application

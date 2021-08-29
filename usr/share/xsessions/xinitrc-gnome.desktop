@@ -1,6 +1,0 @@
-[Desktop Entry]
-Name=xinitrc-gnome
-Comment=Executes the .xinitrc script in your home directory
-Exec=xinitrcsession-helper-gnome
-TryExec=xinitrcsession-helper-gnome
-Type=Application
