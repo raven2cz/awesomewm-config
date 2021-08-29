@@ -28,13 +28,13 @@ Applications styling and additional colors are based on Nordic Colors and KDE No
 * optimized for hidpi (4k) monitors.
 
 # 80s OneDark Theme Screenshots
-![Awesome 80s OneDark 1](/images/one-dark-80s-1.jpg)
-![Awesome 80s OneDark 2](/images/one-dark-80s-2.jpg)
+![Awesome 80s OneDark 1](images/one-dark-80s-1.jpg)
+![Awesome 80s OneDark 2](images/one-dark-80s-2.jpg)
 
 # Amazing Theme Screenshots
-![Awesome Amazing 1](/images/awesome-amazing-1.jpg)
-![Awesome Amazing 2](/images/awesome-amazing-2.jpg)
+![Awesome Amazing 1](images/awesome-amazing-1.jpg)
+![Awesome Amazing 2](images/awesome-amazing-2.jpg)
 
 # Video
 [![Youtube Theme Preview](https://img.youtube.com/vi/YwvnJqN5s90/0.jpg)](https://www.youtube.com/watch?v=YwvnJqN5s90)
-[![Youtube Theme Preview](/images/youtube-machi-layout-hidden-feature.jpg)](https://youtu.be/Z0muY_lfFZU)
+[![Youtube Theme Preview](images/youtube-machi-layout-hidden-feature.jpg)](https://youtu.be/Z0muY_lfFZU)
