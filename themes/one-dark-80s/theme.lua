@@ -236,31 +236,31 @@ theme.titlebar_maximized_button_normal_inactive = theme.dir .. "/titlebar/maximi
 ---------------------
 -- {{{ Tag Wallpaper
 -- CONFIGURE IT: Set according to cloud wallpaper directory
-wppath = os.getenv("HOME") .."/OneCloud/linux/pictures/manga-wallpapers/"
-wppath_user = os.getenv("HOME") .."/OneCloud/linux/pictures/wallpapers-user/"
+wppath = os.getenv("HOME") .."/Pictures/wallpapers/public-wallpapers/"
+wppath_user = os.getenv("HOME") .."/Pictures/wallpapers/user-wallpapers/"
 -- Set wallpaper for each tag
 local wp_selected = {
   "random",
-  "lone-samurai-wallpaper.jpg",
-  "wallhaven-xlmlmo.jpg",
-  "wallhaven-95j8kw.jpg",
-  "purple-rain.jpg",
-  "wallhaven-zx5xwv.jpg",
-  "wallhaven-oxlpj9.png",
-  "wallhaven-g8y59e.jpg",
-  "wallhaven-lqekzp.jpg",
+  "00022-alone-samurai.jpg",
+  "00002-GUWEIZ-samurai-girl.jpg",
+  "00019-wallhaven-95j8kw.jpg",
+  "00009-purple-rain-l8.jpg",
+  "00015-wallhaven-zx5xwv.jpg",
+  "00033-GUWEIZ-1120523.jpg",
+  "00008-manga-life3.jpg",
+  "00027-lovers.jpg",
 }
 -- Feature: place random wallpaper if the wp_selected has "random" text
 local wp_random = {
-  "anime-streets-wallpaper.jpg",
-  "wallhaven-ymz61d.jpg",
-  "wallhaven-r28dm7.jpg",
-  "beautiful-biker-anime-girl-5k.jpg",
-  "anime-girl-getting-out-of-train-4k-v8-3840x2160.jpg",
-  "6330.jpg",
-  "alone-sad-girl.jpg",
-  "41107.jpg",
-  "gamer-girl.jpg",
+  "00024-anime-street-at-night.jpg",
+  "00012-wallhaven-ymz61d.jpg",
+  "00016-wallhaven-r28dm7.jpg",
+  "00010-girl-getting-out-of-train.jpg",
+  "00013-island.jpg",
+  "00014-lake-house.jpg",
+  "00029-fantasy-town.jpg",
+  "00025-anime-girl-looking-away.jpg",
+  "00028-clock-room.jpg.jpg",
 }
 
 -- Feature: User wallpaper folder - the wallpaper can be set for active tag by keybinding
