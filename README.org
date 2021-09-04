@@ -1,4 +1,3 @@
-#+TITLE: Fishlive's AwesomeWM Config
 #+AUTHOR: Antonin Fischer (raven2cz)
 #+DESCRIPTION: raven2cz's personal AwesomeWM config.
 
@@ -11,7 +10,20 @@
 ╚═╝  ╚═╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═══╝
 #+END_EXAMPLE
 
+#+HTML:<div align=center>
+
+* Fishlive's AwesomeWM Config
+
+[[https://github.com/awesomeWM/awesome][file:https://img.shields.io/badge/AwesomeWM-git-blue.svg?logo=lua]]
+
+#+HTML:</div>
+
+#+HTML:<a href="https://awesomewm.org/"><img alt="AwesomeWM Logo" height="160" align = "left" src="https://upload.wikimedia.org/wikipedia/commons/0/07/Awesome_logo.svg"></a>
+
+Welcome to my AwesomeWM configuration files! My system is managed by Git Subtrees; this github repository is git subtree which is mapped to the [[https://github.com/raven2cz/dotfiles][raven2cz/dotfiles]] project.
+
 * TABLE OF CONTENTS :toc:
+- [[#fishlives-awesomewm-config][Fishlive's AwesomeWM Config]]
 - [[#awesomewm-configuration][AwesomeWM Configuration]]
   - [[#80s-onedark-theme][80s OneDark Theme]]
   - [[#amazing-theme][Amazing Theme]]
@@ -39,7 +51,7 @@ Applications styling and additional colors are based on Nordic Colors and KDE No
 * Features
 + treetile layout (fixed) from branch [[https://github.com/alfunx/awesome-treetile][alfunx/awesome-treetile]] - thanks Alfunx your fixes are awesome!
 + machi layout from orig master [[https://github.com/xinhaoyuan/layout-machi][xinhaoyuan/layout-machi]] - thanks Xinhaoyuan your layout is best!
-+ lain layouts+basic-widgets from orig master (standard usage of lain awesome project) [[https://github.com/lcpz/lain][lcpz/lain]] - standard still good ;-)
++ lain layouts+basic-widgets from orig master (standard usage of lain awesome project) [[https://github.com/lcpz/lain][lcpz/lain]] - standard still good :grinning:
 + awesome-wm-widgets from streetturtle orig master (wheater, spotify used) [[https://github.com/streetturtle/awesome-wm-widgets][streetturtle/awesome-wm-widgets]]
 + Shell Color Scripts and MANY advices from Derek Taylor [[https://gitlab.com/dwt1/shell-color-scripts][Shell Color Scripts]] - Derek your youtube channel is awesome, thanks a lot!
 + *my new widgets for Ryzen processors and AMD Radeons graphic cards temperatures* (add to the lain widget folder)
@@ -48,7 +60,7 @@ Applications styling and additional colors are based on Nordic Colors and KDE No
 + sophisticated keybindings for extension of lain and machi layouts. *Many keybindings tricks* for quick work. See keybindings help.
 + *configured notification center* - notifications are configured and linked. In actual case, the history is stored to the naughty_history file.
 + *notification center component* - notification center lua component is added according to original code creator: [[https://github.com/JavaCafe01/dotfiles][JavaCafe01/dotfiles]] Your style is great. Notify center is best!
-+ *Nice Titlebars component* - Nice wonderful titlebar component with many features added. Creator: [[https://github.com/mut-ex/awesome-wm-nice][mut-ex/awesome-wm-nice]] :grinning:
++ *Nice Titlebars component* - Nice wonderful titlebar component with many features added. Creator: [[https://github.com/mut-ex/awesome-wm-nice][mut-ex/awesome-wm-nice]]
 + i3lock-blur for locking and suspend session.
 + optimized for hidpi (4k) monitors.
 
