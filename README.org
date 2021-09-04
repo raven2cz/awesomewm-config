@@ -14,7 +14,7 @@
 
 * Fishlive's AwesomeWM Config
 
-[[https://github.com/awesomeWM/awesome][file:https://img.shields.io/badge/AwesomeWM-git-blue.svg?logo=lua]]
+[[https://github.com/awesomeWM/awesome][file:https://img.shields.io/badge/AwesomeWM-git-blue.svg?logo=lua]] [[LICENSE][https://img.shields.io/badge/License-MIT-yellow.svg]]
 
 #+HTML:</div>
 
@@ -53,7 +53,8 @@ Applications styling and additional colors are based on Nordic Colors and KDE No
 + fonts: Hack Nerd Font, Iosevka Nerd Font, mononoki Nerd Font, TerminessTTFNerdFontMono
 + git subtrees projects included in ~pull-git-subtrees-awesome-config.sh~ script
 
- #+BEGIN_SRC bash
+
+#+BEGIN_SRC bash
 #!/bin/bash
 git subtree pull --prefix awesome-wm-widgets git@github.com:streetturtle/awesome-wm-widgets.git master --squash
 git subtree pull --prefix cyclefocus git@github.com:blueyed/awesome-cyclefocus.git master --squash
@@ -62,12 +63,12 @@ git subtree pull --prefix layout-machi git@github.com:xinhaoyuan/layout-machi.gi
 git subtree pull --prefix machina git@github.com:basaran/awesomewm-machina.git master --squash
 git subtree pull --prefix nice git@github.com:mut-ex/awesome-wm-nice.git master --squash
 git subtree pull --prefix sharedtags git@github.com:Drauthius/awesome-sharedtags.git v4.0 --squash
- #+END_SRC
+#+END_SRC
 
 * Features
 + treetile layout (fixed) from branch [[https://github.com/alfunx/awesome-treetile][alfunx/awesome-treetile]] - thanks Alfunx your fixes are awesome!
 + machi layout from orig master [[https://github.com/xinhaoyuan/layout-machi][xinhaoyuan/layout-machi]] - thanks Xinhaoyuan your layout is best!
-+ lain layouts+basic-widgets from orig master (standard usage of lain awesome project) [[https://github.com/lcpz/lain][lcpz/lain]] - standard still good :grinning:
++ lain layouts+basic-widgets from orig master (standard usage of lain awesome project) [[https://github.com/lcpz/lain][lcpz/lain]] - standard is still good :grinning:
 + awesome-wm-widgets from streetturtle orig master (wheater, spotify used) [[https://github.com/streetturtle/awesome-wm-widgets][streetturtle/awesome-wm-widgets]]
 + Shell Color Scripts and MANY advices from Derek Taylor [[https://gitlab.com/dwt1/shell-color-scripts][Shell Color Scripts]] - Derek your youtube channel is awesome, thanks a lot!
 + *my new widgets for Ryzen processors and AMD Radeons graphic cards temperatures* (add to the lain widget folder)
