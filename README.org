@@ -1,0 +1,65 @@
+#+TITLE: Fishlive's AwesomeWM Config
+#+AUTHOR: Antonin Fischer (raven2cz)
+#+DESCRIPTION: raven2cz's personal AwesomeWM config.
+
+#+BEGIN_EXAMPLE
+██████╗  █████╗ ██╗   ██╗███████╗███╗   ██╗  Antonin Fischer (raven2cz)
+██╔══██╗██╔══██╗██║   ██║██╔════╝████╗  ██║  https://fishlive.org/
+██████╔╝███████║██║   ██║█████╗  ██╔██╗ ██║  https://arch-linux.cz/
+██╔══██╗██╔══██║╚██╗ ██╔╝██╔══╝  ██║╚██╗██║  https://github.com/raven2cz
+██║  ██║██║  ██║ ╚████╔╝ ███████╗██║ ╚████║
+╚═╝  ╚═╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═══╝
+#+END_EXAMPLE
+
+* TABLE OF CONTENTS :toc:
+- [[#awesomewm-configuration][AwesomeWM Configuration]]
+  - [[#80s-onedark-theme][80s OneDark Theme]]
+  - [[#amazing-theme][Amazing Theme]]
+- [[#dependencies][Dependencies]]
+- [[#features][Features]]
+- [[#80s-onedark-theme-screenshots][80s OneDark Theme Screenshots]]
+- [[#amazing-theme-screenshots][Amazing Theme Screenshots]]
+- [[#video][Video]]
+
+* AwesomeWM Configuration
+AwesomeWM [git-master] configuration with new *80s DarkOne Theme* or *Amazing Theme*.
+
+** 80s OneDark Theme
+The theme is focused to Atom colors and 80s pastel color schemes. New complex configuration of main panel with many features and additional modifications of conky, xmenu, rofi and alacritty settings.
+
+** Amazing Theme
+The theme is focused to green colors with gold highlights.
+Applications styling and additional colors are based on Nordic Colors and KDE Nordic Theme [[https://www.nordtheme.com/][An arctic, north-bluish color palette]].
+
+* Dependencies
++ AwesomeWm git-master branch!
++ picom standard version (no blur)
++ fonts: Hack Nerd Font, Iosevka Nerd Font, mononoki Nerd Font, TerminessTTFNerdFontMono
+
+* Features
++ treetile layout (fixed) from branch [[https://github.com/alfunx/awesome-treetile][alfunx/awesome-treetile]] - thanks Alfunx your fixes are awesome!
++ machi layout from orig master [[https://github.com/xinhaoyuan/layout-machi][xinhaoyuan/layout-machi]] - thanks Xinhaoyuan your layout is best!
++ lain layouts+basic-widgets from orig master (standard usage of lain awesome project) [[https://github.com/lcpz/lain][lcpz/lain]] - standard still good ;-)
++ awesome-wm-widgets from streetturtle orig master (wheater, spotify used) [[https://github.com/streetturtle/awesome-wm-widgets][streetturtle/awesome-wm-widgets]]
++ Shell Color Scripts and MANY advices from Derek Taylor [[https://gitlab.com/dwt1/shell-color-scripts][Shell Color Scripts]] - Derek your youtube channel is awesome, thanks a lot!
++ *my new widgets for Ryzen processors and AMD Radeons graphic cards temperatures* (add to the lain widget folder)
++ *change wallpapers for last active tag (if more tag selected, the last id is taken)*
++ *random selection wallpaper for N.tag* - possibility to use word "random" for each tag and use new tables with random wallpapers. It is changed by tag switch.
++ sophisticated keybindings for extension of lain and machi layouts. *Many keybindings tricks* for quick work. See keybindings help.
++ *configured notification center* - notifications are configured and linked. In actual case, the history is stored to the naughty_history file.
++ *notification center component* - notification center lua component is added according to original code creator: [[https://github.com/JavaCafe01/dotfiles][JavaCafe01/dotfiles]] Your style is great. Notify center is best!
++ *Nice Titlebars component* - Nice wonderful titlebar component with many features added. Creator: [[https://github.com/mut-ex/awesome-wm-nice][mut-ex/awesome-wm-nice]] :grinning:
++ i3lock-blur for locking and suspend session.
++ optimized for hidpi (4k) monitors.
+
+* 80s OneDark Theme Screenshots
+[[images/one-dark-80s-1.jpg]]
+[[images/one-dark-80s-2.jpg]]
+
+* Amazing Theme Screenshots
+[[images/awesome-amazing-1.jpg]]
+[[images/awesome-amazing-2.jpg]]
+
+* Video
+[[https://www.youtube.com/watch?v=YwvnJqN5s90][https://img.youtube.com/vi/YwvnJqN5s90/0.jpg]]
+[[https://youtu.be/Z0muY_lfFZU][images/youtube-machi-layout-hidden-feature.jpg]]
