@@ -437,12 +437,7 @@ local alsaWibox = wiboxBox1(volicon, theme.volume.widget, alsaColor, 3, 3, under
 -- Net
 wboxColor = theme.baseColors[8]
 local neticon = wibox.widget.textbox();
-neticon:set_markup(markup.fontfg(theme.font_larger, wboxColor, ""))spotify_widget({
-          font = 'Iosevka Nerd Font 9',
-          max_length = 50,
-          play_icon = '/usr/share/icons/Papirus-Light/24x24/categories/spotify.svg',
-          pause_icon = '/usr/share/icons/Papirus-Dark/24x24/panel/spotify-indicator.svg'
-        })
+neticon:set_markup(markup.fontfg(theme.font_larger, wboxColor, ""))
 local net = lain.widget.net({
   settings = function()
     widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, string.format("%#7.1f", net_now.sent) .. " ﰵ " .. string.format("%#7.1f", net_now.received) .. " ﰬ "))
