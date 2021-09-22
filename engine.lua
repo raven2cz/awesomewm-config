@@ -36,8 +36,9 @@ local function fair_split(length, shares)
     local sum_adj
     local remaining = #shares
     local spare = nil
-    local need_recompute = false
+    local need_recompute
     repeat
+        need_recompute = false
         sum_weight = 0
         sum_adj = 0
         for i = 1, #shares do
@@ -922,11 +923,11 @@ if not in_module then
     check_transcoded_command("121h.", "h1,2,1.")
     check_transcoded_command("1_10,2,1h1s131v.", "h1_10,2,1-v1,3,1.")
     check_transcoded_command("332111w.", "w3,3,2,1,1,1.")
-    check_transcoded_command("1310111d.", ";d1,3,1,,1,1,1.")
+    check_transcoded_command("1310111d.", "d1,3,1,,1,1,1.")
     check_transcoded_command("dw66.", "dw6,6.")
-    check_transcoded_command(";dw66.", ";dw6,6.")
-    check_transcoded_command("101dw66.", ";dw6,6.")
-    check_transcoded_command("3tdw66.", "t3;dw6,6.")
+    check_transcoded_command(";dw66.", "dw6,6.")
+    check_transcoded_command("101dw66.", "dw6,6.")
+    check_transcoded_command("3tdw66.", "t3dw6,6.")
     print("Passed.")
 end
 
