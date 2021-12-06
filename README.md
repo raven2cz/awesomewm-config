@@ -35,6 +35,8 @@ We now have tabs for tiled clients :)
 
 ### Next?
 
+- [ ] keybindings could also be called by numbers for a given region. (win+1, win+2 etc).
+- [ ] Better keybindings could be done vimium style, by drawing wiboxes over the tabs.
 - [ ] Better keybindings (possibly emacs style, or vim style): an xcape key can be used to to initiate awm layer and enter can exit from it.
 - [X] Tags must always have a focused window. Added tag.selected signal.
 - [X] Clickable tabs
