@@ -461,7 +461,7 @@ local cw = calendar_widget({
 -- Spotify widge
 local spotifyWibox = spotify_widget({
   font = theme.font,
-  max_length = 150,
+  max_length = 500,
   play_icon = '/usr/share/icons/Papirus-Light/24x24/categories/spotify.svg',
   pause_icon = '/usr/share/icons/Papirus-Dark/24x24/panel/spotify-indicator.svg'
 })
@@ -575,20 +575,20 @@ screen.connect_signal("request::desktop_decoration", function(s)
     screen  = s,
     filter  = awful.widget.taglist.filter.all,
     buttons = {
-      awful.button({ }, 1, function(t) t:view_only() end),
+      awful.button({}, 1, function(t) t:view_only() end),
       awful.button({ modkey }, 1, function(t)
         if client.focus then
           client.focus:move_to_tag(t)
         end
       end),
-      awful.button({ }, 3, awful.tag.viewtoggle),
+      awful.button({}, 3, awful.tag.viewtoggle),
       awful.button({ modkey }, 3, function(t)
         if client.focus then
           client.focus:toggle_tag(t)
         end
       end),
-      awful.button({ }, 4, function(t) awful.tag.viewprev(t.screen) end),
-      awful.button({ }, 5, function(t) awful.tag.viewnext(t.screen) end),
+      awful.button({}, 4, function(t) awful.tag.viewprev(t.screen) end),
+      awful.button({}, 5, function(t) awful.tag.viewnext(t.screen) end),
     },
     widget_template = {
         {
@@ -618,7 +618,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
                 },
                 {
                     {
-                        bottom = 1,
+                        bottom = 2,
                         widget = wibox.container.margin
                     },
                     id = 'overline',

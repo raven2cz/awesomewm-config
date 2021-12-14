@@ -617,7 +617,7 @@ client.connect_signal("request::default_keybindings", function()
     })
 end)
 
--- Steam bug with window outside of the screem
+-- Steam bug with window outside of the screen
 client.connect_signal("property::position", function(c)
      if c.class == 'Steam' then
          local g = c.screen.geometry

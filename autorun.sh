@@ -17,7 +17,7 @@ synology-drive start
 run parcellite
 run clipmenud
 run volctl
-#run conky -c ~/.config/conky
+run /usr/bin/emacs --daemon
 run ~/.config/conky/start_conky ~/.config/conky/MX-CoreBlue/conkyrc2core 
 run remmina -i
 run picom --experimental-backends --config $HOME/.config/picom/picom.conf
