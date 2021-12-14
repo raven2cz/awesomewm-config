@@ -238,6 +238,7 @@ theme.titlebar_maximized_button_normal_inactive = theme.dir .. "/titlebar/maximi
 -- CONFIGURE IT: Set according to cloud wallpaper directory
 wppath = os.getenv("HOME") .."/Pictures/wallpapers/public-wallpapers/"
 wppath_user = os.getenv("HOME") .."/Pictures/wallpapers/user-wallpapers/"
+notifpath_user = os.getenv("HOME") .."/Pictures/wallpapers/public-wallpapers/portrait/"
 -- Set wallpaper for each tag
 local wp_selected = {
   "random",
@@ -269,6 +270,8 @@ local wp_user = {}
 -- settings for currecnt user wallpaper
 local wp_user_idx = 0
 
+-- Feature: Notification icon folder - support change notification icons randomly
+local notif_user = {}
 -- }}}
 
 -- {{{ Wallpaper Changer
@@ -788,10 +791,21 @@ screen.connect_signal("request::desktop_decoration", function(s)
     }
   end
   )
+  -- naughty.connect_signal("request::display", function(n)
+  --     naughty.layout.box { notification = n }
+  -- end
+  -- )
 
   -- XDG icon lookup
   naughty.connect_signal('request::icon', function(n, context, hints)
-    if context ~= 'app_icon' then return end
+    if context ~= 'app_icon' then
+      -- try use random notification portrait from resources
+      if #notif_user >= 1 then
+        n.icon = notifpath_user .. notif_user[math.random(#notif_user)]
+      end
+      return
+    end
+    -- try use application icon
 
     local path = menubar.utils.lookup_icon(hints.app_icon) or
       menubar.utils.lookup_icon(hints.app_icon:lower())
@@ -802,9 +816,6 @@ screen.connect_signal("request::desktop_decoration", function(s)
   end
   )
 
-  -- naughty.connect_signal("request::display", function(n)
-  --     naughty.layout.box { notification = n }
-  -- end)
 
   -----------------------------------------------
   -- WALLPAPER PER TAG and USER WALLS keybinding
@@ -816,6 +827,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
 
   -- Try to load user wallpapers
   wp_user = fishlive.util.scandir(wppath_user)
+  -- Try to load notification icons
+  notif_user = fishlive.util.scandir(notifpath_user)
 
   -- Change wallpaper per tag
   theme.change_wallpaper_per_tag()
