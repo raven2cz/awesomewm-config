@@ -44,6 +44,13 @@ local sharedtags = {
 local function salvage(tag)
     -- The screen to move the orphaned tag to.
     local newscreen = capi.screen.primary
+    -- the primary screen may be the one that is being
+    -- removed, so try to find a different screen if possible.
+    for s in capi.screen do
+        if s ~= tag.screen then
+            newscreen = s
+        end
+    end
 
     -- Make sure the tag isn't selected when moved to the new screen.
     tag.selected = false
