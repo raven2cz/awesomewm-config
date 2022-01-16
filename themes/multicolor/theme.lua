@@ -3,15 +3,17 @@
 -- | | | (_| |\ V /  __/ | | |  https://fishlive.org/
 -- |_|  \__,_| \_/ \___|_| |_|  https://github.com/raven2cz
 --
--- A customized theme.lua for awesomewm-git (Master) / OneDark Eighties Theme (https://github.com/raven2cz)
+-- A customized theme.lua for awesomewm-git (Master) / Multicolor Theme (https://github.com/raven2cz)
 ------------------------
--- OneDark 80s Theme  --
+-- Multicolor Theme  --
 ------------------------
 
-local theme_name = "one-dark-80s"
+local theme_name = "multicolor"
+local theme_assets = require("beautiful.theme_assets")
 local awful = require("awful")
 local gfs = require("gears.filesystem")
 local gears = require("gears")
+local gcolor = require("gears.color")
 local themes_path = gfs.get_themes_dir()
 local rnotification = require("ruled.notification")
 local dpi = require("beautiful.xresources").apply_dpi
@@ -21,16 +23,19 @@ local wibox = require("wibox")
 local lain = require("lain")
 -- Fishlive Utilities
 local fishlive = require("fishlive")
+local colorscheme = require("fishlive.colorscheme")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require('menubar')
 local xdg_menu = require("archmenu")
+local hotkeys_popup = require("awful.hotkeys_popup")
 
 -- Use Polybar instead of classic Awesome Bar
 local usePolybar = false
 
 -- {{{ Main
-local theme = {}
+-- load colorscheme and prepare theme defaults
+local theme = fishlive.colorscheme.default
 theme.dir = os.getenv("HOME") .. "/.config/awesome/themes/" .. theme_name
 -- }}}
 
@@ -46,106 +51,17 @@ end
 theme.font          = "Iosevka Nerd Font 9"
 theme.font_larger   = "Iosevka Nerd Font 11"
 theme.font_notify   = "mononoki Nerd Font 11"
-
--- {{{ Colors
---base16-eighties-one-dark color palatte
-theme.base00 = "#2d2d2d"
-theme.base01 = "#393939"
-theme.base02 = "#515151"
-theme.base03 = "#747369"
-theme.base04 = "#a09f93"
-theme.base05 = "#d3d0c8"
-theme.base06 = "#e8e6df"
-theme.base07 = "#f2f0ec"
-theme.base08 = "#f2777a"
-theme.base09 = "#f99157"
-theme.base0A = "#ffcc66"
-theme.base0B = "#99cc99"
-theme.base0C = "#66cccc"
-theme.base0D = "#6699cc"
-theme.base0E = "#cc99cc"
-theme.base0F = "#d27b53"
-
---one-dark-extended color palette
-theme.base10 = "#2C2C2C"
-theme.base18 = "#b74822"
-theme.base1A = "#F0DFAF"
-
--- random shuffle foreground colors, 8 colors
-theme.baseColors = {
-  theme.base08,
-  theme.base09,
-  theme.base0A,
-  theme.base0E,
-  theme.base0C,
-  theme.base0D,
-  theme.base0B,
-  theme.base18,
-  theme.base1A,
-}
-fishlive.util.shuffle(theme.baseColors)
-
-theme.fg_normal  = theme.base06
-theme.fg_focus   = theme.base1A
-theme.fg_urgent  = theme.base0E
-theme.fg_minimize = theme.base07
-
-theme.bg_normal  = theme.base10
-theme.bg_focus   = theme.base00
-theme.bg_urgent  = theme.base18
-theme.bg_systray = theme.base10
-theme.bg_minimize = theme.base03
-theme.bg_underline = theme.base0C
-
-theme.notification_opacity = 0.84
-theme.notification_bg = theme.bg_normal
-theme.notification_fg = theme.fg_focus
+theme.menu_font     = "mononoki Nerd Font 11"
 -- }}}
 
 -- {{{ Borders
 theme.useless_gap   = dpi(5)
 theme.border_width  = dpi(1)
-theme.border_color_normal = theme.base10
-theme.border_color_active = theme.base0A
-theme.border_color_marked = theme.base0E
--- }}}
-
--- {{{ Titlebars
-theme.titlebar_bg_focus  = theme.base02
-theme.titlebar_bg_normal = theme.base02
--- }}}
-
--- There are other variable sets
--- overriding the default one when
--- defined, the sets are:
--- [taglist|tasklist]_[bg|fg]_[focus|urgent|occupied|empty|volatile]
--- titlebar_[normal|focus]
--- tooltip_[font|opacity|fg_color|bg_color|border_width|border_color]
--- }}}
-
--- {{{ Widgets
--- You can add as many variables as
--- you wish and access them by using
--- beautiful.variable in your rc.lua
-theme.widgetbar_fg  = theme.base05
-theme.fg_widget     = theme.base05
---theme.fg_center_widget = "#88A175"
---theme.fg_end_widget    = "#FF5656"
---theme.bg_widget        = "#494B4F"
---theme.border_widget    = "#3F3F3F"
--- }}}
-
--- {{{ Mouse finder
-theme.mouse_finder_color = theme.base0E
--- mouse_finder_[timeout|animate_timeout|radius|factor]
 -- }}}
 
 -- {{{ Menu
--- Variables set for theming the menu:
--- menu_[bg|fg]_[normal|focus]
--- menu_[border_color|border_width]
-theme.menu_height = dpi(15)
-theme.menu_width  = dpi(100)
+theme.menu_height = dpi(18)
+theme.menu_width  = dpi(130)
 -- }}}
 
 -- {{{ Notification Center
@@ -154,11 +70,6 @@ theme.clear_grey_icon = theme.dir .. "/icons/clear_grey.png"
 theme.notification_icon = theme.dir .. "/icons/notification.png"
 theme.delete_icon = theme.dir .. "/icons/delete.png"
 theme.delete_grey_icon = theme.dir .. "/icons/delete_grey.png"
-theme.xcolor0 = theme.base02
-theme.groups_bg  = theme.base01
-theme.xbackground = theme.base01
-theme.bg_very_light = theme.base03
-theme.bg_light = theme.base02
 theme.border_radius = dpi(0)
 theme.wibar_height = dpi(27)
 -- }}}
@@ -171,35 +82,38 @@ theme.taglist_squares_unsel = theme.dir .. "/taglist/squarez.png"
 -- }}}
 
 -- {{{ Misc
-theme.awesome_icon           = theme.dir .. "/awesome-icon.png"
-theme.menu_submenu_icon      = themes_path .. "default/submenu.png"
+--theme.awesome_icon           = theme.dir .. "/awesome-icon.png"
+theme.awesome_icon = theme_assets.awesome_icon(
+    theme.menu_height, theme.awesome_icon_bg, theme.awesome_icon_fg
+)
+theme.menu_submenu_icon = themes_path .. "default/submenu.png"
 -- }}}
 
 -- {{{ Layout
-theme.layout_tile        = theme.dir .. "/layouts/tile.png"
-theme.layout_tileleft    = theme.dir .. "/layouts/tileleft.png"
-theme.layout_tilebottom  = theme.dir .. "/layouts/tilebottom.png"
-theme.layout_tiletop     = theme.dir .. "/layouts/tiletop.png"
-theme.layout_fairv       = theme.dir .. "/layouts/fairv.png"
-theme.layout_fairh       = theme.dir .. "/layouts/fairh.png"
-theme.layout_spiral      = theme.dir .. "/layouts/spiral.png"
-theme.layout_dwindle     = theme.dir .. "/layouts/dwindle.png"
-theme.layout_max         = theme.dir .. "/layouts/max.png"
-theme.layout_fullscreen  = theme.dir .. "/layouts/fullscreen.png"
-theme.layout_magnifier   = theme.dir .. "/layouts/magnifier.png"
-theme.layout_floating    = theme.dir .. "/layouts/floating.png"
-theme.layout_cornernw    = theme.dir .. "/layouts/cornernw.png"
-theme.layout_cornerne    = theme.dir .. "/layouts/cornerne.png"
-theme.layout_cornersw    = theme.dir .. "/layouts/cornersw.png"
-theme.layout_cornerse    = theme.dir .. "/layouts/cornerse.png"
-theme.layout_cascade     = theme.dir .. "/layouts/cascade.png"
-theme.layout_cascadetile = theme.dir .. "/layouts/cascadetile.png"
-theme.layout_centerfair  = theme.dir .. "/layouts/centerfair.png"
-theme.layout_centerwork  = theme.dir .. "/layouts/centerwork.png"
-theme.layout_centerworkh = theme.dir .. "/layouts/centerworkh.png"
-theme.layout_termfair    = theme.dir .. "/layouts/termfair.png"
-theme.layout_treetile    = theme.dir .. "/layouts/treetile.png"
-theme.layout_machi       = theme.dir .. "/layouts/machi.png"
+theme.layout_tile        = gcolor.recolor_image(theme.dir .. "/layouts/tile.png", theme.layout_fg)
+theme.layout_tileleft    = gcolor.recolor_image(theme.dir .. "/layouts/tileleft.png", theme.layout_fg)
+theme.layout_tilebottom  = gcolor.recolor_image(theme.dir .. "/layouts/tilebottom.png", theme.layout_fg)
+theme.layout_tiletop     = gcolor.recolor_image(theme.dir .. "/layouts/tiletop.png", theme.layout_fg)
+theme.layout_fairv       = gcolor.recolor_image(theme.dir .. "/layouts/fairv.png", theme.layout_fg)
+theme.layout_fairh       = gcolor.recolor_image(theme.dir .. "/layouts/fairh.png", theme.layout_fg)
+theme.layout_spiral      = gcolor.recolor_image(theme.dir .. "/layouts/spiral.png", theme.layout_fg)
+theme.layout_dwindle     = gcolor.recolor_image(theme.dir .. "/layouts/dwindle.png", theme.layout_fg)
+theme.layout_max         = gcolor.recolor_image(theme.dir .. "/layouts/max.png", theme.layout_fg)
+theme.layout_fullscreen  = gcolor.recolor_image(theme.dir .. "/layouts/fullscreen.png", theme.layout_fg)
+theme.layout_magnifier   = gcolor.recolor_image(theme.dir .. "/layouts/magnifier.png", theme.layout_fg)
+theme.layout_floating    = gcolor.recolor_image(theme.dir .. "/layouts/floating.png", theme.layout_fg)
+theme.layout_cornernw    = gcolor.recolor_image(theme.dir .. "/layouts/cornernw.png", theme.layout_fg)
+theme.layout_cornerne    = gcolor.recolor_image(theme.dir .. "/layouts/cornerne.png", theme.layout_fg)
+theme.layout_cornersw    = gcolor.recolor_image(theme.dir .. "/layouts/cornersw.png", theme.layout_fg)
+theme.layout_cornerse    = gcolor.recolor_image(theme.dir .. "/layouts/cornerse.png", theme.layout_fg)
+theme.layout_cascade     = gcolor.recolor_image(theme.dir .. "/layouts/cascade.png", theme.layout_fg)
+theme.layout_cascadetile = gcolor.recolor_image(theme.dir .. "/layouts/cascadetile.png", theme.layout_fg)
+theme.layout_centerfair  = gcolor.recolor_image(theme.dir .. "/layouts/centerfair.png", theme.layout_fg)
+theme.layout_centerwork  = gcolor.recolor_image(theme.dir .. "/layouts/centerwork.png", theme.layout_fg)
+theme.layout_centerworkh = gcolor.recolor_image(theme.dir .. "/layouts/centerworkh.png", theme.layout_fg)
+theme.layout_termfair    = gcolor.recolor_image(theme.dir .. "/layouts/termfair.png", theme.layout_fg)
+theme.layout_treetile    = gcolor.recolor_image(theme.dir .. "/layouts/treetile.png", theme.layout_fg)
+theme.layout_machi       = gcolor.recolor_image(theme.dir .. "/layouts/machi.png", theme.layout_fg)
 -- }}}
 
 -- {{{ Titlebar
@@ -359,7 +273,7 @@ theme.fs = lain.widget.fs({
   notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = theme.font_notify },
   settings = function()
     local fsp = string.format(" %3.2f %s ", fs_now["/"].free, fs_now["/"].units)
-    widget:set_markup(markup.font(theme.font, fsp))
+    widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, fsp))
   end
 })
 local fsWibox = wiboxBox1(fsicon, theme.fs.widget, wboxColor, 2, 3, underLineSize, wiboxMargin)
@@ -451,7 +365,7 @@ local netWibox = wiboxBox1(neticon, net.widget, wboxColor, 3, 3, underLineSize, 
 wboxColor = theme.baseColors[9]
 local clockicon = wibox.widget.textbox();
 clockicon:set_markup(markup.fontfg(theme.font_larger, wboxColor, ""))
-local mytextclock = wibox.widget.textclock(markup.fontfg(theme.font, theme.widgetbar_fg, " %a %d-%m-%Y") .. markup.fontfg(theme.font_larger, theme.base0A, " %H:%M:%S "), 1)
+local mytextclock = wibox.widget.textclock(markup.fontfg(theme.font, theme.widgetbar_fg, " %a %d-%m-%Y") .. markup.fontfg(theme.font_larger, theme.clock_fg, " %H:%M:%S "), 1)
 local clockWibox = wiboxBox1(clockicon, mytextclock, wboxColor, 0, 0, underLineSize, wiboxMargin)
 
 -- Calendar widget
@@ -481,14 +395,50 @@ myawesomemenu = {
   { "quit", function() awesome.quit() end },
 }
 
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, theme.awesome_icon },
-  { "Applications", xdgmenu },
-  { "open terminal", terminal }
-}
-})
-theme.mymainmenu = mymainmenu
+-- Colorschemes Switcher --
+theme.menu_colorschemes_table_prepare = function()
+  local menucs = {}
+  for i, cs in ipairs(colorscheme.table) do
+      menucs[i] = { cs.scheme, function()
+          -- call global colorscheme script for switch all GNU/Linux apps
+          -- permanent storage of selected colorscheme to last.lua
+          local file = io.open(os.getenv("HOME") .. "/.config/awesome/fishlive/colorscheme/last.lua", "w")
+          file:write('return require "fishlive.colorscheme".' .. cs.scheme_id)
+          file:close()
+          awesome.restart()
+        end
+      }
+  end
+  return menucs
+end
 
-mylauncher = awful.widget.launcher({ image = theme.awesome_icon, menu = mymainmenu })
+theme.menu_colorschemes_create = function()
+  return awful.menu({
+      items = theme.menu_colorschemes_table_prepare(),
+      theme = {
+          height = dpi(18),
+          width  = dpi(200)
+      }
+  })
+end
+
+-- Main Launcher Menus --
+local menuTheme = fishlive.util.copyTable(theme)
+menuTheme["font"] = theme.menu_font
+menuTheme["height"] = 22
+menuTheme["width"] = 350
+mylauncher = awful.widget.launcher({
+  image = theme.awesome_icon,
+  menu = awful.menu({
+    items = {
+      { "Awesome", myawesomemenu, theme.awesome_icon },
+      { "ColorScheme", theme.menu_colorschemes_table_prepare() },
+      { "Applications", xdgmenu },
+      { "Open Terminal", terminal }
+    },
+    theme = menuTheme
+  })
+})
 
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
@@ -632,6 +582,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
             widget = wibox.container.margin
         },
         id = 'background_role',
+        bg = theme.bg_normal,
+        fg = theme.fg_normal,
         widget = wibox.container.background,
         shape = gears.shape.rectangle,
         create_callback = update_tag,
@@ -664,7 +616,9 @@ screen.connect_signal("request::desktop_decoration", function(s)
   -- separator type
   separator:set_text("   ")
 
+  -------------------------------
   -- MAIN PANEL CONFIGURATION
+  -------------------------------
   -- Create the wibox
   if usePolybar then
     -- Polybar support
@@ -814,7 +768,6 @@ screen.connect_signal("request::desktop_decoration", function(s)
     end
   end
   )
-
 
   -----------------------------------------------
   -- WALLPAPER PER TAG and USER WALLS keybinding

@@ -52,7 +52,7 @@ local function worker(user_args)
         },
         {
             layout = wibox.container.scroll.horizontal,
-            max_size = 100,
+            max_size = 200,
             step_function = wibox.container.scroll.step_functions.waiting_nonlinear_back_and_forth,
             speed = 40,
             {

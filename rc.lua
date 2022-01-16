@@ -63,7 +63,7 @@ end)
 
 -- MainMenu XMENU
 local function xmenu()
-    awful.spawn.with_shell("/home/box/.config/xmenu/xmenu.sh")
+    awful.spawn.with_shell(os.getenv("HOME") .. "/.config/xmenu/xmenu.sh")
 end
 
 -- This is used later as the default terminal and editor to run.
@@ -129,8 +129,7 @@ lain.layout.cascade.tile.ncol          = 2
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 --beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
---beautiful.init(gears.filesystem.get_configuration_dir() .. "/themes/amazing/theme.lua")
-beautiful.init(gears.filesystem.get_configuration_dir() .. "/themes/one-dark-80s/theme.lua")
+beautiful.init(gears.filesystem.get_configuration_dir() .. "/themes/multicolor/theme.lua")
 -- {{{ Layouts configuration
 -- machi layout config
 beautiful.layout_machi = machi.get_icon()
@@ -348,6 +347,8 @@ awful.keyboard.append_global_keybindings({
               {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "w", function () xmenu() end,
               {description = "show main menu", group = "awesome"}),
+    awful.key({ modkey,           }, "c", function () beautiful.menu_colorschemes_create():toggle() end,
+              {description = "show colorschemes menu", group = "awesome"}),
     awful.key({ modkey,           }, "a", function () awful.spawn("clipmenu") end,
               {description = "clipboard history by rofi/clipmenud", group = "awesome"}),
     awful.key({ modkey, modkey1 }, "r", awesome.restart,

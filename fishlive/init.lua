@@ -13,5 +13,6 @@ Licensed under GNU General Public License v2
 return {
     layout = require("fishlive.layout"),
     util = require("fishlive.util"),
-    widget = require("fishlive.widget")
+    widget = require("fishlive.widget"),
+    colorscheme = require("fishlive.colorscheme")
 }
