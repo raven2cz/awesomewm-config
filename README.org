@@ -105,8 +105,12 @@ git subtree pull --prefix sharedtags git@github.com:Drauthius/awesome-sharedtags
 
 * Videos - see AwesomeWM in action
 
-https://youtu.be/-Fo7mB6_Wtg
-https://youtu.be/SNJOeR7mxCI
-https://youtu.be/QgjHP6Ju56k
+[[https://youtu.be/-Fo7mB6_Wtg][http://i3.ytimg.com/vi/-Fo7mB6_Wtg/hqdefault.jpg]]
+
+[[https://youtu.be/SNJOeR7mxCI][https://i3.ytimg.com/vi/SNJOeR7mxCI/maxresdefault.jpg]]
+
+[[https://youtu.be/QgjHP6Ju56k][https://i3.ytimg.com/vi/QgjHP6Ju56k/maxresdefault.jpg]]
+
 [[https://www.youtube.com/watch?v=YwvnJqN5s90][https://img.youtube.com/vi/YwvnJqN5s90/0.jpg]]
+
 [[https://youtu.be/Z0muY_lfFZU][images/youtube-machi-layout-hidden-feature.jpg]]
