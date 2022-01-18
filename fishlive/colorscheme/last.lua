@@ -1,1 +1,1 @@
-return require "fishlive.colorscheme".nord
+return require "fishlive.colorscheme".eighties_one_dark

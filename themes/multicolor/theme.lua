@@ -9,6 +9,7 @@
 ------------------------
 
 local theme_name = "multicolor"
+
 local theme_assets = require("beautiful.theme_assets")
 local awful = require("awful")
 local gfs = require("gears.filesystem")
@@ -78,11 +79,9 @@ theme.wibar_height = dpi(27)
 -- {{{ Taglist
 theme.taglist_squares_sel   = theme.dir .. "/taglist/squarefz.png"
 theme.taglist_squares_unsel = theme.dir .. "/taglist/squarez.png"
---theme.taglist_squares_resize = "false"
 -- }}}
 
 -- {{{ Misc
---theme.awesome_icon           = theme.dir .. "/awesome-icon.png"
 theme.awesome_icon = theme_assets.awesome_icon(
     theme.menu_height, theme.awesome_icon_bg, theme.awesome_icon_fg
 )
@@ -116,48 +115,22 @@ theme.layout_treetile    = gcolor.recolor_image(theme.dir .. "/layouts/treetile.
 theme.layout_machi       = gcolor.recolor_image(theme.dir .. "/layouts/machi.png", theme.layout_fg)
 -- }}}
 
--- {{{ Titlebar
-theme.titlebar_close_button_focus  = theme.dir .. "/titlebar/close_focus.png"
-theme.titlebar_close_button_normal = theme.dir .. "/titlebar/close_normal.png"
-
-theme.titlebar_minimize_button_normal = theme.dir .. "/titlebar/minimize_normal.png"
-theme.titlebar_minimize_button_focus  = theme.dir .. "/titlebar/minimize_focus.png"
-
-theme.titlebar_ontop_button_focus_active  = theme.dir .. "/titlebar/ontop_focus_active.png"
-theme.titlebar_ontop_button_normal_active = theme.dir .. "/titlebar/ontop_normal_active.png"
-theme.titlebar_ontop_button_focus_inactive  = theme.dir .. "/titlebar/ontop_focus_inactive.png"
-theme.titlebar_ontop_button_normal_inactive = theme.dir .. "/titlebar/ontop_normal_inactive.png"
-
-theme.titlebar_sticky_button_focus_active  = theme.dir .. "/titlebar/sticky_focus_active.png"
-theme.titlebar_sticky_button_normal_active = theme.dir .. "/titlebar/sticky_normal_active.png"
-theme.titlebar_sticky_button_focus_inactive  = theme.dir .. "/titlebar/sticky_focus_inactive.png"
-theme.titlebar_sticky_button_normal_inactive = theme.dir .. "/titlebar/sticky_normal_inactive.png"
-
-theme.titlebar_floating_button_focus_active  = theme.dir .. "/titlebar/floating_focus_active.png"
-theme.titlebar_floating_button_normal_active = theme.dir .. "/titlebar/floating_normal_active.png"
-theme.titlebar_floating_button_focus_inactive  = theme.dir .. "/titlebar/floating_focus_inactive.png"
-theme.titlebar_floating_button_normal_inactive = theme.dir .. "/titlebar/floating_normal_inactive.png"
-
-theme.titlebar_maximized_button_focus_active  = theme.dir .. "/titlebar/maximized_focus_active.png"
-theme.titlebar_maximized_button_normal_active = theme.dir .. "/titlebar/maximized_normal_active.png"
-theme.titlebar_maximized_button_focus_inactive  = theme.dir .. "/titlebar/maximized_focus_inactive.png"
-theme.titlebar_maximized_button_normal_inactive = theme.dir .. "/titlebar/maximized_normal_inactive.png"
-
--- }}}
 ---------------------
 -- Wallpaper Support
 ---------------------
 -- {{{ Tag Wallpaper
 -- CONFIGURE IT: Set according to cloud wallpaper directory
-wppath = os.getenv("HOME") .."/Pictures/wallpapers/public-wallpapers/"
-wppath_user = os.getenv("HOME") .."/Pictures/wallpapers/user-wallpapers/"
-notifpath_user = os.getenv("HOME") .."/Pictures/wallpapers/public-wallpapers/portrait/"
+local wppath = os.getenv("HOME").."/Pictures/wallpapers/public-wallpapers/"
+local wppath_user = os.getenv("HOME").."/Pictures/wallpapers/user-wallpapers/"
+local wppath_colorscheme = os.getenv("HOME").."/Pictures/wallpapers/public-wallpapers/colorscheme/"..theme.scheme_id.."/"
+local notifpath_user = os.getenv("HOME").."/Pictures/wallpapers/public-wallpapers/portrait/"
+local notif_user = {}
 -- Set wallpaper for each tag
 local wp_selected = {
   "random",
   "00022-alone-samurai.jpg",
   "00002-GUWEIZ-samurai-girl.jpg",
-  "00019-wallhaven-95j8kw.jpg",
+  "colorscheme",
   "00009-purple-rain-l8.jpg",
   "00015-wallhaven-zx5xwv.jpg",
   "00033-GUWEIZ-1120523.jpg",
@@ -176,72 +149,12 @@ local wp_random = {
   "00025-anime-girl-looking-away.jpg",
   "00028-clock-room.jpg.jpg",
 }
-
--- Feature: User wallpaper folder - the wallpaper can be set for active tag by keybinding
--- The directory is defined in the configuration settings in this theme file
-local wp_user = {}
--- settings for currecnt user wallpaper
-local wp_user_idx = 0
-
--- Feature: Notification icon folder - support change notification icons randomly
-local notif_user = {}
--- }}}
-
--- {{{ Wallpaper Changer
-theme.change_wallpaper_user = function(direction)
-  local maxIdx = #wp_user
-  wp_user_idx = wp_user_idx + direction
-  if wp_user_idx < 1 then wp_user_idx = maxIdx end
-  if wp_user_idx > maxIdx then wp_user_idx = 1 end
-
-  local wp = wp_user[wp_user_idx]
-
-  for s in screen do
-    for i = 1,#s.tags do
-      local tag = s.tags[i]
-      if tag.selected then
-        theme.wallpaper_user = wppath_user .. wp
-        theme.wallpaper_user_tag = tag
-        gears.wallpaper.maximized(theme.wallpaper_user, s, false)
-      end
-    end
-  end
-end
-
-theme.change_wallpaper_per_tag = function()
-  -- For each screen
-  for scr in screen do
-    -- Go over each tab
-    for t = 1,#wp_selected do
-      local tag = scr.tags[t]
-      tag:connect_signal("property::selected", function (tag)
-        -- And if selected
-        if not tag.selected then return end
-        -- Set the color of tag
-        --theme.taglist_fg_focus = theme.baseColors[tag.index]
-        -- Set random wallpaper
-        if theme.wallpaper_user_tag == tag then
-          wp = theme.wallpaper_user
-        elseif wp_selected[t] == "random" then
-          local position = math.random(1, #wp_random)
-          wp = wppath .. wp_random[position]
-        else
-          wp = wppath .. wp_selected[t]
-        end
-        --gears.wallpaper.fit(wppath .. wp_selected[t], s)
-        gears.wallpaper.maximized(wp, s, false)
-      end)
-    end
-  end
-end
 -- }}}
 
 -- {{{ Wibar
-
-local markup = lain.util.markup
-
--- Separators
+-- Separators and markups
 local separators = lain.util.separators
+local markup = lain.util.markup
 
 --------------------------
 -- Widgets Declarations
@@ -253,7 +166,7 @@ local todo_widget = require("awesome-wm-widgets.todo-widget.todo")
 
 -- fix params for wibox boxes
 local wiboxMargin = 7
-local underLineSize = 1.5
+local underLineSize = 3
 local wiboxBox0 = fishlive.widget.wiboxBox0Underline
 local wiboxBox1 = fishlive.widget.wiboxBoxIconUnderline
 local wiboxBox2 = fishlive.widget.wiboxBox2IconUnderline
@@ -263,7 +176,7 @@ local wboxColor = theme.baseColors[1]
 local keyboardText = wibox.widget.textbox();
 keyboardText:set_markup(markup.fontfg(theme.font_larger, wboxColor, " "))
 theme.mykeyboardlayout = awful.widget.keyboardlayout()
-local keyboardWibox = wiboxBox1(keyboardText, theme.mykeyboardlayout, wboxColor, 3, 6, underLineSize, wiboxMargin)
+local keyboardWibox = wiboxBox1(keyboardText, theme.mykeyboardlayout, wboxColor, theme.widgetbar_fg, 3, 6, underLineSize, wiboxMargin)
 
 -- FS ROOT
 wboxColor = theme.baseColors[2]
@@ -276,7 +189,7 @@ theme.fs = lain.widget.fs({
     widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, fsp))
   end
 })
-local fsWibox = wiboxBox1(fsicon, theme.fs.widget, wboxColor, 2, 3, underLineSize, wiboxMargin)
+local fsWibox = wiboxBox1(fsicon, theme.fs.widget, wboxColor, theme.widgetbar_fg, 2, 3, underLineSize, wiboxMargin)
 
 -- MEM
 wboxColor = theme.baseColors[3]
@@ -287,7 +200,7 @@ local mem = lain.widget.mem({
     widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, " " .. mem_now.used .. " MB "))
   end
 })
-local memWibox = wiboxBox1(memicon, mem.widget, wboxColor, 2, 3, underLineSize, wiboxMargin)
+local memWibox = wiboxBox1(memicon, mem.widget, wboxColor, theme.widgetbar_fg, 2, 3, underLineSize, wiboxMargin)
 
 -- CPU
 wboxColor = theme.baseColors[4]
@@ -298,7 +211,7 @@ local cpu = lain.widget.cpu({
     widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, " " .. cpu_now.usage .. " % "))
   end
 })
-local cpuWibox = wiboxBox1(cpuicon, cpu.widget, wboxColor, 3, 4, underLineSize, wiboxMargin)
+local cpuWibox = wiboxBox1(cpuicon, cpu.widget, wboxColor, theme.widgetbar_fg, 3, 4, underLineSize, wiboxMargin)
 
 -- CPU and GPU temps (lain, average)
 wboxColor = theme.baseColors[5]
@@ -314,7 +227,7 @@ local tempgpu = lain.widget.temp_gpu({
     widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, " gpu " .. coretemp_now .. "°C "))
   end
 })
-local tempWibox = wiboxBox2(tempicon, tempcpu.widget, tempgpu.widget, wboxColor, 4, 4, underLineSize, wiboxMargin)
+local tempWibox = wiboxBox2(tempicon, tempcpu.widget, tempgpu.widget, wboxColor, theme.widgetbar_fg, 4, 4, underLineSize, wiboxMargin)
 
 -- Weather widget
 wboxColor = theme.baseColors[6]
@@ -327,7 +240,7 @@ local myWeather = weather_widget({
   show_hourly_forecast = true,
   show_daily_forecast = true,
 })
-local weatherWibox = wiboxBox0(myWeather, wboxColor, 3, 3, underLineSize, wiboxMargin)
+local weatherWibox = wiboxBox0(myWeather, wboxColor, theme.widgetbar_fg, 3, 3, underLineSize, wiboxMargin)
 
 -- ALSA volume
 local alsaColor = theme.baseColors[7]
@@ -348,7 +261,7 @@ theme.volume = lain.widget.alsa({
     widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, " " .. volume_now.level .. "% "))
   end
 })
-local alsaWibox = wiboxBox1(volicon, theme.volume.widget, alsaColor, 3, 3, underLineSize, wiboxMargin)
+local alsaWibox = wiboxBox1(volicon, theme.volume.widget, alsaColor, theme.widgetbar_fg, 3, 3, underLineSize, wiboxMargin)
 
 -- Net
 wboxColor = theme.baseColors[8]
@@ -359,14 +272,14 @@ local net = lain.widget.net({
     widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, string.format("%#7.1f", net_now.sent) .. " ﰵ " .. string.format("%#7.1f", net_now.received) .. " ﰬ "))
   end
 })
-local netWibox = wiboxBox1(neticon, net.widget, wboxColor, 3, 3, underLineSize, wiboxMargin)
+local netWibox = wiboxBox1(neticon, net.widget, wboxColor, theme.widgetbar_fg, 3, 3, underLineSize, wiboxMargin)
 
 -- Textclock widget
 wboxColor = theme.baseColors[9]
 local clockicon = wibox.widget.textbox();
 clockicon:set_markup(markup.fontfg(theme.font_larger, wboxColor, ""))
 local mytextclock = wibox.widget.textclock(markup.fontfg(theme.font, theme.widgetbar_fg, " %a %d-%m-%Y") .. markup.fontfg(theme.font_larger, theme.clock_fg, " %H:%M:%S "), 1)
-local clockWibox = wiboxBox1(clockicon, mytextclock, wboxColor, 0, 0, underLineSize, wiboxMargin)
+local clockWibox = wiboxBox1(clockicon, mytextclock, wboxColor, theme.widgetbar_fg, 0, 0, underLineSize, wiboxMargin)
 
 -- Calendar widget
 local cw = calendar_widget({
@@ -395,26 +308,9 @@ myawesomemenu = {
   { "quit", function() awesome.quit() end },
 }
 
--- Colorschemes Switcher --
-theme.menu_colorschemes_table_prepare = function()
-  local menucs = {}
-  for i, cs in ipairs(colorscheme.table) do
-      menucs[i] = { cs.scheme, function()
-          -- call global colorscheme script for switch all GNU/Linux apps
-          -- permanent storage of selected colorscheme to last.lua
-          local file = io.open(os.getenv("HOME") .. "/.config/awesome/fishlive/colorscheme/last.lua", "w")
-          file:write('return require "fishlive.colorscheme".' .. cs.scheme_id)
-          file:close()
-          awesome.restart()
-        end
-      }
-  end
-  return menucs
-end
-
 theme.menu_colorschemes_create = function()
   return awful.menu({
-      items = theme.menu_colorschemes_table_prepare(),
+      items = colorscheme.menu.prepare_colorscheme_menu(),
       theme = {
           height = dpi(18),
           width  = dpi(200)
@@ -432,29 +328,17 @@ mylauncher = awful.widget.launcher({
   menu = awful.menu({
     items = {
       { "Awesome", myawesomemenu, theme.awesome_icon },
-      { "ColorScheme", theme.menu_colorschemes_table_prepare() },
+      { "ColorScheme", colorscheme.menu.prepare_colorscheme_menu() },
       { "Applications", xdgmenu },
       { "Open Terminal", terminal }
     },
     theme = menuTheme
   })
 })
+-- }}}
 
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
-
--- Set Wallpapers
---[[
-screen.connect_signal("request::wallpaper", function(s)
-    -- Wallpaper
-    local wallpaper = theme.wppath .. wp_selected[3]
-    -- If wallpaper is a function, call it with the screen
-    if type(wallpaper) == "function" then
-        wallpaper = wallpaper(s)
-    end
-    gears.wallpaper.maximized(wallpaper, s, true)
-end)
---]]
 
 -------------------------------------
 -- DESKTOP and PANELS CONFIGURATION
@@ -556,6 +440,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
                          left = 7,
                          right = 0,
                          top = 0,
+                         bottom = -2,
                          widget = wibox.container.margin
                     },
                     {
@@ -565,12 +450,14 @@ screen.connect_signal("request::desktop_decoration", function(s)
                         },
                         top = 0,
                         right = 7,
+                        bottom = -2,
                         widget = wibox.container.margin
                     }
                 },
                 {
                     {
-                        bottom = 2,
+                        top = 0,
+                        bottom = 3,
                         widget = wibox.container.margin
                     },
                     id = 'overline',
@@ -772,22 +659,36 @@ screen.connect_signal("request::desktop_decoration", function(s)
   -----------------------------------------------
   -- WALLPAPER PER TAG and USER WALLS keybinding
   -----------------------------------------------
-  -- Set actual wallpaper for first tag and screen
-  local wp = wp_selected[1]
-  if wp == "random" then wp = wp_random[1] end
-  gears.wallpaper.maximized(wppath .. wp, s, false)
-
-  -- Try to load user wallpapers
-  wp_user = fishlive.util.scandir(wppath_user)
   -- Try to load notification icons
   notif_user = fishlive.util.scandir(notifpath_user)
 
-  -- Change wallpaper per tag
-  theme.change_wallpaper_per_tag()
+  -- User Wallpaper Changer
+  local wp_user_params = {
+    screen = screen,
+    wppath_user = wppath_user
+  }
+  theme.change_wallpaper_user = fishlive.wallpaper.createUserWallpaper(wp_user_params)
+
+  -- Colorscheme Wallpaper Changer
+  local wp_colorscheme_params = {
+    screen = screen,
+    wppath_user = wppath_colorscheme
+  }
+  theme.change_wallpaper_colorscheme = fishlive.wallpaper.createUserWallpaper(wp_colorscheme_params)
+
+  -- Register Tag Wallpaper Changer
+  fishlive.wallpaper.registerTagWallpaper({
+    screen = screen,
+    wp_selected = wp_selected,
+    wp_random = wp_random,
+    wppath = wppath,
+    wp_user_params = wp_user_params,
+    wp_colorscheme_params = wp_colorscheme_params,
+    change_wallpaper_colorscheme = theme.change_wallpaper_colorscheme
+  })
   -- }}}
 end)
 -- }}}
 
 return theme
-
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80

@@ -13,7 +13,10 @@ local json = require("json")
 local spawn = require("awful.spawn")
 local gears = require("gears")
 local beautiful = require("beautiful")
+local gcolor = require("gears.color")
 local gfs = require("gears.filesystem")
+
+local format = string.format
 
 local HOME_DIR = os.getenv("HOME")
 local WIDGET_DIR = HOME_DIR .. '/.config/awesome/awesome-wm-widgets/todo-widget'
@@ -24,6 +27,11 @@ local GET_TODO_ITEMS = 'bash -c "cat ' .. STORAGE .. '"'
 local rows  = { layout = wibox.layout.fixed.vertical }
 local todo_widget = {}
 local update_widget
+
+local function fontfg(fg, text)
+    return format("<span foreground='%s'>%s</span>", fg, text)
+end
+
 todo_widget.widget = wibox.widget {
     {
         {
@@ -52,10 +60,10 @@ todo_widget.widget = wibox.widget {
     end,
     widget = wibox.container.background,
     set_text = function(self, new_value)
-        self:get_children_by_id("txt")[1].text = new_value
+        self:get_children_by_id("txt")[1]:set_markup(fontfg(beautiful.fg_normal, new_value))
     end,
     set_icon = function(self, new_value)
-        self:get_children_by_id("icon")[1].image = new_value
+        self:get_children_by_id("icon")[1].image = gcolor.recolor_image(new_value, beautiful.fg_normal)
     end
 }
 
@@ -85,7 +93,7 @@ local popup = awful.popup{
 local add_button = wibox.widget {
     {
         {
-            image = WIDGET_DIR .. '/list-add-symbolic.svg',
+            image = gcolor.recolor_image(WIDGET_DIR .. '/list-add-symbolic.svg', beautiful.fg_normal),
             resize = false,
             widget = wibox.widget.imagebox
         },
@@ -97,6 +105,8 @@ local add_button = wibox.widget {
     shape = function(cr, width, height)
         gears.shape.circle(cr, width, height, 12)
     end,
+    fg = beautiful.fg_normal,
+    bg = beautiful.bg_normal,
     widget = wibox.container.background
 }
 
@@ -113,6 +123,7 @@ add_button:connect_signal("button::press", function()
             margins = 8,
             layout = wibox.container.margin
         },
+        fg = beautiful.fg_normal,
         bg = beautiful.bg_normal,
         widget = wibox.container.background
     })
@@ -141,7 +152,7 @@ local function worker(user_args)
 
     local args = user_args or {}
 
-    local icon = args.icon or WIDGET_DIR .. '/checkbox-checked-symbolic.svg'
+    local icon = args.icon or gcolor.recolor_image(WIDGET_DIR .. '/checkbox-checked-symbolic.svg', beautiful.fg_normal)
 
     todo_widget.widget:set_icon(icon)
 
@@ -156,7 +167,7 @@ local function worker(user_args)
             {
                 {widget = wibox.widget.textbox},
                 {
-                    markup = '<span size="large" font_weight="bold" color="#ffffff">ToDo</span>',
+                    markup = '<span size="large" font_weight="bold" color="'..beautiful.fg_normal..'">ToDo</span>',
                     align = 'center',
                     forced_width = 350, -- for horizontal alignment
                     forced_height = 40,
@@ -166,6 +177,7 @@ local function worker(user_args)
                 spacing = 8,
                 layout = wibox.layout.fixed.horizontal
             },
+            fg = beautiful.fg_normal,
             bg = beautiful.bg_normal,
             widget = wibox.container.background
         }
@@ -197,7 +209,7 @@ local function worker(user_args)
 
             local trash_button = wibox.widget {
                 {
-                    {    image = WIDGET_DIR .. '/window-close-symbolic.svg',
+                    {   image = gcolor.recolor_image(WIDGET_DIR .. '/window-close-symbolic.svg', beautiful.fg_normal),
                         resize = false,
                         widget = wibox.widget.imagebox
                     },
@@ -220,7 +232,7 @@ local function worker(user_args)
 
 
             local move_up = wibox.widget {
-                image = WIDGET_DIR .. '/chevron-up.svg',
+                image = gcolor.recolor_image(WIDGET_DIR .. '/chevron-up.svg', beautiful.fg_normal),
                 resize = false,
                 widget = wibox.widget.imagebox
             }
@@ -235,7 +247,7 @@ local function worker(user_args)
             end)
 
             local move_down = wibox.widget {
-                image = WIDGET_DIR .. '/chevron-down.svg',
+                image = gcolor.recolor_image(WIDGET_DIR .. '/chevron-down.svg', beautiful.fg_normal),
                 resize = false,
                 widget = wibox.widget.imagebox
             }
@@ -300,6 +312,7 @@ local function worker(user_args)
                     margins = 8,
                     layout = wibox.container.margin
                 },
+                fg = beautiful.fg_normal,
                 bg = beautiful.bg_normal,
                 widget = wibox.container.background
             }

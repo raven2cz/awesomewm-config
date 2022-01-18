@@ -13,7 +13,7 @@ run /usr/lib/kactivitymanagerd
 run /usr/lib/pam_kwallet_init
 run nm-applet
 run pamac-tray
-synology-drive start
+if ! pgrep -f cloud-drive-ui; then synology-drive start; fi
 run parcellite
 run clipmenud
 run volctl

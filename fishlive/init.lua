@@ -14,5 +14,6 @@ return {
     layout = require("fishlive.layout"),
     util = require("fishlive.util"),
     widget = require("fishlive.widget"),
+    wallpaper = require("fishlive.wallpaper"),
     colorscheme = require("fishlive.colorscheme")
 }
