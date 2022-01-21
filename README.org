@@ -60,7 +60,7 @@ Applications styling and additional colors are based on Nordic Colors and KDE No
 + git subtrees projects included in ~pull-git-subtrees-awesome-config.sh~ script
 + Global-colorscheme script frpm my github repo: https://github.com/raven2cz/global-colorscheme
 + public-wallpapers are in github repo: https://github.com/raven2cz/public-wallpapers
-
++ rofi-themes in github repo: https://github.com/raven2cz/rofi-themes
 
 #+BEGIN_SRC bash
 #!/bin/bash
@@ -91,6 +91,7 @@ git subtree pull --prefix sharedtags git@github.com:Drauthius/awesome-sharedtags
 + dynamic color schemes changes (15 best color schemes supported)
 + notification portraits
 + user, color scheme swap wallpapers
++ rofi-themes - support dynamic change for all implemented color schemes (see link rofi-themes in dependencies chapter)
 
 * Multicolor Theme Screenshot
 [[images/awesome-multicolor-theme.jpg]]
