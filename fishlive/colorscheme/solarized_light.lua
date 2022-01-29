@@ -24,6 +24,8 @@ theme.base0D = "#268bd2"
 theme.base0E = "#6c71c4"
 theme.base0F = "#d33682"
 
+theme.leading_fg = theme.base0A
+
 theme.bg_systray = theme.base02
 theme.base1A = theme.base0F
 theme.awesome_icon_bg = theme.base0D

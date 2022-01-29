@@ -24,6 +24,9 @@ theme.base0D = "#51afef" --# blue
 theme.base0E = "#c678dd" --# purple
 theme.base0F = "#5699AF" --# brown
 
+theme.leading_fg = theme.base0B
+
+theme.border_color_active = theme.base0B
 theme.widgetbar_fg = theme.base06
 theme.bg_focus = theme.base03
 theme.bg_minimize = theme.base04

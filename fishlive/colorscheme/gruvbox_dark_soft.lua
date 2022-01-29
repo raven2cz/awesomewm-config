@@ -23,6 +23,8 @@ theme.base0C = "#8ec07c" --# cyan
 theme.base0D = "#83a598" --# blue
 theme.base0E = "#d3869b" --# purple
 theme.base0F = "#d65d0e" --# brown
+
+theme.leading_fg = theme.base0A
 -- }}}
 
 return theme

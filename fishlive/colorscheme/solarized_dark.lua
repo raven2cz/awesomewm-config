@@ -24,6 +24,8 @@ theme.base0D = "#268bd2"
 theme.base0E = "#6c71c4"
 theme.base0F = "#d33682"
 
+theme.leading_fg = theme.base0C
+
 -- specific modifs for nord required colors
 --theme.base10 = theme.base02
 theme.base1A = theme.base0C

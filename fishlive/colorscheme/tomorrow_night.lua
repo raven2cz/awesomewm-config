@@ -23,6 +23,8 @@ theme.base0C = "#8abeb7"
 theme.base0D = "#81a2be"
 theme.base0E = "#b294bb"
 theme.base0F = "#a3685a"
+
+theme.leading_fg = theme.base0A
 -- }}}
 
 return theme

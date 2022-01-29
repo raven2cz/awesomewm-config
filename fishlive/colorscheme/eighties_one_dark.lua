@@ -24,6 +24,8 @@ theme.base0D = "#6699cc"
 theme.base0E = "#cc99cc"
 theme.base0F = "#d27b53"
 
+theme.leading_fg = theme.base0C
+
 -- extended color base16 palette for urgent and focus events
 theme.base10 = "#2C2C2C"
 theme.base18 = "#b74822"

@@ -24,6 +24,8 @@ theme.base0D = "#9876aa" --# purple
 theme.base0E = "#cc7832" --# orange
 theme.base0F = "#808080" --# gray
 
+theme.leading_fg = theme.base0E
+
 -- specific modifs for darcula required colors
 theme.border_color_active = theme.base0E
 -- }}}

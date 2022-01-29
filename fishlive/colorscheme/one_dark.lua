@@ -23,6 +23,10 @@ theme.base0C = "#56b6c2"
 theme.base0D = "#61afef"
 theme.base0E = "#c678dd"
 theme.base0F = "#be5046"
+
+theme.leading_fg = theme.base08
+theme.fg_focus = theme.base08
+theme.border_color_active = theme.base08
 -- }}}
 
 return theme

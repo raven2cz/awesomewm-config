@@ -24,6 +24,8 @@ theme.base0D = "#6699CC"
 theme.base0E = "#C594C5"
 theme.base0F = "#AB7967"
 
+theme.leading_fg = theme.base0C
+
 -- specific modifs for this color scheme
 theme.fg_focus = theme.base0C
 theme.clock_fg = theme.base0C
