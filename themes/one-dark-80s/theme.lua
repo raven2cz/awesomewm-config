@@ -237,7 +237,7 @@ theme.titlebar_maximized_button_normal_inactive = theme.dir .. "/titlebar/maximi
 -- CONFIGURE IT: Set according to cloud wallpaper directory
 wppath = os.getenv("HOME") .."/Pictures/wallpapers/public-wallpapers/"
 wppath_user = os.getenv("HOME") .."/Pictures/wallpapers/user-wallpapers/"
-notifpath_user = os.getenv("HOME") .."/Pictures/wallpapers/public-wallpapers/portrait/"
+notifpath_user = os.getenv("HOME") .."/Pictures/wallpapers/public-wallpapers/portrait/default/"
 -- Set wallpaper for each tag
 local wp_selected = {
   "random",

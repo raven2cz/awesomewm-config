@@ -9,6 +9,7 @@
       * (c) 2021, A.Fischer
 --]]
 
+local io = io
 local awful = require("awful")
 
 -- fishlive utilities submodule
@@ -34,6 +35,15 @@ function util.scandir(directory)
   end
   pfile:close()
   return t
+end
+
+-- check if folder exists --
+function util.is_dir(path)
+    local f = io.open(path, "r")
+    if f == nil then return false end
+    local ok, err, code = f:read(1)
+    f:close()
+    return code == 21
 end
 
 -- return copied table of the instance

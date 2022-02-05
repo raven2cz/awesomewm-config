@@ -123,7 +123,9 @@ theme.layout_machi       = gcolor.recolor_image(theme.dir .. "/layouts/machi.png
 local wppath = os.getenv("HOME").."/Pictures/wallpapers/public-wallpapers/"
 local wppath_user = os.getenv("HOME").."/Pictures/wallpapers/user-wallpapers/"
 local wppath_colorscheme = os.getenv("HOME").."/Pictures/wallpapers/public-wallpapers/colorscheme/"..theme.scheme_id.."/"
-local notifpath_user = os.getenv("HOME").."/Pictures/wallpapers/public-wallpapers/portrait/"
+local notifpath = os.getenv("HOME").."/Pictures/wallpapers/public-wallpapers/portrait/"
+local notifpath_user = notifpath..theme.scheme_id.."/"
+if not fishlive.util.is_dir(notifpath_user) then notifpath_user = notifpath.."default/" end
 local notif_user = {}
 -- Set wallpaper for each tag
 local wp_selected = {
@@ -555,6 +557,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
   naughty.config.defaults.ontop = true
   naughty.config.defaults.icon_size = dpi(32)
   naughty.config.defaults.timeout = 10
+  naughty.config.defaults.hover_timeout = 300
   naughty.config.defaults.title = 'System Notification Title'
   naughty.config.defaults.margin = dpi(16)
   naughty.config.defaults.border_width = 0
@@ -583,6 +586,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
           bg                  = theme.bg_urgent,
           fg                  = theme.fg_normal,
           margin              = dpi(16),
+          icon_size           = dpi(64),
           position            = 'top_middle',
           implicit_timeout    = 0
         }
@@ -598,7 +602,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
           margin              = dpi(16),
           position            = 'top_middle',
           implicit_timeout    = 10,
-          icon_size           = dpi(260),
+          icon_size           = dpi(360),
           opacity             = 0.87
         }
       }
@@ -613,7 +617,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
           margin              = dpi(16),
           position            = 'top_middle',
           implicit_timeout    = 10,
-          icon_size           = dpi(260),
+          icon_size           = dpi(360),
           opacity             = 0.87
         }
       }
@@ -646,7 +650,6 @@ screen.connect_signal("request::desktop_decoration", function(s)
       return
     end
     -- try use application icon
-
     local path = menubar.utils.lookup_icon(hints.app_icon) or
       menubar.utils.lookup_icon(hints.app_icon:lower())
 

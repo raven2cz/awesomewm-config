@@ -299,6 +299,24 @@ awful.keyboard.append_global_keybindings({
         end,
         {description="Make screenshot to ~/Pictures/screenshots/", group="awesome"}),
 
+    -- Language Translation Support
+    awful.key({ modkey, ctrlkey }, "t", function ()
+          awful.util.spawn("notify-trans cs", false)
+        end,
+        {description="translate to Czech", group="awesome"}),
+
+    -- Language Translation Support
+    awful.key({ modkey, ctrlkey, "Shift" }, "t", function ()
+          awful.util.spawn("notify-trans en tts", false)
+        end,
+        {description="translate to English TTS", group="awesome"}),
+
+    -- Language Translation Support
+    awful.key({ modkey, altkey }, "t", function ()
+          awful.util.spawn("notify-trans cs tts", false)
+        end,
+        {description="translate to Czech TTS", group="awesome"}),
+
     -- Lock Support
     awful.key({ modkey }, "Home", function () awful.spawn("i3exit lock") end,
               {description="Lock Screen", group="awesome"}),
