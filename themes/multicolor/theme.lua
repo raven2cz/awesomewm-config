@@ -135,7 +135,7 @@ local wp_selected = {
   "colorscheme",
   "00009-purple-rain-l8.jpg",
   "00015-wallhaven-zx5xwv.jpg",
-  "00033-GUWEIZ-1120523.jpg",
+  "00045-GUWEIZ-1120524.jpg",
   "00008-manga-life3.jpg",
   "00027-lovers.jpg",
 }
