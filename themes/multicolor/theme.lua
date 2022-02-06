@@ -73,6 +73,7 @@ theme.delete_icon = theme.dir .. "/icons/delete.png"
 theme.delete_grey_icon = theme.dir .. "/icons/delete_grey.png"
 theme.border_radius = dpi(0)
 theme.wibar_height = dpi(27)
+theme.systray_base_size = dpi(22)
 -- }}}
 
 -- {{{ Icons
@@ -297,6 +298,9 @@ local spotifyWibox = spotify_widget({
   pause_icon = '/usr/share/icons/Papirus-Dark/24x24/panel/spotify-indicator.svg'
 })
 
+-- Systray
+local systray = wibox.widget.systray()
+systray.base_size = theme.systray_base_size
 -- Separators
 local separator = wibox.widget.textbox()
 
@@ -535,7 +539,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
         separator,
         todo_widget(),
         separator,
-        wibox.widget.systray(),
+        systray,
         separator,
         keyboardWibox,
         fsWibox,
