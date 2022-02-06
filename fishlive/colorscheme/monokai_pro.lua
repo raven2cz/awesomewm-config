@@ -25,6 +25,8 @@ theme.base0E = "#ab9df2" --# purple
 theme.base0F = "#cc6633" --# brown
 
 theme.leading_fg = theme.base0A
+theme.base1A = theme.base0A
+theme.border_color_active = theme.base08
 -- }}}
 
 return theme
