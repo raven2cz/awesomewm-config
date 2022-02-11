@@ -68,8 +68,9 @@ end
 
 -- This is used later as the default terminal and editor to run.
 terminal = "alacritty" --"kitty" --"urxvt"
-editor = os.getenv("EDITOR") or "vim"
-editor_cmd = terminal .. " -e " .. editor
+terminal2 = "kitty"
+editor = os.getenv("EDITOR") or "nvim"
+editor_cmd = terminal2 .. " -e " .. editor
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -387,7 +388,9 @@ awful.keyboard.append_global_keybindings({
         end,
         {description = "lua execute prompt", group = "awesome"}),
     awful.key({ modkey }, "Return", function () awful.spawn(terminal) end,
-              {description = "open a terminal", group = "launcher"}),
+              {description = "open a terminal (alacritty)", group = "launcher"}),
+    awful.key({ modkey, altkey }, "Return", function () awful.spawn(terminal2) end,
+              {description = "open a terminal2 (kitty)", group = "launcher"}),
     awful.key({ modkey }, "r", function () awful.screen.focused().mypromptbox:run() end,
               {description = "run prompt", group = "launcher"}),
     awful.key({ modkey }, "p", function() menubar.show() end,
