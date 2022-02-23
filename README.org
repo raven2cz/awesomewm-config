@@ -32,6 +32,7 @@ It is primarily targeted at power users, developers and any people dealing with 
   - [[#multicolor-theme][Multicolor Theme]]
   - [[#80s-onedark-theme][80s OneDark Theme]]
   - [[#amazing-theme][Amazing Theme]]
+- [[#guide-and-installation][Guide and Installation]]
 - [[#dependencies][Dependencies]]
 - [[#features][Features]]
 - [[#multicolor-theme-screenshot][Multicolor Theme Screenshot]]
@@ -52,6 +53,14 @@ The theme is focused to Atom colors and 80s pastel color schemes. New complex co
 ** Amazing Theme
 The theme is focused to green colors with gold highlights.
 Applications styling and additional colors are based on Nordic Colors and KDE Nordic Theme [[https://www.nordtheme.com/][An arctic, north-bluish color palette]].
+
+* Guide and Installation
+AwesomeWM walkthrough and installation instructions are part of [[https://www.youtube.com/user/tondafischer/playlists][Tux: Linux World Series]]. The series was primarily created for czech community. There were several requests from other communities for translation. AwesomeWM is part of translated episodes.
++ [[https://www.youtube.com/user/tondafischer/playlists][YouTube Series - Tux: Linux World Series]] - Complete introduction to Arch Linux and GNU/Linux for newbies and advanced users.
++ [[https://github.com/raven2cz/tux][Tux: Linux World Documentation]] - Documentation and guides step by step for Tux Series.
++ [[https://youtu.be/gPJQzUnSRxI][AwesomeWM Basics]] - Fundamental installation, default themes and keybindings. Lua and main principles about AW.
++ [[https://youtu.be/gh6h9DvUJRI][AwesomeWM Ricins 1/2]] - Advanced configuration and installation of demo project Multicolor Theme. Architecture Design and top-bottom guide.
++ [[https://youtu.be/1dNNwsOx6hU][AwesomeWM Demo Project and Keybindings]] - The demonstration project with full demo of advanced features and ergonomic keybidnings for advanced users.
 
 * Dependencies
 + AwesomeWm git-master branch
