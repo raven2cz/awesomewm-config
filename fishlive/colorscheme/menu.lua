@@ -21,6 +21,11 @@ menu.prepare_colorscheme_menu = function()
             homeDir .. "/.config/awesome/fishlive/colorscheme/last.lua",
             'return require "fishlive.colorscheme".' .. cs.scheme_id
           )
+          -- permanent storage of selected colorscheme for global system
+          writeToFile(
+            homeDir .. "/.colorscheme",
+            cs.scheme_id
+          )
           -- change rofi theme
           writeToFile(
             homeDir .. "/.config/rofi/config.rasi",
