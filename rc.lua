@@ -324,9 +324,13 @@ awful.keyboard.append_global_keybindings({
     awful.key({ modkey }, "F12", function () awful.spawn("poweroff") end,
               {description="Suspend Computer", group="awesome"}),
 
-    -- ROFI Support
+    -- Rofi Support
     awful.key({ modkey }, "s", function () awful.spawn("rofi -show-icons -modi windowcd,window,drun -show drun") end,
               {description="show rofi drun", group="launcher"}),
+    awful.key({modkey, altkey},"p",function() awful.spawn.with_shell("rofi-pass -t") end,
+              {description="types password from pass",group="launcher"}),
+    awful.key({modkey, ctrlkey},"p", function() awful.spawn.with_shell("rofi-pass") end,
+              {description="copy password from pass",group="launcher"}),
 
     -- Layout and Gaps Support
     awful.key({ modkey, ctrlkey }, "=", function () lain.util.useless_gaps_resize(1) end,
@@ -394,7 +398,7 @@ awful.keyboard.append_global_keybindings({
     awful.key({ modkey }, "r", function () awful.screen.focused().mypromptbox:run() end,
               {description = "run prompt", group = "launcher"}),
     awful.key({ modkey }, "p", function() menubar.show() end,
-              {description = "show the menubar", group = "launcher"}),
+              {description = "show the d-menu", group = "launcher"}),
 })
 
 -- Tags related keybindings

@@ -315,13 +315,15 @@ myawesomemenu = {
 }
 
 theme.menu_colorschemes_create = function()
-  return awful.menu({
+  local menu = awful.menu({
       items = colorscheme.menu.prepare_colorscheme_menu(),
       theme = {
           height = dpi(18),
           width  = dpi(200)
       }
   })
+  fishlive.widget.click_to_hide_menu(menu, nil, true)
+  return menu
 end
 
 -- Main Launcher Menus --
