@@ -119,7 +119,7 @@ git subtree pull --prefix sharedtags git@github.com:Drauthius/awesome-sharedtags
 
 [[https://youtu.be/-Fo7mB6_Wtg][http://i3.ytimg.com/vi/-Fo7mB6_Wtg/hqdefault.jpg]]
 
-[[http://i3.ytimg.com/vi/1nyB85CiJUc/hqdefault.jpg][http://i3.ytimg.com/vi/1nyB85CiJUc/hqdefault.jpg]]
+[[https://youtu.be/1nyB85CiJUc][http://i3.ytimg.com/vi/1nyB85CiJUc/hqdefault.jpg]]
 
 [[https://youtu.be/SNJOeR7mxCI][https://i3.ytimg.com/vi/SNJOeR7mxCI/maxresdefault.jpg]]
 
