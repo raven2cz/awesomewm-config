@@ -1,1 +1,1 @@
-return require "fishlive.colorscheme".doom_one
+return require "fishlive.colorscheme".monokai_pro

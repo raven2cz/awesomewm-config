@@ -104,6 +104,7 @@ git subtree pull --prefix sharedtags git@github.com:Drauthius/awesome-sharedtags
 + image collage feature - integrate image collage to each tag as part of wallpaper with dynamic toggling images
 
 * Multicolor Theme Screenshot
+[[images/awesome-multicolor-mononoki.jpg]]
 [[images/awesome-multicolor-theme.jpg]]
 [[images/collage-aw-lua-travel-enjoy-job-desktop.jpg]]
 
