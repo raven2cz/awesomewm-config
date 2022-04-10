@@ -25,6 +25,7 @@ local lain = require("lain")
 -- Fishlive Utilities
 local fishlive = require("fishlive")
 local colorscheme = require("fishlive.colorscheme")
+local collage = require("fishlive.collage")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require('menubar')
@@ -694,6 +695,45 @@ screen.connect_signal("request::desktop_decoration", function(s)
     wp_user_params = wp_user_params,
     wp_colorscheme_params = wp_colorscheme_params,
     change_wallpaper_colorscheme = theme.change_wallpaper_colorscheme
+  })
+
+  ---------------------------
+  -- Collage Images Feature
+  ---------------------------
+  local collageTag = function(wppath, wps, tagids, collage_template)
+    local imgsources = {}
+    for i=1,#wps do
+      imgsources[i] = wppath .. wps[i]
+    end
+    fishlive.util.shuffle(imgsources)
+    collage.registerTagCollage({
+      screen = screen,
+      collage_template = collage_template,
+      imgsources = imgsources,
+      tagids = tagids,
+    })
+  end
+  -- Portraits Collage for Dev Tag
+  collageTag(notifpath_user, notif_user, {4}, {
+    { max_width = 400, posx = 100, posy = 100 },
+    { max_width = 400, posx = 100, posy = 800 },
+    { max_width = 600, posx = 3740, posy = 2060, align = "bottom-right" },
+  })
+  -- Joy Collage for love Tag
+  local wppath_joy = notifpath .. "joy/"
+  collageTag(wppath_joy, fishlive.util.scandir(wppath_joy), {9}, {
+    { max_height = 800, posx = 100, posy = 100 },
+    { max_height = 400, posx = 100, posy = 930 },
+    { max_height = 400, posx = 450, posy = 930 },
+    { max_height = 400, posx = 870, posy = 100 },
+    { max_height = 400, posx = 1220, posy = 100 },
+    { max_height = 800, posx = 870, posy = 530 },
+  })
+  -- Collage of user wallpapers
+  collageTag(wppath_user, fishlive.util.scandir(wppath_user), {3}, {
+    { max_width = 800, posx = 100, posy = 100 },
+    { max_width = 1200, posx = 100, posy = 800 },
+    { max_width = 800, posx = 3740, posy = 1700, align = "bottom-right" },
   })
   -- }}}
 end)

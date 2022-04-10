@@ -8,9 +8,9 @@ function run {
 }
 
 run /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-run /usr/lib/kactivitymanagerd
+#run /usr/lib/kactivitymanagerd
 #run /use/lib/polkit-kde-authentication-agent-1
-run /usr/lib/pam_kwallet_init
+#run /usr/lib/pam_kwallet_init
 run nm-applet
 run pamac-tray
 if ! pgrep -f cloud-drive-ui; then synology-drive start; fi
