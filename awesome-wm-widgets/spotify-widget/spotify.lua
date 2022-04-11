@@ -22,7 +22,6 @@ local GET_CURRENT_SONG_CMD = 'sp current'
 local function fontfg(fg, text)
     return format("<span foreground='%s'>%s</span>", fg, text)
 end
-
 local function ellipsize(text, length)
     local message = (utf8.len(text) > length and length > 0)
         and text:sub(0, utf8.offset(text, length - 2) - 1) .. '...'
