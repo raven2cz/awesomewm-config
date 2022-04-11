@@ -18,6 +18,7 @@ local function factory(args)
     local temp     = { widget = args.widget or wibox.widget.textbox() }
     local timeout  = args.timeout or 30
     local tempfile = args.tempfile or "/sys/devices/virtual/thermal/thermal_zone0/temp"
+    local format   = args.format or "%.1f"
     local settings = args.settings or function() end
 
     function temp.update()
@@ -31,7 +32,11 @@ local function factory(args)
                     temp_now[t] = temp_value and temp_value/1e3 or temp_fl
                 end
             end
-            coretemp_now = temp_now[tempfile] or "N/A"
+            if temp_now[tempfile] then
+                coretemp_now = string.format(format, temp_now[tempfile]) 
+            else
+                coretemp_now = "N/A"
+            end
             widget = temp.widget
             settings()
         end)
