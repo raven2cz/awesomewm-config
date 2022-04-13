@@ -730,11 +730,11 @@ screen.connect_signal("request::desktop_decoration", function(s)
     { max_height = 800, posx = 870, posy = 530 },
   })
   -- Collage of user wallpapers
-  collageTag(wppath_user, fishlive.util.scandir(wppath_user), {3}, {
-    { max_width = 800, posx = 100, posy = 100 },
-    { max_width = 1200, posx = 100, posy = 800 },
-    { max_width = 800, posx = 3740, posy = 1700, align = "bottom-right" },
-  })
+  -- collageTag(wppath_user, fishlive.util.scandir(wppath_user), {3}, {
+  --   { max_width = 800, posx = 100, posy = 100 },
+  --   { max_width = 1200, posx = 100, posy = 800 },
+  --   { max_width = 800, posx = 3740, posy = 1700, align = "bottom-right" },
+  -- })
   -- }}}
 end)
 -- }}}

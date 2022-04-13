@@ -63,7 +63,7 @@ todo_widget.widget = wibox.widget {
         self:get_children_by_id("txt")[1]:set_markup(fontfg(beautiful.fg_normal, new_value))
     end,
     set_icon = function(self, new_value)
-        self:get_children_by_id("icon")[1].image = gcolor.recolor_image(new_value, beautiful.fg_normal)
+        self:get_children_by_id("icon")[1].image = new_value
     end
 }
 
@@ -93,7 +93,7 @@ local popup = awful.popup{
 local add_button = wibox.widget {
     {
         {
-            image = gcolor.recolor_image(WIDGET_DIR .. '/list-add-symbolic.svg', beautiful.fg_normal),
+            image = WIDGET_DIR .. '/list-add-symbolic.svg',
             resize = false,
             widget = wibox.widget.imagebox
         },
@@ -152,7 +152,7 @@ local function worker(user_args)
 
     local args = user_args or {}
 
-    local icon = args.icon or gcolor.recolor_image(WIDGET_DIR .. '/checkbox-checked-symbolic.svg', beautiful.fg_normal)
+    local icon = args.icon or WIDGET_DIR .. '/checkbox-checked-symbolic.svg'
 
     todo_widget.widget:set_icon(icon)
 
