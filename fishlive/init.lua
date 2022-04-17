@@ -16,5 +16,6 @@ return {
     widget = require("fishlive.widget"),
     wallpaper = require("fishlive.wallpaper"),
     colorscheme = require("fishlive.colorscheme"),
-    collage = require("fishlive.collage")
+    collage = require("fishlive.collage"),
+    plugins = require("fishlive.plugins"),
 }

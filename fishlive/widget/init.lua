@@ -11,6 +11,8 @@
 
 local awful = require("awful")
 local wibox = require("wibox")
+local wrequire = require("fishlive.helpers").wrequire
+local setmetatable = setmetatable
 
 -- fishlive widget submodule
 -- fishlive.widget
@@ -87,35 +89,34 @@ end
 local capi = { button = button, mouse = mouse }
 
 function widget.click_to_hide(widget, hide_fct, only_outside)
+    only_outside = only_outside or false
+
+    hide_fct = hide_fct or function(object)
+        if only_outside and object == widget then
+            return
+        end
+        widget.visible = false
+    end
+
+    local click_bind = awful.button({ }, 1, hide_fct)
+
+    -- when the widget is visible, we hide it on button press
+    widget:connect_signal('property::visible', function(w)
+            if not w.visible then
+                wibox.disconnect_signal("button::press", hide_fct)
+                client.disconnect_signal("button::press", hide_fct)
+                awful.mouse.remove_global_mousebinding(click_bind)
+            else
+                awful.mouse.append_global_mousebinding(click_bind)
+                client.connect_signal("button::press", hide_fct)
+                wibox.connect_signal("button::press", hide_fct)
+            end
+    end)
+
 	only_outside = only_outside or false
 
 	hide_fct = hide_fct or function()
 		widget.visible = false
-	end
-
-	-- when the widget is visible, we hide it on button press
-	widget:connect_signal("property::visible", function(w)
-		if not w.visible then
-			capi.button.disconnect_signal("press", hide_fct)
-		else
-			-- the mouse button is pressed here, we have to wait for the release
-			local function connect_to_press()
-				capi.button.disconnect_signal("release", connect_to_press)
-				capi.button.connect_signal("press", hide_fct)
-			end
-			capi.button.connect_signal("release", connect_to_press)
-		end
-	end)
-
-	if only_outside then
-		-- disable hide on click when the mouse is inside the widget
-		widget:connect_signal("mouse::enter", function()
-			capi.button.disconnect_signal("press", hide_fct)
-		end)
-
-		widget:connect_signal("mouse::leave", function()
-			capi.button.connect_signal("press", hide_fct)
-		end)
 	end
 end
 
@@ -137,4 +138,5 @@ function widget.initialize(args)
   end
 end
 
-return setmetatable(widget, {__call = function(_, ...) return widget.initialize(...) end})
+return setmetatable(widget, { __index = wrequire, __call = function(_, ...) return widget.initialize(...) end })
+

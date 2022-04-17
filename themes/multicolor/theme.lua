@@ -26,6 +26,7 @@ local lain = require("lain")
 local fishlive = require("fishlive")
 local colorscheme = require("fishlive.colorscheme")
 local collage = require("fishlive.collage")
+local fwidget = require("fishlive.widget")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require('menubar')
@@ -54,6 +55,8 @@ theme.font          = "Iosevka Nerd Font 9"
 theme.font_larger   = "Iosevka Nerd Font 11"
 theme.font_notify   = "mononoki Nerd Font 11"
 theme.menu_font     = "mononoki Nerd Font 11"
+theme.tabbar_font   = "Iosevka Nerd Font 11"
+theme.icon_font     = "TerminessTTF NF "
 -- }}}
 
 -- {{{ Borders
@@ -116,7 +119,14 @@ theme.layout_termfair    = gcolor.recolor_image(theme.dir .. "/layouts/termfair.
 theme.layout_treetile    = gcolor.recolor_image(theme.dir .. "/layouts/treetile.png", theme.layout_fg)
 theme.layout_machi       = gcolor.recolor_image(theme.dir .. "/layouts/machi.png", theme.layout_fg)
 -- }}}
-
+---------------------
+-- Tabbed support
+---------------------
+theme.tabbar_position = "bottom"
+theme.tabbar_size = 30
+theme.tabbar_bg_focus  = theme.bg_minimize
+theme.mstab_tabbar_style = "default"
+theme.mstab_tabbar_position = "top"
 ---------------------
 -- Wallpaper Support
 ---------------------
@@ -315,6 +325,7 @@ myawesomemenu = {
   { "quit", function() awesome.quit() end },
 }
 
+-- Colorscheme Menu
 theme.menu_colorschemes_create = function()
   local menu = awful.menu({
       items = colorscheme.menu.prepare_colorscheme_menu(),
@@ -364,10 +375,10 @@ screen.connect_signal("request::desktop_decoration", function(s)
       awful.layout.layouts[2], --apps (machi)
       awful.layout.suit.floating, --idea
       awful.layout.layouts[11],--water (machi to empty placement)
-      awful.layout.suit.magnifier, --air (machi)
+      awful.layout.layouts[8], --air
       awful.layout.layouts[5], --fire (center-work)
       awful.layout.layouts[6], --earth (termfair)
-      awful.layout.suit.max    --love
+      awful.layout.layouts[9]  --love
     }
   }
 
@@ -382,16 +393,9 @@ screen.connect_signal("request::desktop_decoration", function(s)
   s.mypromptbox = awful.widget.prompt()
 
   -- Create an imagebox widget which will contain an icon indicating which layout we're using.
-  -- We need one layoutbox per screen.
-  s.mylayoutbox = awful.widget.layoutbox {
-    screen  = s,
-    buttons = {
-      awful.button({ }, 1, function () awful.layout.inc( 1) end),
-      awful.button({ }, 3, function () awful.layout.inc(-1) end),
-      awful.button({ }, 4, function () awful.layout.inc(-1) end),
-      awful.button({ }, 5, function () awful.layout.inc( 1) end),
-    }
-  }
+  -- We need one layoutbox per screen with support popup menu with layouts.
+  local layoutsmenu = fishlive.widget.layoutsmenu
+  s.mylayoutsmenu = layoutsmenu(s)
 
   -- TAGLIST COMPONENT
   -- Taglist Callbacks
@@ -553,7 +557,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
         netWibox,
         weatherWibox,
         clockWibox,
-        s.mylayoutbox,
+        s.mylayoutsmenu,
       },
     }
   end

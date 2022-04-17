@@ -35,8 +35,6 @@ local treetile = require("treetile")
 local machi = require("layout-machi")
 -- switching windows in the actual layout
 --local machina = require("machina")()
--- titlebars NICE
-local nice = require("nice")
 -- cycle focus clients
 local cyclefocus = require("cyclefocus")
 
@@ -130,45 +128,19 @@ lain.layout.cascade.tile.ncol          = 2
 -- {{{ Theme and Colorscheme Declaration
 -- Themes define colours, icons, font and wallpapers.
 --beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
-beautiful.init(gears.filesystem.get_configuration_dir().."/themes/multicolor/theme.lua")
+local themeName = "multicolor"
+beautiful.init(gears.filesystem.get_configuration_dir().."/themes/"..themeName.."/theme.lua")
 -- }}}
 
--- {{{ Layouts configuration
--- titlebars NICE
-nice {
-    win_shade_enabled = true,
-    titlebar_height = 29,
-    titlebar_radius = 11,
-    titlebar_font = "Iosevka Nerd Font 9",
-    button_size = 13,
-    button_margin_horizontal = 5,
-    button_margin_top = 2,
-    minimize_color = "#ffb400",
-    maximize_color = "#4CBB17",
-    close_color = "#ee4266",
-    sticky_color = "#774f73",
-    floating_color = "#774f73",
-    ontop_color = "#774f73",
-    titlebar_items = {
-        left = {"sticky", "floating", "ontop"},
-        middle = "title",
-        right = {"minimize", "maximize","close"},
-    },
-        tooltip_messages = {
-        close = "Close",
-        minimize = "Minimize",
-        maximize_active = "Unmaximize",
-        maximize_inactive = "Maximize",
-        floating_active = "Floating",
-        floating_inactive = "Tiling",
-        ontop_active = "OnTop",
-        ontop_inactive = "NotOnTop",
-        sticky_active = "Sticky",
-        sticky_inactive = "NotSticky",
-    }
-}
+-- {{{ Libraries Configuration after beautiful.init()
+-- Bling (must be after beautiful.init())
+bling = require("bling")
+awful.layout.append_default_layout(bling.layout.mstab)
 
--- Notification Canter
+-- Nice titlebars
+fishlive.plugins.createTitlebarsNiceLib()
+
+-- Notification Center
 popup = require("notifs.notif-center.notif_popup")
 
 -- {{{ Mouse bindings
@@ -374,6 +346,8 @@ awful.keyboard.append_global_keybindings({
               {description="show help", group="awesome"}),
     awful.key({ modkey }, "w", function () xmenu() end,
               {description = "show main menu", group = "awesome"}),
+    awful.key({ modkey }, "q", function () fishlive.widget.exit_screen() end,
+              {description = "exit screen", group = "awesome"}),
     awful.key({ modkey }, "c", function () beautiful.menu_colorschemes_create():toggle() end,
               {description = "show colorschemes menu", group = "awesome"}),
     awful.key({ modkey }, "a", function () awful.spawn("clipmenu") end,
@@ -438,6 +412,27 @@ awful.keyboard.append_global_keybindings({
               end
           end,
           {description = "restore minimized", group = "client"}),
+})
+
+-- Tabbed related keybindings
+awful.keyboard.append_global_keybindings({
+    awful.key {
+        modifiers   = { modkey, ctrlkey },
+        keygroup    = "numpad",
+        description = "tabbed features",
+        group       = "client",
+        on_press    = function(index)
+            if index == 1 then bling.module.tabbed.pick_with_dmenu()
+            elseif index == 2 then bling.module.tabbed.pick_by_direction("down")
+            elseif index == 4 then bling.module.tabbed.pick_by_direction("left")
+            elseif index == 5 then bling.module.tabbed.iter()
+            elseif index == 6 then bling.module.tabbed.pick_by_direction("right")
+            elseif index == 7 then bling.module.tabbed.pick()
+            elseif index == 8 then bling.module.tabbed.pick_by_direction("up")
+            elseif index == 9 then bling.module.tabbed.pop()
+            end
+        end
+    },
 })
 
 -- Layout related keybindings
