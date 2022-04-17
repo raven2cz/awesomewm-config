@@ -6,3 +6,4 @@ git subtree pull --prefix layout-machi git@github.com:xinhaoyuan/layout-machi.gi
 git subtree pull --prefix machina git@github.com:basaran/awesomewm-machina.git master --squash
 git subtree pull --prefix nice git@github.com:mut-ex/awesome-wm-nice.git master --squash
 git subtree pull --prefix sharedtags git@github.com:Drauthius/awesome-sharedtags.git v4.0 --squash
+git subtree pull --prefix bling git@github.com:BlingCorp/bling.git master --squash
