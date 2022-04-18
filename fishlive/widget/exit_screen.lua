@@ -3,17 +3,18 @@ local gears = require("gears")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local xresources = require("beautiful.xresources")
+local markup = require "lain".util.markup
 local dpi = xresources.apply_dpi
 
 -- Appearance
 local font = gears.string.split(beautiful.font, " ")[1] or "sans"
 local icon_font = beautiful.icon_font .. "140" or "TerminessTTF NF 90"
-local icon_normal_color = beautiful.bg_primary or "#54ff54"
-local icon_hover_color = beautiful.fg_primary or "#18b218"
+local icon_normal_color = beautiful.fg_focus or "#54ff54"
+local icon_hover_color = beautiful.fg_urgent or "#18b218"
 
 local username = os.getenv("USER")
 -- Capitalize username
-local goodbye_widget = wibox.widget.textbox("Goodbye " .. username:sub(1,1):upper()..username:sub(2))
+local goodbye_widget = wibox.widget.textbox("Goodbye " .. username:sub(1,1):upper()..username:sub(2) .. "!")
 goodbye_widget.font = font .. " 70"
 
 -- Get screen geometry
@@ -22,16 +23,8 @@ local screen_height = awful.screen.focused().geometry.height
 
 -- Create the widget
 local exit_screen = wibox({x = 0, y = 0, visible = false, ontop = true, type = "dock", height = screen_height, width = screen_width})
-
--- TODO: find or write a safe function to add transparency to a color
-exit_screen.bg = beautiful.wibar_bg or beautiful.xbackground .. "cc" or "#000000cc"
-exit_screen.fg = beautiful.wibar_fg or beautiful.xforeground or "#b2b2b2"
-
--- Create an container box
--- local exit_screen_box = wibox.container.background()
--- exit_screen_box.bg = exit_screen.bg
--- exit_screen_box.shape = gears.shape.rounded_rect
--- exit_screen_box.shape_border_radius = 20
+exit_screen.bg = beautiful.bg_normal .. "cc" or "#000000cc"
+exit_screen.fg = beautiful.fg_normal or "#b2b2b2"
 
 local exit_screen_grabber
 
@@ -46,12 +39,12 @@ end
 
 exit_screen_grabber = awful.keygrabber {
     keybindings = {
-        awful.key { key = 'Escape', modifiers = {},
-                    on_press = exit_screen_hide},
-        awful.key { key = 'q', modifiers = {},
-                    on_press = exit_screen_hide},
-        awful.key { key = 'x', modifiers = {},
-                    on_press = exit_screen_hide}
+        awful.key({ key = 'Escape', modifiers = {},
+                    on_press = exit_screen_hide}),
+        awful.key({ key = 'q', modifiers = {},
+                    on_press = exit_screen_hide}),
+        awful.key({ key = 'x', modifiers = {},
+                    on_press = exit_screen_hide})
     },
 }
 
@@ -78,7 +71,7 @@ local function big_button_widget(button_text_icon, button_text, action, shortcut
         {
             nil,
             button_icon,
-            forced_height = dpi(150),
+            forced_height = dpi(170),
             expand = "none",
             layout = wibox.layout.align.horizontal
         },
@@ -146,20 +139,28 @@ local reboot   = big_button_widget("",
                                    "r"
 )
 
-local hibernate = big_button_widget("",
-                                    "Hibernate",
-                                    function()
-                                        awful.spawn.with_shell("systemctl hibernate")
-                                    end,
-                                    "h"
-)
+-- local hibernate = big_button_widget("",
+--                                     "Hibernate",
+--                                     function()
+--                                         awful.spawn.with_shell("systemctl hibernate")
+--                                     end,
+--                                     "h"
+-- )
 
-local suspend  = big_button_widget("",
-                                   "Suspend",
+-- local suspend  = big_button_widget("",
+--                                    "Suspend",
+--                                    function()
+--                                        awful.spawn.with_shell("systemctl suspend")
+--                                    end,
+--                                    "s"
+-- )
+
+local refresh  = big_button_widget("",
+                                   "Refresh",
                                    function()
-                                       awful.spawn.with_shell("systemctl suspend")
+                                       awesome.restart()
                                    end,
-                                   "s"
+                                   "f"
 )
 
 local exit     = big_button_widget("",
@@ -173,7 +174,7 @@ local exit     = big_button_widget("",
 local lock     = big_button_widget("",
                                    "Lock",
                                    function()
-                                       awful.spawn.with_shell("xscreensaver-command -lock")
+                                       awful.spawn.with_shell("i3exit lock")
                                    end,
                                    "l"
 )
@@ -194,8 +195,9 @@ exit_screen:setup {
             {
                 poweroff,
                 reboot,
-                hibernate,
-                suspend,
+                --hibernate,
+                --suspend,
+                refresh,
                 exit,
                 lock,
                 spacing = dpi(70),
