@@ -8,7 +8,7 @@ local dpi = xresources.apply_dpi
 
 -- Appearance
 local font = gears.string.split(beautiful.font, " ")[1] or "sans"
-local icon_font = beautiful.icon_font .. "140" or "TerminessTTF NF 90"
+local icon_font = beautiful.icon_font .. "90" or "TerminessTTF NF 90"
 local icon_normal_color = beautiful.fg_focus or "#54ff54"
 local icon_hover_color = beautiful.fg_urgent or "#18b218"
 

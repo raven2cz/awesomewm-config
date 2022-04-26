@@ -56,7 +56,7 @@ theme.font_larger   = "Iosevka Nerd Font 11"
 theme.font_notify   = "mononoki Nerd Font 11"
 theme.menu_font     = "mononoki Nerd Font 11"
 theme.tabbar_font   = "Iosevka Nerd Font 11"
-theme.icon_font     = "TerminessTTF NF "
+theme.icon_font     = "TerminessTTF Nerd Font "
 -- }}}
 
 -- {{{ Borders
