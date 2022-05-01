@@ -4,7 +4,6 @@ local wibox = require('wibox')
 
 local dpi = require('beautiful').xresources.apply_dpi
 
-
 local empty_notifbox = wibox.widget {
 	{
 		layout = wibox.layout.fixed.vertical,
@@ -18,7 +17,7 @@ local empty_notifbox = wibox.widget {
 				resize = true,
 				forced_height = dpi(35),
 				forced_width = dpi(35),
-				widget = wibox.widget.imagebox,
+        widget = wibox.widget.imagebox
 			},
 			nil
 		},
@@ -32,14 +31,13 @@ local empty_notifbox = wibox.widget {
 	},
 	margins = dpi(20),
 	widget = wibox.container.margin
-
 }
 
 -- Make empty_notifbox center
 local centered_empty_notifbox = wibox.widget {
 	layout = wibox.layout.fixed.vertical,
 	expand = 'none',
-	empty_notifbox,
+  empty_notifbox
 }
 
 return centered_empty_notifbox

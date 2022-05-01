@@ -1,98 +1,114 @@
-local awful = require("awful")
 local wibox = require("wibox")
-local gears = require("gears")
 local beautiful = require("beautiful")
 local dpi = beautiful.xresources.apply_dpi
+local helpers = require("fishlive.helpers")
 
---local helpers = require("helpers")
-
-local button = require("widgets.button")
+local button = require("fishlive.widget.button")
 
 local notifbox = {}
 
-notifbox.create = function(icon, title, message, width)
+notifbox.create = function(icon, n, width)
     local time = os.date("%H:%M") 
     local box = {}
 
-    local dismiss = button.create_image_onclick(beautiful.delete_grey_icon, beautiful.delete_icon, function() 
+    local dismiss = button.create_image_onclick(beautiful.delete_grey_icon,
+                                                beautiful.delete_icon,
+                                                function()
         _G.remove_notifbox(box)
     end)
-    dismiss.forced_height = dpi(24)
-    dismiss.forced_width = dpi(24)
-
-    --icon.forced_height = dpi(24)
-    --icon.forced_width = dpi(24)
-
-    local img_icon = wibox.widget {
-                image = icon, 
-                forced_width = dpi(35), 
-                forced_height = dpi(35),
-                resize = true,
-                clip_shape = function(cr)
-            gears.shape.rounded_rect(cr, dpi(35), dpi(35), dpi(6))
-        end, 
-                widget = wibox.widget.imagebox
-            }
-
-    local center1 = wibox.container.margin(
-        img_icon,
-        20,0,14,0
-    )
+    dismiss.forced_height = dpi(14)
+    dismiss.forced_width = dpi(14)
 
     box = wibox.widget {
         {
-           center1, 
             {
                 {
-                    nil, 
                     {
                         {
-                            font = "JetBrains Mono Bold 10", 
-                            markup = title, 
-                            widget = wibox.widget.textbox
-                        }, 
                         {
-                            font = "JetBrains Mono Regular 8", 
-                            markup = message, 
-                            widget = wibox.widget.textbox
+                                image = icon,
+                                resize = true,
+                                clip_shape = helpers.rrect(
+                                    beautiful.border_radius - 3),
+                                widget = wibox.widget.imagebox
                         },
-                        layout = wibox.layout.fixed.vertical
+                            -- bg = beautiful.xcolor1,
+                            strategy = 'exact',
+                            height = 90,
+                            width = 90,
+                            widget = wibox.container.constraint
                     }, 
-                    expand = "none", 
                     layout = wibox.layout.align.vertical
                 }, 
-                left = dpi(20),
-                bottom = dpi(0),
+                    top = dpi(13),
+                    left = dpi(15),
+                    right = dpi(15),
+                    bottom = dpi(13),
                 widget = wibox.container.margin
             }, 
             {
                 {
+                        nil,
                     {
-                        font = "JetBrains Mono Regular 8",
+                            {
+                                {
+                                    step_function = wibox.container.scroll
+                                        .step_functions
+                                        .waiting_nonlinear_back_and_forth,
+                                    speed = 50,
+                                    {
+                                        markup = "<b>" .. n.title .. "</b>",
+                                        font = beautiful.font,
+                                        align = "left",
+                                        widget = wibox.widget.textbox
+                                    },
+                                    forced_width = dpi(204),
+                                    widget = wibox.container.scroll.horizontal
+                                },
+                                {
+                                    {
                         markup = time, 
+                                        align = "right",
+                                        font = beautiful.font,
                         widget = wibox.widget.textbox
                     }, 
+                                    left = dpi(30),
+                                    widget = wibox.container.margin
+                                },
                     {
-                        nil, 
+                                    {
                         dismiss,
+                                        halign = "right",
+                                        widget = wibox.container.place
+                                    },
+                                    left = dpi(10),
+                                    widget = wibox.container.margin
+                                },
+                                layout = wibox.layout.fixed.horizontal
+                            },
+                            {
+                                markup = n.message,
+                                align = "left",
+                                font = beautiful.font,
+                                widget = wibox.widget.textbox
+                            },
+                            layout = wibox.layout.fixed.vertical
+                        },
                         nil, 
                         expand = "none", 
-                        layout = wibox.layout.align.horizontal
+                        layout = wibox.layout.align.vertical
                     }, 
-                    spacing = dpi(5), 
-                    layout = wibox.layout.fixed.vertical
-                }, 
-                margins = dpi(10), 
+                    margins = dpi(8),
                 widget = wibox.container.margin
             }, 
-            spacing = dpi(20), 
             layout = wibox.layout.align.horizontal
         }, 
-        shape = function(cr, width, height)
-            gears.shape.rounded_rect(cr, width, height, dpi(6))
-        end, 
-        bg = beautiful.xcolor0, 
-        forced_width = width,  
+            top = dpi(2),
+            bottom = dpi(2),
+            widget = wibox.container.margin
+        },
+        bg = beautiful.xcolor0 .. "55",
+        shape = helpers.rrect(beautiful.border_radius),
         widget = wibox.container.background 
     }
 

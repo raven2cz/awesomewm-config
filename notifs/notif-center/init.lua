@@ -12,7 +12,7 @@ local notif_header = wibox.widget {
 
 return wibox.widget {
 	{
-		notif_header,
+		nil,
 		nil, 
 		require("notifs.notif-center.clear-all"),
 		expand = "none", 
@@ -21,5 +21,5 @@ return wibox.widget {
 	},
 	require('notifs.notif-center.build-notifbox'), 
 	spacing = dpi(10), 
-	layout = wibox.layout.fixed.vertical,
+	layout = wibox.layout.fixed.vertical
 }
