@@ -719,8 +719,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
   end
   -- Portraits Collage for Dev Tag
   collageTag(notifpath_user, notif_user, {4}, {
-    { max_width = 400, posx = 100, posy = 100 },
-    { max_width = 400, posx = 100, posy = 800 },
+    { max_height = 600, posx = 100, posy = 100 },
+    { max_height = 600, posx = 100, posy = 800 },
     { max_width = 600, posx = 3740, posy = 2060, align = "bottom-right" },
   })
   -- Joy Collage for love Tag

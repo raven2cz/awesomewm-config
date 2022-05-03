@@ -24,15 +24,25 @@ function collage.align(align, posx, posy, imgwidth, imgheight)
   return uposx, uposy
 end
 
-function collage.placeCollageImage(reqimgwidth, reqimgheight, posx, posy, align, imgsrcs, imgidx)
-  local homeDir = os.getenv("HOME")
-  local shadowsrc = homeDir .. "/.config/awesome/fishlive/collage/shadow.png"
-  local imgsrc = imgsrcs[imgidx]
+function collage.calcImageRes(imgsrc, reqimgwidth, reqimgheight)
   local image = surface.load(imgsrc)
   local imgwidth = image.width
   local imgheight = image.height
   local imgratio = 1.0
 
+  --too small images - upscale to 75% of reqimgwidth, reqimgheight
+  if imgwidth < reqimgwidth * 0.75 and reqimgwidth ~= -1 then
+    imgratio = reqimgwidth * 0.75/imgwidth
+    imgwidth = reqimgwidth * 0.75
+    imgheight = imgheight * imgratio
+  end
+  if imgheight < reqimgheight * 0.75 and reqimgheight ~= -1 then
+    imgratio = reqimgheight * 0.75/imgheight
+    imgwidth = imgwidth * imgratio
+    imgheight = reqimgheight * 0.75
+  end
+
+  -- too big images
   if imgwidth > reqimgwidth and reqimgwidth ~= -1 then
     imgratio = reqimgwidth/imgwidth
     imgwidth = reqimgwidth
@@ -44,14 +54,33 @@ function collage.placeCollageImage(reqimgwidth, reqimgheight, posx, posy, align,
     imgheight = reqimgheight
   end
 
-  uposx, uposy = collage.align(align, posx, posy, imgwidth, imgheight)
+  return imgwidth, imgheight, imgratio
+end
+
+function collage.calcShadow(imgwidth, imgheight, uposx, uposy)
+  local width = imgwidth+50*imgwidth/370
+  local height = imgheight+70*imgheight/550
+  local x = uposx - 25*imgwidth/370
+  local y = uposy - 23*imgheight/550
+
+  return width, height, x, y
+end
+
+function collage.placeCollageImage(reqimgwidth, reqimgheight, posx, posy, align, imgsrcs, imgidx)
+  local homeDir = os.getenv("HOME")
+  local shadowsrc = homeDir .. "/.config/awesome/fishlive/collage/shadow.png"
+  local imgsrc = imgsrcs[imgidx]
+
+  local imgwidth, imgheight, imgratio = collage.calcImageRes(imgsrc, reqimgwidth, reqimgheight)
+  local uposx, uposy = collage.align(align, posx, posy, imgwidth, imgheight)
+  local shwWidth, shwHeight, shwX, shwY = collage.calcShadow(imgwidth, imgheight, uposx, uposy)
 
   local imgboxShw = wibox({
       type = "desktop",
-      width = imgwidth+50*imgwidth/370,
-      height = imgheight+70*imgheight/550,
-      x = uposx - 25*imgwidth/370,
-      y = uposy - 23*imgheight/550,
+      width = shwWidth,
+      height = shwHeight,
+      x = shwX,
+      y = shwY,
       visible = true,
       ontop = false,
       opacity = 1.00,
@@ -62,8 +91,8 @@ function collage.placeCollageImage(reqimgwidth, reqimgheight, posx, posy, align,
       {
           id = "shadow",
           widget = wibox.widget.imagebox,
-          forced_width = imgwidth+50*imgwidth/370,
-          forced_height = imgheight+70*imgheight/550,
+          forced_width = shwWidth,
+          forced_height = shwHeight,
           horizontal_fit_policy = "fit",
           vertical_fit_policy = "fit",
           resize = true,
@@ -98,30 +127,18 @@ function collage.placeCollageImage(reqimgwidth, reqimgheight, posx, posy, align,
       if imgidx == 0 then imgidx = #imgsrcs end
       if imgidx > #imgsrcs then imgidx = 1 end
       imgsrc = imgsrcs[imgidx]
-      image = surface.load(imgsrc)
-      imgwidth = image.width
-      imgheight = image.height
-      imgratio = 1.0
-      if imgwidth > reqimgwidth and reqimgwidth ~= -1 then
-        imgratio = reqimgwidth/imgwidth
-        imgwidth = reqimgwidth
-        imgheight = imgheight * imgratio
-      end
-      if imgheight > reqimgheight and reqimgheight ~= -1 then
-        imgratio = reqimgheight/imgheight
-        imgwidth = imgwidth * imgratio
-        imgheight = reqimgheight
-      end
+      imgwidth, imgheight, imgratio = collage.calcImageRes(imgsrc, reqimgwidth, reqimgheight)
       uposx, uposy = collage.align(align, posx, posy, imgwidth, imgheight)
+      shwWidth, shwHeight, shwX, shwY = collage.calcShadow(imgwidth, imgheight, uposx, uposy)
 
-      imgboxShw.x = uposx - 25*imgwidth/370
-      imgboxShw.y = uposy - 23*imgheight/550
-      imgboxShw.width = imgwidth+50*imgwidth/370
-      imgboxShw.height = imgheight+70*imgheight/550
+      imgboxShw.x = shwX
+      imgboxShw.y = shwY
+      imgboxShw.width = shwWidth
+      imgboxShw.height = shwHeight
       shwWibox = imgboxShw:get_children_by_id("shadow")[1]
       shwWibox.image = gears.surface.load_uncached(shadowsrc)
-      shwWibox.forced_width = imgwidth+50*imgwidth/370
-      shwWibox.forced_height = imgheight+70*imgheight/550
+      shwWibox.forced_width = shwWidth
+      shwWibox.forced_height = shwHeight
       shwWibox.horizontal_fit_policy = "fit"
       shwWibox.vertical_fit_policy = "fit"
       self.width = imgwidth
