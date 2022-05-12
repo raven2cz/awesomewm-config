@@ -139,21 +139,21 @@ local reboot   = big_button_widget("",
                                    "r"
 )
 
--- local hibernate = big_button_widget("",
---                                     "Hibernate",
---                                     function()
---                                         awful.spawn.with_shell("systemctl hibernate")
---                                     end,
---                                     "h"
--- )
+local hibernate = big_button_widget("",
+                                    "Hibernate",
+                                    function()
+                                        awful.spawn.with_shell("systemctl hibernate")
+                                    end,
+                                    "h"
+)
 
--- local suspend  = big_button_widget("",
---                                    "Suspend",
---                                    function()
---                                        awful.spawn.with_shell("systemctl suspend")
---                                    end,
---                                    "s"
--- )
+local suspend  = big_button_widget("",
+                                   "Suspend",
+                                   function()
+                                       awful.spawn.with_shell("systemctl suspend")
+                                   end,
+                                   "s"
+)
 
 local refresh  = big_button_widget("",
                                    "Refresh",
@@ -195,8 +195,8 @@ exit_screen:setup {
             {
                 poweroff,
                 reboot,
-                --hibernate,
-                --suspend,
+                hibernate,
+                suspend,
                 refresh,
                 exit,
                 lock,
