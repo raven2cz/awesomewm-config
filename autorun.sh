@@ -20,3 +20,4 @@ run /usr/bin/emacs --daemon
 run ~/.config/conky/start_conky ~/.config/conky/MX-CoreBlue/conkyrc2core 
 run remmina -i
 run picom --experimental-backends --config $HOME/.config/picom/picom.conf
+run mpv --no-video ~/.config/awesome/fishlive/sounds/startup-snd-1.mp3
