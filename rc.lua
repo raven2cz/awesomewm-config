@@ -148,6 +148,14 @@ awful.mouse.append_global_mousebindings({
     awful.button({}, 3, function() xmenu() end),
     awful.button({}, 4, awful.tag.viewprev),
     awful.button({}, 5, awful.tag.viewnext),
+    awful.button({ modkey, altkey }, 4, function ()
+        os.execute(string.format("amixer -q set %s 5%%+", beautiful.volume.channel))
+        beautiful.volume.update()
+    end),
+    awful.button({ modkey, altkey }, 5, function ()
+        os.execute(string.format("amixer -q set %s 5%%-", beautiful.volume.channel))
+        beautiful.volume.update()
+    end),
 })
 -- }}}
 
