@@ -3,7 +3,9 @@ local machi_editor = require(this_package.."editor")
 local awful = require("awful")
 local gobject = require("gears.object")
 local capi = {
-    screen = screen
+    screen = screen,
+    client = client,
+    mouse = mouse,
 }
 
 local ERROR = 2
@@ -122,15 +124,42 @@ function module.set_geometry(c, area_lu, area_rd, useless_gap, border_width)
     end
 end
 
--- TODO: the string need to be updated when its screen geometry changed.
 local function get_machi_tag_string(tag)
-    if tag.machi_tag_string == nil then
-        tag.machi_tag_string =
-            tostring(tag.screen.geometry.width) .. "x" .. tostring(tag.screen.geometry.height) .. "+" ..
-            tostring(tag.screen.geometry.x) .. "+" .. tostring(tag.screen.geometry.y) .. '+' .. tag.name
-    end
-    return tag.machi_tag_string
+    return tostring(tag.screen.geometry.width) .. "x" .. tostring(tag.screen.geometry.height) .. "+" ..
+        tostring(tag.screen.geometry.x) .. "+" .. tostring(tag.screen.geometry.y) .. '+' .. tag.name
 end
+
+local function sanitize_geometry(geo, parent_area)
+    local x = geo.x
+    local width = geo.width
+
+    if x + width > parent_area.x + parent_area.width then
+        x = parent_area.x + parent_area.width - width
+    end
+    if x < parent_area.x then
+        x = parent_area.x
+    end
+    if x + width > parent_area.x + parent_area.width then
+        width = parent_area.x + parent_area.width - x
+    end
+    geo.x = x
+    geo.width = width
+
+    local y = geo.y
+    local height = geo.height
+    if y + height > parent_area.y + parent_area.height then
+        y = parent_area.y + parent_area.height - height
+    end
+    if y < parent_area.y then
+        y = parent_area.y
+    end
+    if y + height > parent_area.y + parent_area.height then
+        height = parent_area.y + parent_area.height - y
+    end
+    geo.y = y
+    geo.height = height
+end
+
 
 function module.create(args_or_name, editor, default_cmd)
     local args
@@ -283,6 +312,12 @@ function module.create(args_or_name, editor, default_cmd)
                     width = c.width + c.border_width * 2,
                     height = c.height + c.border_width * 2,
                 }
+
+                if not c.machi_no_sanitize_geometry then
+                    sanitize_geometry(geo, screen.workarea)
+                else
+                    c.machi_no_sanitize_geometry = nil
+                end
 
                 if not cd[c].placement and new_placement_cb then
                     cd[c].placement = true
@@ -593,5 +628,27 @@ end
 function module.placement.empty_then_fair(c, instance, areas, geometry)
     empty_then_maybe_fair(c, instance, areas, geometry, true)
 end
+
+local function patch_awful_layout()
+    local old_alayout_move_handler = awful.layout.move_handler
+    if old_alayout_move_handler == nil then return end
+    -- Mostly the original one but does not swap clients in machi layouts.
+    function awful.layout.move_handler(c, context, ...)
+        if not c.floating and context == "mouse.move" then
+            local s = capi.mouse.screen
+            if s.selected_tag and s.selected_tag.layout and
+                s.selected_tag.layout.machi_set_cmd then
+                if c.screen ~= s then
+                    c.screen = s
+                end
+                return
+            end
+        end
+        return old_alayout_move_handler(c, context, ...)
+    end
+    capi.client.disconnect_signal("request::geometry", old_alayout_move_handler)
+    capi.client.connect_signal("request::geometry", awful.layout.move_handler)
+end
+patch_awful_layout()
 
 return module

@@ -478,6 +478,7 @@ function module.start(c, exit_keys)
                     end
                     c:emit_signal("request::activate", "mouse.move", {raise=false})
                     c:raise()
+                    c.machi_no_sanitize_geometry = true
                     awful.layout.arrange(screen)
 
                     tablist = nil

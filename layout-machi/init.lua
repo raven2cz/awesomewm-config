@@ -3,7 +3,7 @@ local layout = require(... .. ".layout")
 local editor = require(... .. ".editor")
 local switcher = require(... .. ".switcher")
 local default_editor = editor.default_editor
-local default_layout = layout.create{ name_func = default_name }
+local default_layout = layout.create{}
 local gcolor = require("gears.color")
 local beautiful = require("beautiful")
 
