@@ -44,4 +44,24 @@ menu.prepare_colorscheme_menu = function()
   return menucs
 end
 
+-- Portrait Colorscheme Switcher --
+menu.prepare_portrait_menu = function()
+  local menucs = {}
+  -- table of supported portraits
+  for i, cs in ipairs(colorscheme.table_portrait) do
+      menucs[i] = { cs, function()
+          local homeDir = os.getenv("HOME")
+          -- permanent storage of selected colorscheme for global system
+          writeToFile(
+            homeDir .. "/.portrait",
+            cs
+          )
+          -- restart AWESOME
+          awesome.restart()
+        end
+      }
+  end
+  return menucs
+end
+
 return menu

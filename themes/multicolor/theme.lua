@@ -27,6 +27,7 @@ local fishlive = require("fishlive")
 local colorscheme = require("fishlive.colorscheme")
 local collage = require("fishlive.collage")
 local fwidget = require("fishlive.widget")
+local fhelpers = require("fishlive.helpers")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require('menubar')
@@ -329,6 +330,19 @@ myawesomemenu = {
 theme.menu_colorschemes_create = function()
   local menu = awful.menu({
       items = colorscheme.menu.prepare_colorscheme_menu(),
+      theme = {
+          height = dpi(18),
+          width  = dpi(200)
+      }
+  })
+  fishlive.widget.click_to_hide_menu(menu, nil, true)
+  return menu
+end
+
+-- Portrait Menu
+theme.menu_portrait_create = function()
+  local menu = awful.menu({
+      items = colorscheme.menu.prepare_portrait_menu(),
       theme = {
           height = dpi(18),
           width  = dpi(200)
@@ -674,7 +688,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
   -- WALLPAPER PER TAG and USER WALLS keybinding
   -----------------------------------------------
   -- Try to load notification icons
-  notif_user = fishlive.util.scandir(notifpath_user)
+  notif_user = fishlive.util.scandirArgs(notifpath_user, "")
 
   -- User Wallpaper Changer
   local wp_user_params = {
@@ -724,14 +738,18 @@ screen.connect_signal("request::desktop_decoration", function(s)
     { max_width = 600, posx = 3740, posy = 2060, align = "bottom-right" },
   })
   -- Joy Collage for love Tag
-  local wppath_joy = notifpath .. "joy/"
-  collageTag(wppath_joy, fishlive.util.scandir(wppath_joy), {9}, {
+  local sel_portrait = fhelpers.first_line(os.getenv("HOME")..'/.portrait') or 'joy'
+  local wppath_love_tag = notifpath .. sel_portrait .. "/"
+  collageTag(wppath_love_tag, fishlive.util.scandirArgs(wppath_love_tag, ""), {9}, {
     { max_height = 800, posx = 100, posy = 100 },
     { max_height = 400, posx = 100, posy = 930 },
     { max_height = 400, posx = 450, posy = 930 },
     { max_height = 400, posx = 870, posy = 100 },
     { max_height = 400, posx = 1220, posy = 100 },
     { max_height = 800, posx = 870, posy = 530 },
+    { max_height = 760, posx = 100, posy = 1370 },
+    { max_height = 400, posx = 870, posy = 1370 },
+    { max_height = 400, posx = 1220, posy = 1370 },
   })
   -- Collage of user wallpapers
   -- collageTag(wppath_user, fishlive.util.scandir(wppath_user), {3}, {

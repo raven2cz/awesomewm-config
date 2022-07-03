@@ -358,6 +358,8 @@ awful.keyboard.append_global_keybindings({
               {description = "exit screen", group = "awesome"}),
     awful.key({ modkey }, "c", function () beautiful.menu_colorschemes_create():toggle() end,
               {description = "show colorschemes menu", group = "awesome"}),
+    awful.key({ modkey }, "x", function () beautiful.menu_portrait_create():toggle() end,
+              {description = "show portrait menu for love tag", group = "awesome"}),              
     awful.key({ modkey }, "a", function () awful.spawn("clipmenu") end,
               {description = "clipboard history by rofi/clipmenud", group = "awesome"}),
     awful.key({ modkey, ctrlkey }, "r", awesome.restart,

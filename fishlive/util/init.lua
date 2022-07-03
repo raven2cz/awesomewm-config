@@ -37,6 +37,18 @@ function util.scandir(directory)
   return t
 end
 
+-- return string content of the directory
+function util.scandirArgs(directory, args)
+  local i, t, popen = 0, {}, io.popen
+  local pfile = popen('ls '..args..' "'..directory..'"')
+  for filename in pfile:lines() do
+    i = i + 1
+    t[i] = filename
+  end
+  pfile:close()
+  return t
+end
+
 -- check if folder exists --
 function util.is_dir(path)
     local f = io.open(path, "r")
