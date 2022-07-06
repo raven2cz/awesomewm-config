@@ -36,7 +36,7 @@ function plugins.createTitlebarsNiceLib()
           middle = "title",
           right = {"minimize", "maximize","close"},
       },
-          tooltip_messages = {
+      tooltip_messages = {
           close = "Close",
           minimize = "Minimize",
           maximize_active = "Unmaximize",
