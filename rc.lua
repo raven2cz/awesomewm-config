@@ -299,7 +299,7 @@ awful.keyboard.append_global_keybindings({
         {description="translate to Czech TTS", group="awesome"}),
 
     -- Lock Support
-    awful.key({ modkey }, "Home", function () awful.spawn("i3exit lock") end,
+    awful.key({ modkey }, "Home", function () awful.spawn("lock.sh") end,
               {description="Lock Screen", group="awesome"}),
     awful.key({ modkey }, "F12", function () awful.spawn("poweroff") end,
               {description="Suspend Computer", group="awesome"}),
@@ -622,6 +622,9 @@ client.connect_signal("request::default_keybindings", function()
     awful.keyboard.append_client_keybindings({
        -- Store debug information
         awful.key({ modkey, "Shift" }, "d", function (c)
+                --naughty.notify {
+                --    text = fishlive.util.screen_res_y()
+                --}
                 local val = awesome.systray()
                 local file = io.open(os.getenv("HOME") .. "/.config/awesome/debug.txt", "a")
                 file:write("systray.tostring=" .. val .. "\n")

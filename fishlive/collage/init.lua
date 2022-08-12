@@ -164,6 +164,7 @@ function collage.registerTagCollage(t)
     -- Go over each tag
     for t = 1,#tagids do
       local tag = scr.tags[tagids[t]]
+      if tag == nil then goto continue end
       tag:connect_signal("property::selected", function (tag)
         -- if not selected, hide collage
         if not tag.selected and imgboxes ~= nil then
@@ -199,6 +200,7 @@ function collage.registerTagCollage(t)
           end
         end
       end)
+      ::continue::
     end
   end
 end

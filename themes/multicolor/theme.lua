@@ -37,6 +37,10 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- Use Polybar instead of classic Awesome Bar
 local usePolybar = false
 
+-- Screen Resolution (fullhd=1920x1080+0+0, 4K=3840x2160+0+0, 2K=2048x1080+0+0)
+local scr_res = fishlive.util.screen_resolution()
+local isFullhd = scr_res == "1920x1080+0+0"
+
 -- {{{ Main
 -- load colorscheme and prepare theme defaults
 local theme = fishlive.colorscheme.default
@@ -178,6 +182,7 @@ local calendar_widget = require("awesome-wm-widgets.calendar-widget.calendar")
 local weather_widget = require("awesome-wm-widgets.weather-widget.weather")
 local spotify_widget = require("awesome-wm-widgets.spotify-widget.spotify")
 local todo_widget = require("awesome-wm-widgets.todo-widget.todo")
+local battery_widget = require("awesome-wm-widgets.battery-widget.battery")
 
 -- fix params for wibox boxes
 local wiboxMargin = 7
@@ -397,8 +402,9 @@ screen.connect_signal("request::desktop_decoration", function(s)
   }
 
   -- Each screen has its own tag table.
-  for s = 1, screen.count() do
-    tags[s] = awful.tag(tags.names, s, tags.layouts)
+  local tagCount = isFullhd and 4 or #tags.names
+  for s = 1,screen.count() do
+    tags[s] = awful.tag({table.unpack(tags.names,1,tagCount)}, s, {table.unpack(tags.layouts,1,tagCount)})
     -- Set additional optional parameters for each tag
     --tags[s][1].column_count = 2
   end
@@ -530,6 +536,11 @@ screen.connect_signal("request::desktop_decoration", function(s)
   -- separator type
   separator:set_text("   ")
 
+  -- drop some widgets for small resolutions
+  if isFullhd then
+    tempWibox, netWibox, weatherWibox = nil, nil, nil
+  end
+
   -------------------------------
   -- MAIN PANEL CONFIGURATION
   -------------------------------
@@ -560,6 +571,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
         separator,
         todo_widget(),
         separator,
+        --battery_widget(),
         systray,
         separator,
         keyboardWibox,
@@ -732,11 +744,18 @@ screen.connect_signal("request::desktop_decoration", function(s)
     })
   end
   -- Portraits Collage for Dev Tag
-  collageTag(notifpath_user, notif_user, {4}, {
-    { max_height = 600, posx = 100, posy = 100 },
-    { max_height = 600, posx = 100, posy = 800 },
-    { max_width = 600, posx = 3740, posy = 2060, align = "bottom-right" },
-  })
+  if isFullhd then
+    collageTag(notifpath_user, notif_user, {4}, {
+      { max_height = 450, posx = 10, posy = 40 },
+      { max_height = 450, posx = 10, posy = 500 },
+    })
+  else
+    collageTag(notifpath_user, notif_user, {4}, {
+      { max_height = 600, posx = 100, posy = 100 },
+      { max_height = 600, posx = 100, posy = 800 },
+      { max_width = 600, posx = 3740, posy = 2060, align = "bottom-right" },
+    })
+  end
   -- Joy Collage for love Tag
   local sel_portrait = fhelpers.first_line(os.getenv("HOME")..'/.portrait') or 'joy'
   local wppath_love_tag = notifpath .. sel_portrait .. "/"

@@ -62,7 +62,7 @@ function wallpaper.registerTagWallpaper(t)
     gears.wallpaper.maximized(wppath .. wp, scr, false)
 
     -- Go over each tab
-    for t = 1,#wp_selected do
+    for t = 1,#scr.tags do
       local tag = scr.tags[t]
       tag:connect_signal("property::selected", function (tag)
         -- And if selected

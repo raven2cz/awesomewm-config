@@ -65,4 +65,16 @@ function util.copyTable(t)
   return setmetatable(u, getmetatable(t))
 end
 
+function util.screen_resolution()
+  return io.popen("echo $(xwininfo -root | grep 'geometry' | awk '{print $2;}')"):read("*all"):gsub("%s+", "")
+end
+
+function util.screen_res_x()
+  return io.popen("echo $(xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1)"):read("*all"):gsub("%s+", "")
+end
+
+function util.screen_res_y()
+  return io.popen("echo $(xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2)"):read("*all"):gsub("%s+", "")
+end
+
 return util
