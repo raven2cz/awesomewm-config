@@ -37,10 +37,13 @@ function util.scandir(directory)
   return t
 end
 
--- return string content of the directory
-function util.scandirArgs(directory, args)
+-- return string content of the directory with ls arguments and file extensions support
+function util.scandirArgs(lsargs)
+  local dir = lsargs.dir
+  local args = lsargs.args or ''
+  local fileExt = lsargs.fileExt or ''
   local i, t, popen = 0, {}, io.popen
-  local pfile = popen('ls '..args..' "'..directory..'"')
+  local pfile = popen('cd '..dir..'; ls '..args..' '..fileExt)
   for filename in pfile:lines() do
     i = i + 1
     t[i] = filename

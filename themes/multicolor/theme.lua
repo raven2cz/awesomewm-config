@@ -700,7 +700,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
   -- WALLPAPER PER TAG and USER WALLS keybinding
   -----------------------------------------------
   -- Try to load notification icons
-  notif_user = fishlive.util.scandirArgs(notifpath_user, "")
+  notif_user = fishlive.util.scandirArgs{dir=notifpath_user, fileExt="*.{png,jpg}"}
 
   -- User Wallpaper Changer
   local wp_user_params = {
@@ -759,7 +759,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
   -- Joy Collage for love Tag
   local sel_portrait = fhelpers.first_line(os.getenv("HOME")..'/.portrait') or 'joy'
   local wppath_love_tag = notifpath .. sel_portrait .. "/"
-  collageTag(wppath_love_tag, fishlive.util.scandirArgs(wppath_love_tag, ""), {9}, {
+  collageTag(wppath_love_tag, fishlive.util.scandirArgs{dir=wppath_love_tag, fileExt='*.{png,jpg}'}, {9}, {
     { max_height = 800, posx = 100, posy = 100 },
     { max_height = 400, posx = 100, posy = 930 },
     { max_height = 400, posx = 450, posy = 930 },
