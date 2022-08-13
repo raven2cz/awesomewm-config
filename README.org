@@ -47,7 +47,7 @@ AwesomeWM [git-master] configuration with new *Multicolor Theme*, *80s DarkOne T
 
 ** Multicolor Theme
 The multicolor theme brings 15 best colorschemes today! 13 dark and soft, 2 light themes. You can find here nord, doom_one, tomorrow_night, palenight, dracula, dark one etc. The system binds together special lua script which change the additional applications together: kitty, alacritty (and planned next). In the public-wallpaper packages are downloaded prepared 50 wallpapers depended on the selected color scheme. Last important change is notification support with portraits with appropriate color scheme too.
-All color scheme are applied on-the-fly without restart station, you just select appropriate color scheme and whole WM, wallpapers and other apps are changed. The wallpapers can be swap for appropriate color scheme by `super+alt+C` forward, `super+ctrl+C` backward and color scheme table is shown by `super+c`
+All color scheme are applied on-the-fly without restart station, you just select appropriate color scheme and whole WM, wallpapers and other apps are changed. The wallpapers can be swap for appropriate color scheme by ~super+alt+C~ forward, ~super+ctrl+C~ backward and color scheme table is shown by ~super+c~
 .
 
 ** 80s OneDark Theme
@@ -109,8 +109,8 @@ git subtree pull --prefix sharedtags git@github.com:Drauthius/awesome-sharedtags
 + *image collage feature* - integrate image collage to each tag as part of wallpaper with dynamic toggling images
 
 * Keybindings Overview
-[[images/keybidnings1.png]]
-[[images/keybidnings2.png]]
+[[images/keybidning1.png]]
+[[images/keybidning2.png]]
 
 * Multicolor Theme Screenshot
 [[images/awesome-multicolor-monokai_pro.jpg]]
