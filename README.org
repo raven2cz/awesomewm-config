@@ -26,7 +26,7 @@ AwesomeWM is a highly configurable by LUA, next generation framework window mana
 
 It is primarily targeted at power users, developers and any people dealing with every day computing tasks and who wants to have fine-grained control on their graphical environment.
 
-[[images/awesome-trailer.jpg][https://youtu.be/4KKdbwZ8GQ4]]
+[[https://youtu.be/4KKdbwZ8GQ4][images/awesome-trailer.jpg]]
 
 * TABLE OF CONTENTS :toc:
 - [[#fishlives-awesomewm-config][Fishlive's AwesomeWM Config]]
