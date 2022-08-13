@@ -26,6 +26,8 @@ AwesomeWM is a highly configurable by LUA, next generation framework window mana
 
 It is primarily targeted at power users, developers and any people dealing with every day computing tasks and who wants to have fine-grained control on their graphical environment.
 
+[[images/awesome-trailer.jpg][https://youtu.be/4KKdbwZ8GQ4]]
+
 * TABLE OF CONTENTS :toc:
 - [[#fishlives-awesomewm-config][Fishlive's AwesomeWM Config]]
 - [[#awesomewm-themes-configuration][AwesomeWM Themes Configuration]]
@@ -71,6 +73,7 @@ AwesomeWM walkthrough and installation instructions are part of [[https://www.yo
 + public-wallpapers are in github repo: https://github.com/raven2cz/public-wallpapers
 + rofi-themes in github repo: https://github.com/raven2cz/rofi-themes
 
+These dependencies are automatically checkout with this project:
 #+BEGIN_SRC bash
 #!/bin/bash
 git subtree pull --prefix awesome-wm-widgets git@github.com:streetturtle/awesome-wm-widgets.git master --squash
@@ -101,7 +104,8 @@ git subtree pull --prefix sharedtags git@github.com:Drauthius/awesome-sharedtags
 + notification portraits
 + user, color scheme swap wallpapers
 + rofi-themes - support dynamic change for all implemented color schemes (see link rofi-themes in dependencies chapter)
-+ image collage feature - integrate image collage to each tag as part of wallpaper with dynamic toggling images
++ bling - supports for tab views similar as i3 tabbing support
++ *image collage feature* - integrate image collage to each tag as part of wallpaper with dynamic toggling images
 
 * Multicolor Theme Screenshot
 [[images/awesome-multicolor-monokai_pro.jpg]]
