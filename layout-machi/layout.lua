@@ -637,11 +637,16 @@ local function patch_awful_layout()
         if not c.floating and context == "mouse.move" then
             local s = capi.mouse.screen
             if s.selected_tag and s.selected_tag.layout and
-                s.selected_tag.layout.machi_set_cmd then
-                if c.screen ~= s then
-                    c.screen = s
+                s.selected_tag.layout.machi_get_instance_data then
+                local cd, td, areas, instance, new_placement_cb = s.selected_tag.layout.machi_get_instance_data(s, s.selected_tag)
+                if cd and cd[c] and cd[c].area and areas[cd[c].area].layout then
+                    -- Falling through in a nested layout.
+                else
+                    if c.screen ~= s then
+                        c.screen = s
+                    end
+                    return
                 end
-                return
             end
         end
         return old_alayout_move_handler(c, context, ...)
