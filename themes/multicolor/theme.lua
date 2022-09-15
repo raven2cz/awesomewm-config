@@ -150,7 +150,7 @@ local wp_selected = {
   "00022-alone-samurai.jpg",
   "00002-GUWEIZ-samurai-girl.jpg",
   "colorscheme",
-  "00009-purple-rain-l8.jpg",
+  "00047-raining-anime-girl.jpg",
   "00015-wallhaven-zx5xwv.jpg",
   "00045-GUWEIZ-1120524.jpg",
   "00008-manga-life3.jpg",
