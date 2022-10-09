@@ -523,6 +523,37 @@ function helpers.float_and_resize(c, width, height)
     c:raise()
 end
 
+--#!/usr/bin/env bash
+--cat <<EOF | awesome-client
+--require("fishlive.helpers")
+--spawn("/usr/bin/firefox", "firefox", screen[1].tags[4], "class")
+--spawn("/usr/bin/kwrite", "kwrite", screen[1].tags[5], "class")
+--EOF
+function helpers.spawn(command, class, tag, test)
+    test = test or "class"
+    local callback
+    callback = function(c)
+        if test == "class" then
+            if c.class == class then
+                awful.client.movetotag(tag, c)
+                client.disconnect_signal("manage", callback)
+            end
+        elseif test == "instance" then
+            if c.instance == class then
+                awful.client.movetotag(tag, c)
+                client.disconnect_signal("manage", callback)
+            end
+        elseif test == "name" then
+               if string.match(c.name, class) then
+                   awful.client.movetotag(tag, c)
+                client.disconnect_signal("manage", callback)
+            end
+        end
+    end
+    client.connect_signal("manage", callback)
+    awful.util.spawn_with_shell(command)
+end
+
 -- }}}
 
 return helpers

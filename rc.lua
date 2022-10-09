@@ -349,7 +349,6 @@ awful.keyboard.append_global_keybindings({
 
 -- General Awesome keys
 awful.keyboard.append_global_keybindings({
-
     awful.key({ modkey, ctrlkey }, "s", hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
     awful.key({ modkey }, "w", function () xmenu() end,
@@ -362,6 +361,8 @@ awful.keyboard.append_global_keybindings({
               {description = "show portrait menu for love tag", group = "awesome"}),              
     awful.key({ modkey }, "a", function () awful.spawn("clipmenu") end,
               {description = "clipboard history by rofi/clipmenud", group = "awesome"}),
+    awful.key({ modkey }, "l", function() awful.menu.client_list { theme = { width = 250 } } end,
+              {description="show client list", group="awesome"}),
     awful.key({ modkey, ctrlkey }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
     awful.key({ modkey, "Shift" }, "q", awesome.quit,
@@ -692,6 +693,19 @@ client.connect_signal("property::position", function(c)
 ruled.client.connect_signal("request::rules", function()
     -- All clients will match this rule.
     ruled.client.append_rule {
+        id         = "floating",
+        rule_any = {
+            name = { "Ulauncher - Application Launcher" },
+        },
+        properties = {
+            focus     = awful.client.focus.filter,
+            raise     = true,
+            screen    = awful.screen.preferred,
+            border_width = 0,
+        }
+    }
+
+    ruled.client.append_rule {
         id         = "global",
         rule       = { },
         properties = {
@@ -773,11 +787,15 @@ ruled.client.connect_signal("request::rules", function()
         properties = { titlebars_enabled = true      }
     }
 
-    -- Set Firefox to always map on the tag named "2" on screen 1.
-    -- ruled.client.append_rule {
-    --     rule       = { class = "Firefox"     },
-    --     properties = { screen = 1, tag = "2" }
-    -- }
+    -- Set Blender to always map on the tag 4 in screen 1.
+    ruled.client.append_rule {
+        rule_any    = {
+            name = {"Blender"}
+        },
+        properties = {
+            tag = screen[1].tags[4],
+        },
+    }
 end)
 
 -- }}}
