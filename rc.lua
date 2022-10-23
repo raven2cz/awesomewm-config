@@ -804,9 +804,9 @@ end)
 
 client.connect_signal("manage", function(c)
     -- Similar behaviour as other window managers DWM, XMonad.
-    -- Master-Slave layout new clinet goes to the slave, master is kept
+    -- Master-Slave layout new client goes to the slave, master is kept
     -- If you need new slave as master press: ctrl + super + return
-    if not awesome.startup then awful.client.setslave(c) end
+    if not awesome.startup then c:to_secondary_section() end
 end)
 
 -- }}}
