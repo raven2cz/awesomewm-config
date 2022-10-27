@@ -37,17 +37,6 @@ local function exit_screen_show()
     exit_screen.visible = true
 end
 
-exit_screen_grabber = awful.keygrabber {
-    keybindings = {
-        awful.key({ key = 'Escape', modifiers = {},
-                    on_press = exit_screen_hide}),
-        awful.key({ key = 'q', modifiers = {},
-                    on_press = exit_screen_hide}),
-        awful.key({ key = 'x', modifiers = {},
-                    on_press = exit_screen_hide})
-    },
-}
-
 exit_screen:buttons(gears.table.join(
     -- Middle click - Hide exit_screen
     awful.button({}, 2, function ()
@@ -59,7 +48,7 @@ exit_screen:buttons(gears.table.join(
     end)
 ))
 
-local function big_button_widget(button_text_icon, button_text, action, shortcut)
+local function big_button_widget(button_text_icon, button_text, action)
     local button_icon = wibox.widget.textbox()
     button_icon.font = icon_font
     button_icon.markup = "<span foreground='" .. icon_normal_color .."'>" .. button_text_icon .. "</span>"
@@ -91,12 +80,12 @@ local function big_button_widget(button_text_icon, button_text, action, shortcut
       end)
     ))
 
-    -- Add shortcut
-    if shortcut then
-        exit_screen_grabber:add_keybinding(
-            awful.key({ key = shortcut, modifiers = {}, on_press = action})
-        )
-    end
+    -- Add shortcut (awesome bug doesn't work correctly)
+    --if shortcut then
+    --    exit_screen_grabber:add_keybinding(
+    --        awful.key({ key = shortcut, modifiers = {}, on_press = action})
+    --    )
+    --end
 
     -- Add visual hover effect
     button_icon:connect_signal("mouse::enter", function ()
@@ -121,63 +110,38 @@ local function big_button_widget(button_text_icon, button_text, action, shortcut
     return result
 end
 
+local exit_actions = {
+    ["poweroff"] = function () awful.spawn.with_shell("systemctl poweroff") end,
+    ["reboot"] = function () awful.spawn.with_shell("systemctl reboot") end,
+    ["hibernate"] = function () awful.spawn.with_shell("systemctl hibernate") end,
+    ["suspend"] = function () awful.spawn.with_shell("systemctl suspend") end,
+    ["refresh"] = function () awesome.restart() end,
+    ["exit"] = function () awesome.quit() end,
+    ["lock"] = function () awful.spawn("lock.sh") end
+}
 
-local poweroff = big_button_widget("",
-                                   "[P]oweroff",
-                                   function()
-                                       awful.spawn.with_shell("systemctl poweroff")
-                                   end,
-                                   "p"
-)
+exit_screen_grabber = awful.keygrabber {
+    keybindings = {
+        awful.key({ key = 'Escape', modifiers = {}, on_press = exit_screen_hide}),
+        awful.key({ key = 'q', modifiers = {}, on_press = exit_screen_hide}),
+        awful.key({ key = 'x', modifiers = {}, on_press = exit_screen_hide}),
+        awful.key({ key = 'p', modifiers = {}, on_press = exit_actions["poweroff"]}),
+        awful.key({ key = 'r', modifiers = {}, on_press = exit_actions["reboot"]}),
+        awful.key({ key = 'h', modifiers = {}, on_press = exit_actions["hibernate"]}),
+        awful.key({ key = 's', modifiers = {}, on_press = exit_actions["suspend"]}),
+        awful.key({ key = 'f', modifiers = {}, on_press = exit_actions["refresh"]}),
+        awful.key({ key = 'e', modifiers = {}, on_press = exit_actions["exit"]}),
+        awful.key({ key = 'l', modifiers = {}, on_press = exit_actions["lock"]})
+    },
+}
 
-local reboot   = big_button_widget("",
-                                   "[R]eboot",
-                                   function()
-                                       awful.spawn.with_shell("systemctl reboot")
-                                   end,
-                                   "r"
-)
-
-local hibernate = big_button_widget("",
-                                    "[H]ibernate",
-                                    function()
-                                        awful.spawn.with_shell("systemctl hibernate")
-                                    end,
-                                    "h"
-)
-
-local suspend  = big_button_widget("",
-                                   "[S]uspend",
-                                   function()
-                                       awful.spawn.with_shell("systemctl suspend")
-                                   end,
-                                   "s"
-)
-
-local refresh  = big_button_widget("",
-                                   "Re[f]resh",
-                                   function()
-                                       awesome.restart()
-                                   end,
-                                   "f"
-)
-
-local exit     = big_button_widget("",
-                                   "[E]xit",
-                                   function()
-                                       awesome.quit()
-                                   end,
-                                   "e"
-)
-
-local lock     = big_button_widget("",
-                                   "[L]ock",
-                                   function()
-                                       exit_screen_hide()
-                                       awful.spawn.with_shell("i3exit lock")
-                                   end,
-                                   "l"
-)
+local poweroff  = big_button_widget("", "[P]oweroff", exit_actions["poweroff"])
+local reboot    = big_button_widget("", "[R]eboot", exit_actions["reboot"])
+local hibernate = big_button_widget("", "[H]ibernate", exit_actions["hibernate"])
+local suspend   = big_button_widget("", "[S]uspend", exit_actions["suspend"])
+local refresh   = big_button_widget("", "Re[f]resh", exit_actions["refresh"])
+local exit      = big_button_widget("", "[E]xit",exit_actions["exit"])
+local lock      = big_button_widget("", "[L]ock", exit_actions["lock"])
 
 -- Item placement
 exit_screen:setup {
