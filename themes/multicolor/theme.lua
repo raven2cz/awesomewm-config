@@ -47,6 +47,9 @@ local theme = fishlive.colorscheme.default
 theme.dir = os.getenv("HOME") .. "/.config/awesome/themes/" .. theme_name
 -- }}}
 
+-- Fishlive Statuses - producents-consuments
+require("fishlive.status.archupdates")
+
 -- activate random seed by time
 math.randomseed(os.time());
 -- To guarantee unique random numbers on every platform, pop a few
@@ -191,6 +194,20 @@ local wiboxBox0 = fishlive.widget.wiboxBox0Underline
 local wiboxBox1 = fishlive.widget.wiboxBoxIconUnderline
 local wiboxBox2 = fishlive.widget.wiboxBox2IconUnderline
 
+-- Archupdates count indicator
+local wboxColor = theme.baseColors[9]
+local archupdateText = wibox.widget.textbox();
+archupdateText:set_markup(markup.fontfg(theme.font_larger, wboxColor, ""))
+local arch_updates = wibox.widget {
+  widget = wibox.widget.textbox,
+  markup = "<span>...</span>",
+  font = theme.font
+}
+awesome.connect_signal("status::archupdates", function(count)
+  arch_updates.markup = " <span>" .. count .. "</span>"
+end)
+local archupdateWibox = wiboxBox1(archupdateText, arch_updates, wboxColor, theme.widgetbar_fg, 3, 6, underLineSize, wiboxMargin)
+
 -- Keyboard map indicator and switcher
 local wboxColor = theme.baseColors[1]
 local keyboardText = wibox.widget.textbox();
@@ -307,7 +324,7 @@ local cw = calendar_widget({
   placement = 'top_right'
 })
 
--- Spotify widge
+-- Spotify widget
 local spotifyWibox = spotify_widget({
   font = theme.font,
   max_length = 500,
@@ -574,6 +591,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
         --battery_widget(),
         systray,
         separator,
+        archupdateWibox,
         keyboardWibox,
         fsWibox,
         memWibox,
