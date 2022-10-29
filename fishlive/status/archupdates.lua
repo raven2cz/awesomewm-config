@@ -3,7 +3,7 @@ local status = {}
 
 local command = "aurupdates.sh"
 local signal = "status::archupdates"
-local interval = 1800 -- per 30 mins
+local interval = 600 -- per 10 mins
 
 awful.widget.watch(command, interval, function(_, stdout)
     awesome.emit_signal(signal, stdout)
