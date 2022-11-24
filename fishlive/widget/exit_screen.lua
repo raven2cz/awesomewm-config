@@ -33,8 +33,8 @@ local function exit_screen_hide()
     exit_screen.visible = false
 end
 local function exit_screen_show()
-    exit_screen_grabber:start()
     exit_screen.visible = true
+    exit_screen_grabber:start()
 end
 
 exit_screen:buttons(gears.table.join(
@@ -121,18 +121,34 @@ local exit_actions = {
 }
 
 exit_screen_grabber = awful.keygrabber {
-    keybindings = {
-        awful.key({ key = 'Escape', modifiers = {}, on_press = exit_screen_hide}),
-        awful.key({ key = 'q', modifiers = {}, on_press = exit_screen_hide}),
-        awful.key({ key = 'x', modifiers = {}, on_press = exit_screen_hide}),
-        awful.key({ key = 'p', modifiers = {}, on_press = exit_actions["poweroff"]}),
-        awful.key({ key = 'r', modifiers = {}, on_press = exit_actions["reboot"]}),
-        awful.key({ key = 'h', modifiers = {}, on_press = exit_actions["hibernate"]}),
-        awful.key({ key = 's', modifiers = {}, on_press = exit_actions["suspend"]}),
-        awful.key({ key = 'f', modifiers = {}, on_press = exit_actions["refresh"]}),
-        awful.key({ key = 'e', modifiers = {}, on_press = exit_actions["exit"]}),
-        awful.key({ key = 'l', modifiers = {}, on_press = exit_actions["lock"]})
-    },
+    auto_start = true,
+	stop_event = 'release',
+	keypressed_callback = function(self, mod, key, command)
+                if key == 'p' then
+			exit_actions["poweroff"]()
+
+		elseif key == 'r' then
+			exit_actions["reboot"]()
+
+		elseif key == 'h' then
+			exit_actions["hibernate"]()
+
+		elseif key == 's' then
+			exit_actions["suspend"]()
+
+		elseif key == 'f' then
+			exit_actions["refresh"]()
+
+                elseif key == 'e' then
+			exit_actions["exit"]()
+
+                elseif key == 'l' then
+			exit_actions["lock"]()
+
+		elseif key == 'Escape' or key == 'q' or key == 'x' then
+			exit_screen_hide()
+		end
+    end
 }
 
 local poweroff  = big_button_widget("", "[P]oweroff", exit_actions["poweroff"])
