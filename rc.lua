@@ -66,7 +66,7 @@ end
 
 -- This is used later as the default terminal and editor to run.
 terminal = "alacritty" --"kitty" --"urxvt"
-terminal2 = "kitty"
+terminal2 = "wezterm"
 editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = terminal2 .. " -e " .. editor
 
