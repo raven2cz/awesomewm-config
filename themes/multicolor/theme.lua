@@ -64,7 +64,7 @@ theme.font_larger   = "Iosevka Nerd Font 11"
 theme.font_notify   = "mononoki Nerd Font 11"
 theme.menu_font     = "mononoki Nerd Font 11"
 theme.tabbar_font   = "Iosevka Nerd Font 11"
-theme.icon_font     = "TerminessTTF Nerd Font "
+theme.icon_font     = "Iosevka Nerd Font "
 -- }}}
 
 -- {{{ Borders
@@ -641,7 +641,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
           bg                  = theme.bg_urgent,
           fg                  = theme.fg_normal,
           margin              = dpi(16),
-          icon_size           = dpi(64),
+          icon_size           = dpi(360),
           position            = 'top_middle',
           implicit_timeout    = 0
         }
