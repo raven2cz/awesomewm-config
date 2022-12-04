@@ -200,7 +200,7 @@ function module.create(args_or_name, editor, default_cmd)
                 layout = layout,
                 cmd = persistent and args.editor.get_last_cmd(name) or nil,
                 areas_cache = {},
-                tag_data = {},
+                nested_tags = {},
                 client_data = setmetatable({}, {__mode="k"}),
             }
             if instances[name].cmd == nil then
@@ -224,7 +224,7 @@ function module.create(args_or_name, editor, default_cmd)
                 return
             end
         end
-        return instance.client_data, instance.tag_data, instance.areas_cache[key], instance, args.new_placement_cb
+        return instance.client_data, instance.nested_tags, instance.areas_cache[key], instance, args.new_placement_cb
     end
 
     local function set_cmd(cmd, tag, keep_instance_data)
@@ -232,11 +232,11 @@ function module.create(args_or_name, editor, default_cmd)
         if instance.cmd ~= cmd then
             instance.cmd = cmd
             instance.areas_cache = {}
-            for _, tag in pairs(instance.tag_data) do
+            for _, tag in pairs(instance.nested_tags) do
                 tag:emit_signal("property::layout")
             end
             if not keep_instance_data then
-                instance.tag_data = {}
+                instance.nested_tags = {}
                 instance.client_data = setmetatable({}, {__mode="k"})
             end
         end
@@ -247,13 +247,17 @@ function module.create(args_or_name, editor, default_cmd)
 
     clean_up = function (tag)
         local screen = tag.screen
-        local _cd, _td, _areas, instance, _new_placement_cb = get_instance_data(screen, tag)
+        if not screen then
+            -- This could happen when deleting tag.
+            return
+        end
+        local _cd, _nt, _areas, instance, _new_placement_cb = get_instance_data(screen, tag)
 
         if tag_data[tag].regsitered then
             tag_data[tag].regsitered = false
             tag:disconnect_signal("property::layout", clean_up)
-            tag:connect_signal("property::selected", clean_up)
-            for _, tag in pairs(instance.tag_data) do
+            tag:disconnect_signal("property::selected", clean_up)
+            for _, tag in pairs(instance.nested_tags) do
                 tag:emit_signal("property::layout")
             end
         end
@@ -269,7 +273,7 @@ function module.create(args_or_name, editor, default_cmd)
         local wa = screen.workarea -- get the real workarea without the gap (instead of p.workarea)
         local cls = p.clients
         local tag = p.tag or screen.selected_tag
-        local cd, td, areas, instance, new_placement_cb = get_instance_data(screen, tag)
+        local cd, nt, areas, instance, new_placement_cb = get_instance_data(screen, tag)
 
         if not tag_data[tag] then tag_data[tag] = {} end
         if not tag_data[tag].registered then
@@ -409,9 +413,9 @@ function module.create(args_or_name, editor, default_cmd)
         local function arrange_nested_layout(area, clients)
             local nested_layout = machi_editor.nested_layouts[areas[area].layout]
             if not nested_layout then return end
-            if td[area] == nil then
+            if nt[area] == nil then
                 local tag = gobject{}
-                td[area] = tag
+                nt[area] = tag
                 -- TODO: Make the default more flexible.
                 tag.layout = nested_layout
                 tag.column_count = 1
@@ -425,7 +429,7 @@ function module.create(args_or_name, editor, default_cmd)
                 }
             end
             local nested_params = {
-                tag = td[area],
+                tag = nt[area],
                 screen = p.screen,
                 clients = clients,
                 padding = 0,
@@ -472,7 +476,7 @@ function module.create(args_or_name, editor, default_cmd)
         local tag = c.screen.selected_tag
         local instance = get_instance_(tag)
         local cd = instance.client_data
-        local cd, td, areas, _placement_cb = get_instance_data(c.screen, tag)
+        local cd, nt, areas, _placement_cb = get_instance_data(c.screen, tag)
 
         if areas == nil then return end
 
@@ -638,7 +642,7 @@ local function patch_awful_layout()
             local s = capi.mouse.screen
             if s.selected_tag and s.selected_tag.layout and
                 s.selected_tag.layout.machi_get_instance_data then
-                local cd, td, areas, instance, new_placement_cb = s.selected_tag.layout.machi_get_instance_data(s, s.selected_tag)
+                local cd, nt, areas, instance, new_placement_cb = s.selected_tag.layout.machi_get_instance_data(s, s.selected_tag)
                 if cd and cd[c] and cd[c].area and areas[cd[c].area].layout then
                     -- Falling through in a nested layout.
                 else
