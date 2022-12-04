@@ -333,7 +333,7 @@ local function areas_from_command(command, workarea, minimum)
         elseif method == "w" or method == "d" then
 
             local args = parse_arg_str(arg_str, 0)
-
+            local arg
             local x_shares = {}
             local y_shares = {}
             local m_start = #args + 1
@@ -466,7 +466,7 @@ local function areas_from_command(command, workarea, minimum)
                 end
 
                 local function generate_range(s, e)
-                    local r = {} for i = s, e do r[#r+1] = i end return r
+                    local r = {} for j = s, e do r[#r+1] = j end return r
                 end
 
                 local r = {
@@ -719,7 +719,7 @@ local function areas_from_command(command, workarea, minimum)
         root.height = root.y_minimum
     end
 
-    function split(id)
+    local function split(id)
         local a = closed_areas[id]
         if a.split then
             local x_shares, y_shares
