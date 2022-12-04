@@ -122,6 +122,8 @@ function collage.placeCollageImage(reqimgwidth, reqimgheight, posx, posy, align,
   imgbox:connect_signal('button::press', function(self, _, _, button)
       if button == 5 then imgidx = imgidx + 1 --button == 1 or
       elseif button == 4 then imgidx = imgidx - 1 --button == 3 or
+      elseif button == 3 then
+        awful.spawn.with_shell('qimgv "'..imgsrcs[imgidx]..'"')
       else return
       end
       if imgidx == 0 then imgidx = #imgsrcs end
