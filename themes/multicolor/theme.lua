@@ -588,7 +588,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
         separator,
         todo_widget(),
         separator,
-        --battery_widget(),
+        battery_widget({display_notification=true, show_current_level=true, margin_right=10}),
         systray,
         separator,
         archupdateWibox,
