@@ -34,7 +34,7 @@ local function worker(user_args)
 
     local display_notification = args.display_notification or false
     local display_notification_onClick = args.display_notification_onClick or true
-    local position = args.notification_position or "top_right"
+    local position = args.notification_position or "top_middle"
     local timeout = args.timeout or 10
 
     local warning_msg_title = args.warning_msg_title or 'Huston, we have a problem'
@@ -84,10 +84,12 @@ local function worker(user_args)
                 text =  stdout,
                 title = "Battery status",
                 icon = path_to_icons .. batteryType .. ".svg",
-                icon_size = dpi(16),
+                icon_size = dpi(200),
+                margin = dpi(16),
                 position = position,
-                timeout = 5, hover_timeout = 0.5,
-                width = 200,
+                timeout = 5, 
+                hover_timeout = 0.5,
+                width = 600,
                 screen = mouse.screen
             }
         end
@@ -105,7 +107,7 @@ local function worker(user_args)
     local function show_battery_warning()
         naughty.notify {
             icon = warning_msg_icon,
-            icon_size = 100,
+            icon_size = 200,
             text = warning_msg_text,
             title = warning_msg_title,
             timeout = 25, -- show the warning for a longer time
