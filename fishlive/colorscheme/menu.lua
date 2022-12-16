@@ -26,6 +26,11 @@ menu.prepare_colorscheme_menu = function()
             homeDir .. "/.colorscheme",
             cs.scheme_id
           )
+          -- permanent storage of selected colorscheme for global system
+          writeToFile(
+            homeDir .. "/.portrait",
+            cs.scheme_id
+          )
           -- change rofi theme
           writeToFile(
             homeDir .. "/.config/rofi/config.rasi",

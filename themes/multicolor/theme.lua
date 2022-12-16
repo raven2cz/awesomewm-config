@@ -762,22 +762,23 @@ screen.connect_signal("request::desktop_decoration", function(s)
     })
   end
   -- Portraits Collage for Dev Tag
+  local sel_portrait = fhelpers.first_line(os.getenv("HOME")..'/.portrait') or 'joy'
+  local wppath_sel_portrait = notifpath .. sel_portrait .. "/"
+  local portraits = fishlive.util.scandirArgs{dir=wppath_sel_portrait, fileExt='*.{png,jpg}'}
   if isFullhd then
-    collageTag(notifpath_user, notif_user, {4}, {
+    collageTag(wppath_sel_portrait, portraits, {4}, {
       { max_height = 450, posx = 10, posy = 40 },
       { max_height = 450, posx = 10, posy = 500 },
     })
   else
-    collageTag(notifpath_user, notif_user, {4}, {
+    collageTag(wppath_sel_portrait, portraits, {4}, {
       { max_height = 600, posx = 100, posy = 100 },
       { max_height = 600, posx = 100, posy = 800 },
       { max_width = 600, posx = 3740, posy = 2060, align = "bottom-right" },
     })
   end
   -- Joy Collage for love Tag
-  local sel_portrait = fhelpers.first_line(os.getenv("HOME")..'/.portrait') or 'joy'
-  local wppath_love_tag = notifpath .. sel_portrait .. "/"
-  collageTag(wppath_love_tag, fishlive.util.scandirArgs{dir=wppath_love_tag, fileExt='*.{png,jpg}'}, {9}, {
+  collageTag(wppath_sel_portrait, portraits, {9}, {
     { max_height = 800, posx = 100, posy = 100 },
     { max_height = 400, posx = 100, posy = 930 },
     { max_height = 400, posx = 450, posy = 930 },
