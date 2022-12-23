@@ -12,6 +12,7 @@ return {
   "dracula",
   "fantasy-women",
   "fantasy-women-2",
+  "fantasy-women-3",
   "gruvbox_dark_soft",
   "guweiz",
   "joy",
@@ -22,5 +23,7 @@ return {
   "monokai_pro",
   "nord",
   "one_dark",
-  "solarized_dark"
+  "sandman",
+  "solarized_dark",
+  "witcher"
 }
