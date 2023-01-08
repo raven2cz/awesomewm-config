@@ -45,6 +45,7 @@ local isFullhd = scr_res == "1920x1080+0+0"
 -- load colorscheme and prepare theme defaults
 local theme = fishlive.colorscheme.default
 theme.dir = os.getenv("HOME") .. "/.config/awesome/themes/" .. theme_name
+theme.icon_path = theme.dir.."/icons/"
 -- }}}
 
 -- Fishlive Statuses - producents-consuments
@@ -99,6 +100,18 @@ theme.awesome_icon = theme_assets.awesome_icon(
     theme.menu_height, theme.awesome_icon_bg, theme.awesome_icon_fg
 )
 theme.menu_submenu_icon = themes_path .. "default/submenu.png"
+-- }}}
+
+-- {{{ Dashboard
+theme.avatar = theme.icon_path .. "avatar.png"
+theme.next_icon = theme.icon_path.."next.png"
+theme.next_grey_icon = theme.icon_path.."next_grey.png"
+theme.previous_icon = theme.icon_path.."previous.png"
+theme.previous_grey_icon = theme.icon_path.."previous_grey.png"
+theme.bar_position = "top"
+theme.bar_height = theme.systray_base_size
+theme.bar_item_radius = dpi(10)
+theme.bar_item_padding = dpi(3)
 -- }}}
 
 -- {{{ Layout

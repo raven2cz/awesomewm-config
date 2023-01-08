@@ -523,6 +523,28 @@ function helpers.float_and_resize(c, width, height)
     c:raise()
 end
 
+function helpers.tablelength(T)
+    local count = 0
+    for _ in pairs(T) do count = count + 1 end
+    return count
+end
+
+function helpers.hover_pointer(widget)
+    local old_cursor, old_wibox
+    widget:connect_signal("mouse::enter", function()
+        -- Hm, no idea how to get the wibox from this signal's arguments...
+        local w = mouse.current_wibox
+        old_cursor, old_wibox = w.cursor, w
+        w.cursor = "hand2"
+    end)
+    widget:connect_signal("mouse::leave", function()
+        if old_wibox then
+            old_wibox.cursor = old_cursor
+            old_wibox = nil
+        end
+    end)
+end
+
 --#!/usr/bin/env bash
 --cat <<EOF | awesome-client
 --require("fishlive.helpers")

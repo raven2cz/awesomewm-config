@@ -37,6 +37,7 @@ function wallpaper.createUserWallpaper(t)
          if tag.selected then
            t.wallpaper_user = wppath_user .. wp
            t.wallpaper_user_tag = tag
+           awesome.emit_signal("wallpaper::change", t.wallpaper_user)
            gears.wallpaper.maximized(t.wallpaper_user, s, false)
          end
        end
@@ -59,6 +60,7 @@ function wallpaper.registerTagWallpaper(t)
     -- Set actual wallpaper for first tag and screen
     local wp = wp_selected[1]
     if wp == "random" then wp = wp_random[1] end
+    awesome.emit_signal("wallpaper::change", wppath .. wp)
     gears.wallpaper.maximized(wppath .. wp, scr, false)
 
     -- Go over each tab
@@ -86,6 +88,7 @@ function wallpaper.registerTagWallpaper(t)
           wp = wppath .. wp_selected[t]
         end
         --gears.wallpaper.fit(wppath .. wp_selected[t], s)
+        awesome.emit_signal("wallpaper::change", wp)
         gears.wallpaper.maximized(wp, s, false)
       end)
     end
