@@ -1,5 +1,5 @@
 package = "lain"
-version = "scm-1"
+version = "scm-2"
 source = {
    url = "git+https://github.com/lcpz/lain.git",
    tag = "master"
