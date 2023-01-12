@@ -92,6 +92,7 @@ local function big_button_widget(button_text_icon, button_text, action)
         button_icon.markup = "<span foreground='" .. icon_hover_color .."'>" .. button_icon.text .. "</span>"
     end)
     result:connect_signal("mouse::enter", function ()
+        ---@diagnostic disable-next-line: undefined-field
         local w = _G.mouse.current_wibox
         if w then
             w.cursor = "hand1"
@@ -101,6 +102,7 @@ local function big_button_widget(button_text_icon, button_text, action)
         button_icon.markup = "<span foreground='" .. icon_normal_color .."'>" .. button_icon.text .. "</span>"
     end)
     result:connect_signal("mouse::leave", function ()
+        ---@diagnostic disable-next-line: undefined-field
         local w = _G.mouse.current_wibox
         if w then
             w.cursor = "left_ptr"

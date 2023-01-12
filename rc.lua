@@ -132,8 +132,6 @@ local themeName = "multicolor"
 beautiful.init(gears.filesystem.get_configuration_dir().."/themes/"..themeName.."/theme.lua")
 -- }}}
 
-local dashboard = require("fishlive.widget.dashboard")
-
 -- {{{ Libraries Configuration after beautiful.init()
 -- Bling (must be after beautiful.init())
 bling = require("bling")
@@ -142,8 +140,12 @@ awful.layout.append_default_layout(bling.layout.mstab)
 -- Nice titlebars
 fishlive.plugins.createTitlebarsNiceLib()
 
+-- Dashboard Component
+dashboard = require("fishlive.widget.dashboard")()
+
 -- Notification Center
 popup = require("notifs.notif-center.notif_popup")
+-- }}}
 
 -- {{{ Mouse bindings
 awful.mouse.append_global_mousebindings({

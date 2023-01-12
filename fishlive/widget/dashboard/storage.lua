@@ -1,23 +1,18 @@
-local awful = require("awful")
 local watch = require("awful.widget.watch")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
-local gears = require("gears")
+local dpi = require("beautiful.xresources").apply_dpi
 
 local content = {}
-
 local container = {}
 
 local function createDiskRow(disk)
-  --[[local detailText = math.floor(disk.used/1024/1024)
-  .. '/'
-  .. math.floor(disk.size/1024/1024) .. 'GB']]--
     local detailText = math.floor((disk.size - disk.used)/1024/1024) .. " GB free"
 
     return wibox.widget{
         {
-            markup = "<span foreground='"..beautiful.fg_dark.."'>"..disk.mount.."</span>",
-            font = "Fira Mono Bold 12",
+            markup = "<span foreground='"..beautiful.fg_focus.."'>"..disk.mount.."</span>",
+            font = beautiful.font_board_monob.."12",
             align = "center",
             widget = wibox.widget.textbox
         },
@@ -27,25 +22,26 @@ local function createDiskRow(disk)
             max_value = 100,
             value = disk.perc,
             start_angle = 3 * math.pi / 2,
-            bg = beautiful.misc2,
-            colors = { beautiful.yellow },
+            bg = beautiful.base01,
+            colors = { beautiful.bg_urgent },
             rounded_edge = true,
             thickness = 10,
             widget = wibox.container.arcchart
           },
           {
-            markup = "<span foreground='"..beautiful.fg_dark.."'>"..disk.perc.."%</span>",
-            font = "Roboto Bold 10",
+            markup = "<span foreground='"..beautiful.fg_normal.."'>"..disk.perc.."%</span>",
+            font = beautiful.font_board_bold.."8",
             align = "center",
             widget = wibox.widget.textbox
           },
-          forced_height = 54,
+          forced_width = dpi(54),
+          forced_height = dpi(54),
           layout = wibox.layout.stack
         },
         {
-          markup = "<span foreground='"..beautiful.fg_dark.."'>"..detailText.."</span>",
+          markup = "<span foreground='"..beautiful.fg_normal.."'>"..detailText.."</span>",
           align = "center",
-          font = "Roboto Medium 9",
+          font = beautiful.font_board_med.."9",
           widget = wibox.widget.textbox
         },
         spacing = 8,
@@ -54,7 +50,7 @@ local function createDiskRow(disk)
 end
 
 local function worker(args)
-    local mounts = {"/"}
+    local mounts = args
     local timeout = 60
     local disks = {}
 
@@ -88,12 +84,11 @@ local function worker(args)
 
           content:reset(content)
 
-          for k,v in ipairs(mounts) do
+          for _,v in ipairs(mounts) do
             local row = createDiskRow(disks[v])
 
             content:add(row)
           end
-
         end,
         content
     )

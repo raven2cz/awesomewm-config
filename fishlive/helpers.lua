@@ -23,7 +23,7 @@ local io         = { lines = io.lines, open  = io.open }
 local pairs      = pairs
 local rawget     = rawget
 local table      = { sort  = table.sort, unpack = table.unpack }
-local unpack     = unpack or table.unpack -- lua 5.1 retro-compatibility
+local unpack     = table.unpack -- lua 5.1 retro-compatibility
 
 -- Fishlive helper functions for internal use
 -- fishlive.helpers
@@ -326,7 +326,6 @@ function helpers.move_to_edge(c, direction)
     if direction == "up" then
         local old_x = c:geometry().x
         awful.placement.top(c, {
-            honor_padding = true,
             honor_workarea = true,
             honor_padding = true
         })
@@ -335,7 +334,6 @@ function helpers.move_to_edge(c, direction)
     elseif direction == "down" then
         local old_x = c:geometry().x
         awful.placement.bottom(c, {
-            honor_padding = true,
             honor_workarea = true,
             honor_padding = true
         })
@@ -344,7 +342,6 @@ function helpers.move_to_edge(c, direction)
     elseif direction == "left" then
         local old_y = c:geometry().y
         awful.placement.left(c, {
-            honor_padding = true,
             honor_workarea = true,
             honor_padding = true
         })
@@ -353,7 +350,6 @@ function helpers.move_to_edge(c, direction)
     elseif direction == "right" then
         local old_y = c:geometry().y
         awful.placement.right(c, {
-            honor_padding = true,
             honor_workarea = true,
             honor_padding = true
         })
@@ -372,11 +368,13 @@ function helpers.add_hover_cursor(w, hover_cursor)
     local original_cursor = "left_ptr"
 
     w:connect_signal("mouse::enter", function()
+        ---@diagnostic disable-next-line: undefined-field
         local w = _G.mouse.current_wibox
         if w then w.cursor = hover_cursor end
     end)
 
     w:connect_signal("mouse::leave", function()
+        ---@diagnostic disable-next-line: undefined-field
         local w = _G.mouse.current_wibox
         if w then w.cursor = original_cursor end
     end)
@@ -413,7 +411,7 @@ function helpers.tag_back_and_forth(tag_index)
 end
 
 -- Move client to screen edge, respecting the screen workarea
-function helpers.move_to_edge(c, direction)
+function helpers.move_to_edge_workarea(c, direction)
     local workarea = awful.screen.focused().workarea
     if direction == "up" then
         c:geometry({nil, y = workarea.y + beautiful.useless_gap * 2, nil, nil})
@@ -536,12 +534,15 @@ function helpers.hover_pointer(widget)
         local w = mouse.current_wibox
         old_cursor, old_wibox = w.cursor, w
         w.cursor = "hand2"
+        widget:get_children_by_id("custom_icon")[1].font = beautiful.icon_font.."31"
     end)
     widget:connect_signal("mouse::leave", function()
         if old_wibox then
             old_wibox.cursor = old_cursor
             old_wibox = nil
         end
+        local w = mouse.current_wibox
+        widget:get_children_by_id("custom_icon")[1].font = beautiful.icon_font.."26"
     end)
 end
 

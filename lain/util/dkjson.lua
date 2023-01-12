@@ -327,7 +327,7 @@ encode2 = function (value, indent, level, buffer, buflen, tables, globalorder, s
           local v = value[k]
           if v ~= nil then
             used[k] = true
-            buflen, _msg = addpair (k, v, prev, indent, level, buffer, buflen, tables, globalorder, state)
+            buflen, nil = addpair (k, v, prev, indent, level, buffer, buflen, tables, globalorder, state)
             prev = true -- add a seperator before the next element
           end
         end

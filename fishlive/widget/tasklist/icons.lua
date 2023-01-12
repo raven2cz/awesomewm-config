@@ -2,17 +2,17 @@ local beautiful = require("beautiful")
 
 return {
     firefox = {
-        class = "firefox",
+        class = "firefoxdeveloperedition",
         icon = "",
         color = beautiful.base0A,
     },
-    kitty = {
-        class = "kitty",
+    wezterm = {
+        class = "org.wezfurlong.wezterm",
         icon = "",
         color = beautiful.fg_normal,
     },
-    thunar = {
-        class = "thunar",
+    dolphin = {
+        class = "dolphin",
         icon = "",
         color = beautiful.base0D
     },

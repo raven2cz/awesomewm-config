@@ -32,8 +32,8 @@ local dock_opener = wibox.widget {
 
 local mouse_in_dock = false
 
-local get_fullscreen = function()
-    tag = awful.screen.focused().selected_tag
+local function get_fullscreen()
+    local tag = awful.screen.focused().selected_tag
 
     for _, client in pairs(tag:clients()) do
         if client.fullscreen then
@@ -44,7 +44,7 @@ local get_fullscreen = function()
     return false
 end
 
-local get_auto_hide = function()
+local function get_auto_hide()
     if client.focus and client.focus.x < width then
         return true
     end
@@ -52,7 +52,7 @@ local get_auto_hide = function()
     return false
 end
 
-local show_cb = function()
+local function show_cb()
     if not mouse_in_dock and get_auto_hide() then return false end
 
     local delta = 2
@@ -65,7 +65,7 @@ local show_cb = function()
     end
 end
 
-local hide_cb = function()
+local function hide_cb()
     if mouse_in_dock or not get_auto_hide() then return false end
 
     local delta = 2
@@ -78,11 +78,11 @@ local hide_cb = function()
     end
 end
 
-local show = function()
+local function show()
     gears.timer.start_new(0.002, show_cb)
 end
 
-local hide = function()
+local function hide()
     gears.timer.start_new(0.002, hide_cb)
 end
 
@@ -112,7 +112,7 @@ local update = function(tag)
         tag = awful.screen.focused().selected_tag
     end
 
-    if get_auto_hide(tag) and not mouse_in_dock then
+    if get_auto_hide() and not mouse_in_dock then
         hide()
     else
         show()

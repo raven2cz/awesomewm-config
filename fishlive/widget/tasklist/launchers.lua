@@ -10,7 +10,7 @@ local icons = require("fishlive.widget.tasklist.icons")
 local get_app_widget = require("fishlive.widget.tasklist.app-widget")
 
 local layout = wibox.layout.fixed.vertical()
-widgets = {}
+local widgets = {}
 layout.spacing = 8
 
 local clientIsApp = function(c, app)
@@ -78,7 +78,7 @@ end
 client.connect_signal("manage", function(c)
     for i, v in pairs(favourites) do
         if clientIsApp(c, v["name"]) then
-            widget = widgets[i]
+            local widget = widgets[i]
             widget.count = widget.count + 1
 
             widget:get_children_by_id("selected_indicator")[1].bg = beautiful.leading_fg
@@ -93,7 +93,7 @@ end)
 client.connect_signal("unmanage", function(c)
     for i, v in pairs(favourites) do
         if clientIsApp(c, v["name"]) then
-            widget = widgets[i]
+            local widget = widgets[i]
             widget.count = widget.count - 1
 
             if widget.count == 0 then
@@ -106,7 +106,7 @@ end)
 client.connect_signal("focus", function(c)
     for i, v in pairs(favourites) do
         if clientIsApp(c, v["name"]) then
-            widget = widgets[i]
+            local widget = widgets[i]
             widget:get_children_by_id("selected_indicator")[1].bg = beautiful.fg_urgent
         end
     end
@@ -115,7 +115,7 @@ end)
 client.connect_signal("unfocus", function(c)
     for i, v in pairs(favourites) do
         if clientIsApp(c, v["name"]) then
-            widget = widgets[i]
+            local widget = widgets[i]
             widget:get_children_by_id("selected_indicator")[1].bg = beautiful.leading_fg
         end
     end

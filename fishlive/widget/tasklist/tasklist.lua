@@ -5,7 +5,6 @@ local beautiful = require("beautiful")
 local dpi = require("beautiful.xresources").apply_dpi
 
 local helpers = require("fishlive.helpers")
-
 local launchers = require("fishlive.widget.tasklist.launchers")
 local get_app_widget = require("fishlive.widget.tasklist.app-widget")
 local icons = require("fishlive.widget.tasklist.icons")
@@ -16,16 +15,18 @@ local source = require("fishlive.widget.tasklist.source")
 local container = {}
 local applist = {}
 
-local get_height = function()
+local SPACING = 8
+
+local function get_height()
     local app_count = helpers.tablelength(favourites) + helpers.tablelength(source())
-    local height = app_count * 48 - 8
+    local height = app_count * 54 - SPACING
     return dpi(height)
 end
 
 local current_height = get_height()
 local previous_height = 0
 
-local redraw_borders = function()
+local function redraw_borders()
     previous_height = current_height
     current_height = get_height()
 
@@ -33,14 +34,14 @@ local redraw_borders = function()
         if helpers.tablelength(source()) == 0 then
             applist.spacing = dpi(0)
         else
-            applist.spacing = dpi(8)
+            applist.spacing = dpi(SPACING)
         end
 
         container.redraw(current_height)
     end
 end
 
-local get_custom_icon = function(c)
+local function get_custom_icon(c)
     for i, v in pairs(icons) do
         if v["class"] == string.lower(c.class) then
             return v
@@ -76,7 +77,7 @@ local widget = awful.widget.tasklist {
     source = source,
     buttons = tasklist_buttons,
     layout = {
-        spacing = 8,
+        spacing = SPACING,
         layout  = wibox.layout.fixed.vertical,
     },
     widget_template = {
@@ -85,11 +86,10 @@ local widget = awful.widget.tasklist {
         widget = wibox.container.background,
         create_callback = function(self, c, index, objects) --luacheck: no unused
             if c.active then
-                self:get_children_by_id('selected_indicator')[1].bg = beautiful.fg_urgent
+                self:get_children_by_id('selected_indicator')[1].bg = beautiful.base0B
             end
 
             local icon = get_custom_icon(c)
-
             if icon then
                 self:get_children_by_id("custom_icon")[1].markup =
                     "<span foreground='"..icon["color"].."'>"..icon["icon"].."</span>"
@@ -104,9 +104,9 @@ local widget = awful.widget.tasklist {
         end,
         update_callback = function(self, c, index, objects) --luacheck: no unused
             if c.active then
-                self:get_children_by_id('selected_indicator')[1].bg = beautiful.fg_urgent
+                self:get_children_by_id('selected_indicator')[1].bg = beautiful.base0B
             else
-                self:get_children_by_id('selected_indicator')[1].bg = beautiful.misc1
+                self:get_children_by_id('selected_indicator')[1].bg = beautiful.base03
             end
         end
     }
@@ -131,7 +131,7 @@ container = borders(
         applist,
         bg = beautiful.bg_normal,
         widget = wibox.container.background
-    }, dpi(53), get_height(), dpi(8)
+    }, dpi(53), get_height(), dpi(SPACING)
 )
 
 return container

@@ -4,9 +4,7 @@ local gears = require("gears")
 local beautiful = require("beautiful")
 local dpi = require("beautiful.xresources").apply_dpi
 
-
-local get_app_icon = function(is_template)
-
+return function(is_template)
     local default_icon = nil
 
     if is_template then
@@ -42,17 +40,17 @@ local get_app_icon = function(is_template)
             {
                 {
                     id = "custom_icon",
-                    font = "Fira Mono NerdFont 22",
+                    font = beautiful.icon_font.."26",
                     align = "center",
                     valign = "center",
                     widget = wibox.widget.textbox
                 },
                 default_icon,
-                forced_height = dpi(32),
-                forced_width = dpi(32),
+                forced_height = dpi(38),
+                forced_width = dpi(38),
                 layout = wibox.layout.fixed.vertical
             },
-            left = dpi(4),
+            left = dpi(8),
             top = dpi(4),
             bottom = dpi(4),
             widget = wibox.container.margin
@@ -60,5 +58,3 @@ local get_app_icon = function(is_template)
         layout = wibox.layout.fixed.horizontal
     }
 end
-
-return get_app_icon

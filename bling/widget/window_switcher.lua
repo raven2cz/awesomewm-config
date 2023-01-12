@@ -285,7 +285,6 @@ local enable = function(opts)
         ontop = true,
         placement = awful.placement.centered,
         screen = awful.screen.focused(),
-        widget = wibox.container.background, -- A dummy widget to make awful.popup not scream
         widget = {
             {
                 draw_widget(),

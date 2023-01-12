@@ -13,11 +13,11 @@ local currentMonth = os.date('*t').month
 
 local cal = wibox.widget {
     date = os.date('*t'),
-    font = 'Roboto Regular 11',
+    font = beautiful.font_board_reg..'11',
     spacing = 4,
     fn_embed = function(widget, flag, date)
         local fg = beautiful.fg_normal
-        local font = "Roboto Regular 11"
+        local font = beautiful.font_board_reg..'11'
         widget.markup = widget.text
         widget.align = "center"
 
@@ -26,7 +26,7 @@ local cal = wibox.widget {
 
             return wibox.widget {
                 widget,
-                bg = beautiful.bg_focus,
+                bg = beautiful.base01,
                 fg = beautiful.fg_urgent,
                 shape = function(cr, width, height)
                     gears.shape.rounded_rect(cr, width, height, 4)
@@ -35,7 +35,7 @@ local cal = wibox.widget {
             }
         elseif flag == "header" then
             fg = beautiful.fg_urgent
-            widget.font = "Roboto Medium 12"
+            widget.font = beautiful.font_board_med..'12'
         elseif flag == "weekday" then
             widget:set_markup('<b>' .. string.upper(widget:get_text()) .. '</b>')
         end
@@ -85,6 +85,5 @@ calendarWidget.reset = function()
     cal:set_date(nil)
     cal:set_date(os.date('*t'))
 end
-
 
 return calendarWidget

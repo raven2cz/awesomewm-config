@@ -1,6 +1,6 @@
 local favourites = require("fishlive.widget.tasklist.favourites")
 
-function reverse_table(t)
+local function reverse_table(t)
     local reversedTable = {}
     local itemCount = #t
     for k, v in ipairs(t) do

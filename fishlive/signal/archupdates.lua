@@ -2,7 +2,7 @@ local awful = require("awful")
 local status = {}
 
 local command = "aurupdates.sh"
-local signal = "status::archupdates"
+local signal = "signal::archupdates"
 local interval = 600 -- per 10 mins
 
 awful.widget.watch(command, interval, function(_, stdout)

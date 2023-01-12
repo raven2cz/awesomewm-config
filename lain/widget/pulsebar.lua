@@ -51,7 +51,7 @@ local function factory(args)
     pulsebar.followtag           = args.followtag or false
     pulsebar.notification_preset = args.notification_preset
     pulsebar.devicetype          = args.devicetype or "sink"
-    pulsebar.cmd                 = args.cmd or "pacmd list-" .. pulsebar.devicetype .. "s | sed -n -e '/*/,$!d' -e '/index/p' -e '/base volume/d' -e '/volume:/p' -e '/muted:/p' -e '/device\\.string/p'"
+    pulsebar.cmd                 = args.cmd or ("pacmd list-" .. pulsebar.devicetype .. "s | sed -n -e '/*/,$!d' -e '/index/p' -e '/base volume/d' -e '/volume:/p' -e '/muted:/p' -e '/device\\.string/p'")
 
     if not pulsebar.notification_preset then
         pulsebar.notification_preset = {

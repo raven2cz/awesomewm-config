@@ -2,19 +2,19 @@ return {
     firefox = {
         name = "firefox",
         class = "firefoxdeveloperedition",
-        command = "firefoxdeveloperedition",
+        command = "firefox-developer-edition",
         index = 1
     },
-    thunar = {
-        name = "thunar",
-        class = "thunar",
-        command = "thunar",
+    dolphin = {
+        name = "dolphin",
+        class = "dolphin",
+        command = "dolphin",
         index = 2
     },
-    kitty = {
-        name = "kitty",
-        class = "kitty",
-        command = "kitty",
+    wezterm = {
+        name = "wezterm",
+        class = "org.wezfurlong.wezterm",
+        command = "wezterm",
         index = 3
     },
     intellij = {

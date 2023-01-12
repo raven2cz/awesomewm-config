@@ -18,6 +18,7 @@ local gcolor = require("gears.color")
 local themes_path = gfs.get_themes_dir()
 local rnotification = require("ruled.notification")
 local dpi = require("beautiful.xresources").apply_dpi
+local config = require("config")
 -- Widget and layout library
 local wibox = require("wibox")
 -- Window Enhancements
@@ -48,8 +49,8 @@ theme.dir = os.getenv("HOME") .. "/.config/awesome/themes/" .. theme_name
 theme.icon_path = theme.dir.."/icons/"
 -- }}}
 
--- Fishlive Statuses - producents-consuments
-require("fishlive.status.archupdates")
+-- Fishlive Signals - producents-consuments
+require("fishlive.signal.archupdates")
 
 -- activate random seed by time
 math.randomseed(os.time());
@@ -60,12 +61,18 @@ end
 
 -- {{{ Styles
 -- Global font
-theme.font          = "Iosevka Nerd Font 9"
-theme.font_larger   = "Iosevka Nerd Font 11"
-theme.font_notify   = "mononoki Nerd Font 11"
-theme.menu_font     = "mononoki Nerd Font 11"
-theme.tabbar_font   = "Iosevka Nerd Font 11"
-theme.icon_font     = "Iosevka Nerd Font "
+theme.font             = "Iosevka Nerd Font 9"
+theme.font_larger      = "Iosevka Nerd Font 11"
+theme.font_notify      = "mononoki Nerd Font 11"
+theme.menu_font        = "mononoki Nerd Font 11"
+theme.tabbar_font      = "Iosevka Nerd Font 11"
+theme.icon_font        = "Iosevka Nerd Font "
+-- Dashboard font
+theme.font_board_reg   = "Roboto Regular "
+theme.font_board_med   = "Roboto Medium "
+theme.font_board_bold  = "Roboto Bold "
+theme.font_board_mono  = "Fira Mono "
+theme.font_board_monob = "Fira Mono Bold "
 -- }}}
 
 -- {{{ Borders
@@ -86,7 +93,7 @@ theme.delete_icon = theme.dir .. "/icons/delete.png"
 theme.delete_grey_icon = theme.dir .. "/icons/delete_grey.png"
 theme.border_radius = dpi(0)
 theme.wibar_height = dpi(27)
-theme.systray_base_size = dpi(22)
+theme.bar_height = dpi(22)
 -- }}}
 
 -- {{{ Icons
@@ -104,14 +111,11 @@ theme.menu_submenu_icon = themes_path .. "default/submenu.png"
 
 -- {{{ Dashboard
 theme.avatar = theme.icon_path .. "avatar.png"
-theme.next_icon = theme.icon_path.."next.png"
+theme.next_icon = theme.icon_path.."next_focus.png"
 theme.next_grey_icon = theme.icon_path.."next_grey.png"
-theme.previous_icon = theme.icon_path.."previous.png"
+theme.previous_icon = theme.icon_path.."previous_focus.png"
 theme.previous_grey_icon = theme.icon_path.."previous_grey.png"
-theme.bar_position = "top"
-theme.bar_height = theme.systray_base_size
-theme.bar_item_radius = dpi(10)
-theme.bar_item_padding = dpi(3)
+theme.nocover_icon = theme.icon_path.."nocover.jpg"
 -- }}}
 
 -- {{{ Layout
@@ -216,7 +220,7 @@ local arch_updates = wibox.widget {
   markup = "<span>...</span>",
   font = theme.font
 }
-awesome.connect_signal("status::archupdates", function(count)
+awesome.connect_signal("signal::archupdates", function(count)
   arch_updates.markup = " <span>" .. count .. "</span>"
 end)
 local archupdateWibox = wiboxBox1(archupdateText, arch_updates, wboxColor, theme.widgetbar_fg, 3, 6, underLineSize, wiboxMargin)
@@ -284,8 +288,8 @@ wboxColor = theme.baseColors[6]
 local tempicon = wibox.widget.textbox();
 tempicon:set_markup(markup.fontfg(theme.font_larger, wboxColor, ""))
 local myWeather = weather_widget({
-  api_key='7df2ce22b859742524de7ab6c97a352d', --fill your API KEY
-  coordinates = { 49.261749, 13.903450 }, -- fill your coords
+  api_key = os.getenv("WEATHER_API_KEY"), --fill your API KEY
+  coordinates = config.weather_coordinates, -- fill your coords
   font_name = 'Carter One',
   show_hourly_forecast = true,
   show_daily_forecast = true,
@@ -347,7 +351,7 @@ local spotifyWibox = spotify_widget({
 
 -- Systray
 local systray = wibox.widget.systray()
-systray.base_size = theme.systray_base_size
+systray.base_size = theme.bar_height
 -- Separators
 local separator = wibox.widget.textbox()
 

@@ -18,4 +18,5 @@ return {
     colorscheme = require("fishlive.colorscheme"),
     collage = require("fishlive.collage"),
     plugins = require("fishlive.plugins"),
+    signal = require("fishlive.signal"),
 }
