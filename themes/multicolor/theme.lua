@@ -67,6 +67,7 @@ theme.font_notify      = "mononoki Nerd Font 11"
 theme.menu_font        = "mononoki Nerd Font 11"
 theme.tabbar_font      = "Iosevka Nerd Font 11"
 theme.icon_font        = "Iosevka Nerd Font "
+theme.operator_font    = "OperatorMono Book "
 -- Dashboard font
 theme.font_board_reg   = "Roboto Regular "
 theme.font_board_med   = "Roboto Medium "
@@ -781,7 +782,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
   -- Portraits Collage for Dev Tag
   local sel_portrait = fhelpers.first_line(os.getenv("HOME")..'/.portrait') or 'joy'
   local wppath_sel_portrait = notifpath .. sel_portrait .. "/"
-  local portraits = fishlive.util.scandirArgs{dir=wppath_sel_portrait, fileExt='*.{png,jpg}'}
+  local portraits = fishlive.util.getImgsFromDir(notifpath, sel_portrait)
   if isFullhd then
     collageTag(wppath_sel_portrait, portraits, {4}, {
       { max_height = 450, posx = 10, posy = 40 },

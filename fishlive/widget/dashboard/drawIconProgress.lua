@@ -1,7 +1,4 @@
-local awful = require("awful")
 local beautiful = require("beautiful")
-local spawn = require("awful.spawn")
-local watch = require("awful.widget.watch")
 local wibox = require("wibox")
 local gears = require("gears")
 local dpi = require('beautiful').xresources.apply_dpi
@@ -9,7 +6,7 @@ local dpi = require('beautiful').xresources.apply_dpi
 local function drawIconProgress(signal, main_color, mute_color)
     local image_size = dpi(24)
     local prcts_width = dpi(35)
-    
+
     local icon = wibox.widget {
         font = beautiful.icon_font.."17",
         valign = "center",
@@ -41,7 +38,7 @@ local function drawIconProgress(signal, main_color, mute_color)
         forced_height = 4,
         widget = wibox.widget.progressbar
     }
-    
+
     local progressbar_container = wibox.widget {
         icon,
         prcts,
@@ -54,13 +51,13 @@ local function drawIconProgress(signal, main_color, mute_color)
         spacing = 8,
         layout = wibox.layout.fixed.horizontal
     }
-    
+
     awesome.connect_signal(signal, function(event)
         progressbar.value = event.value / 100
         icon.text = event.image
         prcts.text = event.value..'%'
     end)
-    
+
     return progressbar_container, progressbar
 end
 

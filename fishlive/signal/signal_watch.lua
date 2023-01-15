@@ -21,7 +21,9 @@ local setmetatable = setmetatable
 local timer = require("gears.timer")
 local spawn = require("awful.spawn")
 
-local signal_watch = { mt = {} }
+local signal_watch = {
+    mt = {}
+}
 
 --- Create signal watcher that send callback result to signal listeners
 -- and updates it at a given time interval (timeout).
@@ -47,20 +49,24 @@ local signal_watch = { mt = {} }
 -- For "signal" reason — the signal causing process termination.
 --
 -- @return Its gears.timer.
+-- @return sw SignalWatch data table
 -- @constructorfct fishlive.signal.signal_watch
 function signal_watch.new(command, timeout, autostart, call_now, callback)
     timeout = timeout or 5
+    local sw = {}
+    sw.command = command
+    sw.timeout = timeout
     local t = timer {
-        timeout = timeout,
+        timeout = sw.timeout,
         autostart = autostart,
         call_now = call_now,
         callback = function()
-            spawn.easy_async(command, function(stdout, stderr, exitreason, exitcode)
+            spawn.easy_async(sw.command, function(stdout, stderr, exitreason, exitcode)
                 callback(stdout, stderr, exitreason, exitcode)
             end)
         end
     }
-    return t
+    return t, sw
 end
 
 function signal_watch.mt.__call(_, ...)

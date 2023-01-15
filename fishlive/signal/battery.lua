@@ -45,7 +45,7 @@ return signal_watch(command, interval, true, true, function(stdout, _, _, _)
     elseif (charge >= 0 and charge < 10) then
         icon = ""
         -- if 5 minutes have elapsed since the last warning
-        if os.difftime(os.time(), last_battery_check) > 300 and charge < 3 then
+        if os.difftime(os.time(), last_battery_check) > 300 and charge < 3 and charge > 0 then
             last_battery_check = os.time()
             naughty.notify{ text = "Battery Warning! Status is "..charge.."%" }
         end

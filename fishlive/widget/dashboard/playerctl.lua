@@ -58,18 +58,20 @@ return function(width, height)
         awesome.emit_signal("signal::playerctl::next")
     end)
 
-    awesome.connect_signal("signal::playerctl", function(data)
-        artist.markup = data.artist
-        title.markup = data.title
-
-        if data.artist == "" and data.title == "" then
-            artist.markup = "Not playing"
-        end
-
-        if data.status:lower() == "playing" then
+    awesome.connect_signal("signal::playerctl::play_pause_result", function(status)
+        if status:lower() == "playing" then
             play_pause.markup = ""
         else
             play_pause.markup = "契"
+        end
+    end)
+
+    awesome.connect_signal("signal::playerctl", function(data)
+        artist.markup = string.sub(data.artist, 0, 28)
+        title.markup = string.sub(data.title, 0, 28)
+
+        if data.artist == "" and data.title == "" then
+            artist.markup = "Not playing"
         end
 
         if data.image ~= "" then

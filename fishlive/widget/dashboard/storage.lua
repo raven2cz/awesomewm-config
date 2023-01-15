@@ -8,10 +8,12 @@ local container = {}
 
 local function createDiskRow(disk)
     local detailText = math.floor((disk.size - disk.used)/1024/1024) .. " GB free"
+    local _, short_mount = string.match(disk.mount, "(.-)([^\\/]-%.?([^%.\\/]*))$")
+    if short_mount == "" then short_mount = disk.mount end
 
     return wibox.widget{
         {
-            markup = "<span foreground='"..beautiful.fg_focus.."'>"..disk.mount.."</span>",
+            markup = "<span foreground='"..beautiful.fg_focus.."'>"..short_mount.."</span>",
             font = beautiful.font_board_monob.."12",
             align = "center",
             widget = wibox.widget.textbox

@@ -3,8 +3,6 @@ local wibox = require("wibox")
 local beautiful = require("beautiful")
 local dpi = require("beautiful.xresources").apply_dpi
 
-local naughty = require("naughty")
-
 local config = require("config")
 local drawBox = require("fishlive.widget.dashboard.drawBox")
 
@@ -14,6 +12,8 @@ local function dashboard()
     local sig_brightness = require("fishlive.signal.brightness")
     local sig_battery = require("fishlive.signal.battery")
     local sig_playerctl = require("fishlive.signal.playerctl")
+    local sig_news = require("fishlive.signal.news")
+    local sig_terminal = require("fishlive.signal.terminal")
 
     -- dashboard widgets
     local leftdock = require("fishlive.widget.dashboard.docks.left")
@@ -28,12 +28,15 @@ local function dashboard()
     local settings = require("fishlive.widget.dashboard.settings")
     local weather = require("fishlive.widget.dashboard.weather")
     local playerctl = require("fishlive.widget.dashboard.playerctl")
+    local news = require("fishlive.widget.dashboard.news")
+    local terminal = require("fishlive.widget.dashboard.terminal")
+    local collage = require("fishlive.widget.dashboard.collage")
 
     local dashboard = wibox({
         visible = false,
         ontop = true,
         type = "dock",
-        screen = screen.primary,
+        screen = screen.focused,
         x = 0,
         y = beautiful.bar_height,
         width = awful.screen.focused().geometry.width,
@@ -68,6 +71,12 @@ local function dashboard()
         sig_brightness:start()
         sig_battery:start()
         sig_playerctl:start()
+        sig_news:start()
+        sig_terminal.t:start()
+
+        calendar.reset()
+        collage.show()
+        keygrabber:start()
     end
 
     dashboard.signals_off = function()
@@ -75,23 +84,23 @@ local function dashboard()
         sig_brightness:stop()
         sig_battery:stop()
         sig_playerctl:stop()
+        sig_news:stop()
+        sig_terminal.t:stop()
+
+        calendar.reset()
+        collage.hide()
+        keygrabber:stop()
     end
 
     dashboard.close = function()
-        calendar.reset()
         dashboard.visible = false
-        keygrabber:stop()
         dashboard.signals_off()
     end
 
     dashboard.toggle = function()
-        calendar.reset()
         dashboard.visible = not dashboard.visible
-        keygrabber:stop()
-
         if dashboard.visible then
             keygrabber = getKeygrabber()
-            keygrabber:start()
             dashboard.signals_on()
         else
             dashboard.signals_off()
@@ -120,9 +129,9 @@ local function dashboard()
                         },
                         {
                             drawBox({
-                                volume,
-                                brightness,
-                                battery,
+                                volume(sig_volume),
+                                brightness(sig_brightness),
+                                battery(),
                                 spacing = dpi(16),
                                 widget = wibox.layout.fixed.vertical
                             }, dpi(200), dpi(114)),
@@ -146,17 +155,26 @@ local function dashboard()
             layout = wibox.layout.align.horizontal
         },
         {
-            nil,
-            nil,
             {
                 {
                     weather,
-                    right = dpi(32),
+                    left = dpi(32),
                     widget = wibox.container.margin
                 },
                 expand = "none",
                 layout = wibox.layout.align.vertical
             },
+            {
+                {
+                    news(sig_news),
+                    left = dpi(100),
+                    right = dpi(100),
+                    top = dpi(60),
+                    widget = wibox.container.margin
+                },
+                layout = wibox.layout.align.vertical
+            },
+            nil,
             expand = "none",
             layout = wibox.layout.align.horizontal
         },
@@ -165,8 +183,14 @@ local function dashboard()
             nil,
             {
                 nil,
-                nil,
-                drawBox(avatar, dpi(180), dpi(230)),
+                terminal(sig_terminal),
+                {
+                    nil,
+                    nil,
+                    drawBox(avatar, dpi(180), dpi(230)),
+                    expand = "none",
+                    layout = wibox.layout.align.vertical
+                },
                 expand = "none",
                 layout = wibox.layout.align.horizontal
             },

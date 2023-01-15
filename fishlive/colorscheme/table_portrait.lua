@@ -8,6 +8,7 @@
 return {
   "arcane",
   "default",
+  "digital-landscapes",
   "doom_one",
   "dracula",
   "fantasy-women",

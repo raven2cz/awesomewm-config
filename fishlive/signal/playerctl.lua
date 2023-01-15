@@ -1,11 +1,12 @@
-local lgi = require("lgi")
+-- Playerctl for Spotify Client only
+-- If there are active more clients, the spotify is selected.
 local awful = require("awful")
 local signal_watch = require("fishlive.signal.signal_watch")
 
-local Playerctl = lgi.Playerctl
+local Playerctl = require("lgi").Playerctl
 local player = nil
 
-local command = "playerctl status"
+local command = "playerctl -p spotify status"
 local signal = "signal::playerctl"
 local interval = 3
 
@@ -23,7 +24,7 @@ sh -c '
         mkdir -p $tmp_dir
     fi
 
-    link="$(playerctl metadata mpris:artUrl)"
+    link="$(playerctl -p spotify metadata mpris:artUrl)"
     link=${link/open.spotify.com/i.scdn.co}
 
     curl -s "$link" --output $tmp_cover_path && echo "$tmp_cover_path"
@@ -76,14 +77,27 @@ end)
 
 awesome.connect_signal(signal.."::play_pause", function()
     player:play_pause()
+    -- revert logic because the change is too fast!
+    local status
+    if player.playback_status:lower() == "playing" then
+        status = "paused" else status = "playing" end
+    awesome.emit_signal(signal.."::play_pause_result", status)
 end)
 
 return signal_watch(command, interval, true, true, function(stdout, _, _, _)
     local out = stdout:gsub('%\n', '')
     if out ~= "" and player == nil then
-        player = Playerctl.Player{}
+        local manager = Playerctl.PlayerManager()
+        for _, id in ipairs(manager.player_names) do
+            player = Playerctl.Player.new_from_name(id)
+            if player.player_name == 'spotify' then
+                manager:manage_player(player)
+                break
+            end
+        end
         player.on_metadata = update_metadata
         player.on_exit = exit
         update_metadata()
     end
+    awesome.emit_signal(signal.."::play_pause_result", out)
 end)

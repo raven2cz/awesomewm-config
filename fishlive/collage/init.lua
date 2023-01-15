@@ -19,6 +19,8 @@ local collage = { _NAME = "fishlive.collage" }
 
 function collage.align(align, posx, posy, imgwidth, imgheight)
   if align == "top-left" then uposx = posx; uposy = posy
+  elseif align == "top-right" then uposx = posx - imgwidth; uposy = posy
+  elseif align == "bottom-left" then uposx = posx + imgwidth; uposy = posy - imgheight
   elseif align == "bottom-right" then uposx = posx - imgwidth; uposy = posy - imgheight
   end
   return uposx, uposy
@@ -66,7 +68,7 @@ function collage.calcShadow(imgwidth, imgheight, uposx, uposy)
   return width, height, x, y
 end
 
-function collage.placeCollageImage(reqimgwidth, reqimgheight, posx, posy, align, imgsrcs, imgidx)
+function collage.placeCollageImage(reqimgwidth, reqimgheight, posx, posy, align, imgsrcs, imgidx, ontop)
   local homeDir = os.getenv("HOME")
   local shadowsrc = homeDir .. "/.config/awesome/fishlive/collage/shadow.png"
   local imgsrc = imgsrcs[imgidx]
@@ -74,6 +76,7 @@ function collage.placeCollageImage(reqimgwidth, reqimgheight, posx, posy, align,
   local imgwidth, imgheight, imgratio = collage.calcImageRes(imgsrc, reqimgwidth, reqimgheight)
   local uposx, uposy = collage.align(align, posx, posy, imgwidth, imgheight)
   local shwWidth, shwHeight, shwX, shwY = collage.calcShadow(imgwidth, imgheight, uposx, uposy)
+  local ontop = ontop or false and true
 
   local imgboxShw = wibox({
       type = "desktop",
@@ -82,7 +85,7 @@ function collage.placeCollageImage(reqimgwidth, reqimgheight, posx, posy, align,
       x = shwX,
       y = shwY,
       visible = true,
-      ontop = false,
+      ontop = ontop,
       opacity = 1.00,
       bg = "#00000000",
   })
@@ -106,7 +109,7 @@ function collage.placeCollageImage(reqimgwidth, reqimgheight, posx, posy, align,
       x = uposx,
       y = uposy,
       visible = true,
-      ontop = false,
+      ontop = ontop,
       opacity = 1.0,
       bg = "#00000000",
   })
@@ -120,12 +123,22 @@ function collage.placeCollageImage(reqimgwidth, reqimgheight, posx, posy, align,
   }
   imgbox:get_children_by_id("img")[1].image = gears.surface.load_uncached(imgsrc)
   imgbox:connect_signal('button::press', function(self, _, _, button)
-      if button == 5 then imgidx = imgidx + 1 --button == 1 or
-      elseif button == 4 then imgidx = imgidx - 1 --button == 3 or
+      if button == 5 then imgidx = imgidx + 1
+      elseif button == 4 then imgidx = imgidx - 1
       elseif button == 3 then
+        awesome.emit_signal("dashboard::close")
         awful.spawn.with_shell('qimgv "'..imgsrcs[imgidx]..'"')
+      elseif button == 2 then
+        awesome.emit_signal("dashboard::close")
+        awful.spawn.with_line_callback("zenity --file-selection --directory --filename="..util.getPathFrom(imgsrcs[imgidx]), {
+          stdout = function(dir)
+            _, imgsrcs = util.getImgsFromDir(dir)
+            imgidx = 1
+          end
+        })
       else return
       end
+
       if imgidx == 0 then imgidx = #imgsrcs end
       if imgidx > #imgsrcs then imgidx = 1 end
       imgsrc = imgsrcs[imgidx]

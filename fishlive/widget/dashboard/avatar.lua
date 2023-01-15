@@ -2,7 +2,6 @@ local awful = require("awful")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local gears = require("gears")
-local naughty = require("naughty")
 local dpi = require("beautiful.xresources").apply_dpi
 
 local user = os.getenv("USER")
@@ -18,8 +17,9 @@ local avatar = wibox.widget {
             gears.shape.rounded_rect(cr, width, height, dpi(200))
         end,
         widget = wibox.container.background
-    }, 
-    left = dpi(12), right = dpi(12),
+    },
+    left = dpi(12),
+    right = dpi(12),
     widget = wibox.container.margin
 }
 
@@ -44,14 +44,22 @@ awful.widget.watch("uptime -p", 60, function(_, stdout)
     uptime.text = out
 end)
 
-return wibox.widget {
-    avatar, 
+local host_widget = wibox.widget {
+    avatar,
     {
-        username, 
+        username,
         uptime,
         spacing = dpi(4),
-        layout = wibox.layout.fixed.vertical 
+        layout = wibox.layout.fixed.vertical
     },
     spacing = dpi(16),
     layout = wibox.layout.fixed.vertical
 }
+
+host_widget:connect_signal('button::press', function(_, _, _, button)
+  if button == 1 then
+    awesome.emit_signal("dashboard::close")
+  end
+end)
+
+return host_widget

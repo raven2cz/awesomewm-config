@@ -10,13 +10,16 @@ local signal = "signal::volume"
 local main_color = beautiful.base0D
 local mute_color = beautiful.base01
 
-local progressbar_container, progressbar = drawIconProgress(signal, main_color, mute_color)
+return function(sig_volume)
+  local progressbar_container, progressbar = drawIconProgress(signal, main_color, mute_color)
 
-progressbar:connect_signal("button::press", function(_, _, _, button)
+  progressbar:connect_signal("button::press", function(_, _, _, button)
     if (button == 4) then awful.spawn(INC_VOLUME_CMD, false)
     elseif (button == 5) then awful.spawn(DEC_VOLUME_CMD, false)
     elseif (button == 1) then awful.spawn(TOG_VOLUME_CMD, false)
     end
-end)
+    sig_volume:emit_signal("timeout")
+  end)
 
-return progressbar_container
+  return progressbar_container
+end

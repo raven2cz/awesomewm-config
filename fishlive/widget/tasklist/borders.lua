@@ -10,7 +10,6 @@ is also licensed under the terms of the MIT License
 
 local wibox = require("wibox")
 local beautiful = require("beautiful")
-local naughty = require("naughty")
 
 local shapes = require("fishlive.widget.shapes")
 local get_border_colors = require("fishlive.widget.border_colors")

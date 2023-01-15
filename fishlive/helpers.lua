@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 --[[
      Fishlive Lua Library
      Helper functions

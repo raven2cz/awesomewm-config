@@ -1,13 +1,8 @@
 local wibox = require("wibox")
-local naughty = require("naughty")
 local beautiful = require("beautiful")
 local gears = require("gears")
-local awful = require("awful")
 
 local button = require("fishlive.widget.button")
-
-
-local calendar = {}
 
 local currentMonth = os.date('*t').month
 
