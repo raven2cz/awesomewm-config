@@ -12,7 +12,8 @@ return {
             local _, imgsources = fishlive.util.getImgsFromDir(notifpath, sel_portrait)
             local xres = fishlive.util.screen_res_x()
 
-            imgbox = collage.placeCollageImage(xres/5.48, xres/5.48, xres-20, 60, "top-right", imgsources, 1, true)
+            imgbox = collage.placeCollageImage(xres/5.48, xres/5.48,
+              xres-(3840/xres)^2 * 20, xres/3840 * 60, "top-right", imgsources, 1, true)
         else
             imgbox.shadow.visible = true
             imgbox.image.visible = true

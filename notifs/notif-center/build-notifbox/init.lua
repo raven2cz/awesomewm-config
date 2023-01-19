@@ -15,7 +15,7 @@ local notifbox_layout = wibox.widget {
     scroll_speed = 10
 }
 
-notifbox_layout.forced_width = width 
+notifbox_layout.forced_width = width
 
 reset_notifbox_layout = function()
 	notifbox_layout:reset(notifbox_layout)

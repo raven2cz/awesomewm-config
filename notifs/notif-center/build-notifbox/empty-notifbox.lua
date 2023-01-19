@@ -11,14 +11,14 @@ local empty_notifbox = wibox.widget {
 		{
 			expand = 'none',
 			layout = wibox.layout.align.horizontal,
-			nil, 
+			nil,
 			{
-				image = beautiful.notification_none_icon, 
-				resize = true,
-				forced_height = dpi(35),
-				forced_width = dpi(35),
-        widget = wibox.widget.imagebox
-			},
+			    image = beautiful.notification_none_icon, 
+			    resize = true,
+			    forced_height = dpi(35),
+			    forced_width = dpi(35),
+                widget = wibox.widget.imagebox
+		    },
 			nil
 		},
 		{
@@ -35,10 +35,9 @@ local empty_notifbox = wibox.widget {
 
 -- Make empty_notifbox center
 local centered_empty_notifbox = wibox.widget {
-	layout = wibox.layout.fixed.vertical,
-	expand = 'none',
+  layout = wibox.layout.fixed.vertical,
+  expand = 'none',
   empty_notifbox
 }
 
 return centered_empty_notifbox
-

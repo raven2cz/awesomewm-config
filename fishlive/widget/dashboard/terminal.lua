@@ -18,25 +18,35 @@ end
 
 return function(sig_terminal)
   local maxwidth = fishlive.util.screen_res_x() * 0.5
+  local maxheight = (fishlive.util.screen_res_y() - 650) / 2
 
-  local terminal_wibox = wibox.widget({
+  local terminal_textbox = wibox.widget {
     bg = beautiful.bg_normal,
     align = "left",
     valign = "center",
     widget = wibox.widget.textbox
-  })
+  }
+
+  local terminal_wibox = wibox.widget {
+    terminal_textbox,
+    layout = require("fishlive.widget.overflow").vertical,
+    scrollbar_width = 2,
+    spacing = 7,
+    scroll_speed = 15,
+  }
+  terminal_wibox.forced_height = maxheight
 
   awesome.connect_signal(signal, function(event)
-    terminal_wibox.markup = markup.fontfg(
+    terminal_textbox.markup = markup.fontfg(
         beautiful.operator_font.." 10",
         beautiful.base0B,
         parse_colors(event.value)
     )
-    local width = terminal_wibox:get_preferred_size()
-    if width > maxwidth then
-      terminal_wibox.forced_width = maxwidth
-    else
-      terminal_wibox.forced_width = width
+    local width = terminal_textbox:get_preferred_size()
+      if width > maxwidth then
+        terminal_wibox.forced_width = maxwidth
+      else
+        terminal_wibox.forced_width = width
     end
   end)
 

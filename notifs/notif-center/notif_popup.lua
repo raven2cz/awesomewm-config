@@ -6,25 +6,25 @@ local dpi = require('beautiful').xresources.apply_dpi
 
 local popupLib = {}
 
-popupLib.create = function(x, y, height, width, widget) 
+popupLib.create = function(x, y, height, width, widget)
     local widgetContainer = wibox.widget {
         {
-            widget, 
-            margins = dpi(10), 
+            widget,
+            margins = dpi(10),
             widget = wibox.container.margin
-        }, 
-        forced_height = height, 
-        forced_width = width, 
+        },
+        forced_height = height,
+        forced_width = width,
         layout = wibox.layout.fixed.vertical
     }
 
     local popupWidget = awful.popup {
-        widget = widgetContainer, 
+        widget = widgetContainer,
         shape = function(cr, width, height)
             gears.shape.rounded_rect(cr, width, height, beautiful.border_radius)
         end,
-        visible = false, 
-        ontop = true, 
+        visible = false,
+        ontop = true,
         x = x,
         y = y
     }
@@ -35,12 +35,12 @@ popupLib.create = function(x, y, height, width, widget)
         single_shot = true,
         callback  = function()
             if not mouseInPopup then
-                popupWidget.visible = false 
+                popupWidget.visible = false
             end
         end
     }
 
-    popupWidget:connect_signal("mouse::leave", function() 
+    popupWidget:connect_signal("mouse::leave", function()
         if popupWidget.visible then
             mouseInPopup = false
             timer:again()
@@ -57,7 +57,7 @@ end
 
 local popupWidget = wibox.widget {
     require("notifs.notif-center"),
-    expand = "none", 
+    expand = "none",
     layout = wibox.layout.fixed.horizontal
 }
 

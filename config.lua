@@ -1,5 +1,4 @@
 local apps = {
-    terminal = "wezterm",
     launcher = "rofi -show-icons -modi windowcd,window,drun -show drun -filter ",
     xrandr = "lxrandr",
     screenshot = "scrot -e 'echo $f'",
@@ -19,7 +18,8 @@ local terminal_cmds = {
       cmd = 'journalctl -n 30 --no-pager'
     },
     {
-      cmd = 'script -q /dev/null -c "journalctl -n 30 --no-pager" | tea -a'
+      cmd = 'notes_sync',
+      timeout = 100000
     },
     {
       cmd = 'ls'
@@ -40,15 +40,20 @@ local terminal_cmds = {
 }
 
 local user = {
-    terminal = "wezterm",
+    terminal = "alacritty",
+    terminal2nd = "wezterm",
 }
 
 local config = {
-    apps = apps,
-    user = user,
-    weather_coordinates = { 49.261749, 13.903450 },
-    dashboard_monitor_storage = {"/", "/home/box/nfs/cloud", "/efi" },
-    terminal_cmds = terminal_cmds,
+  apps = apps,
+  user = user,
+  terminal_cmds = terminal_cmds,
+  weather_coordinates = { 49.261749, 13.903450 },
+  dashboard_monitor_storage = {"/", "/home", "/efi" },
+  main_panel = 'wibar', -- variants: wibar, polybar, none
+  --{{{ Features Activity
+  dashboard_enabled = true,
+  --}}}
 }
 
 return config

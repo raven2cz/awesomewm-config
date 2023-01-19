@@ -13,7 +13,7 @@ return signal_watch(command, interval, true, true, function(stdout, _, _, _)
     local charging = false
 
     for s in stdout:gmatch("[^\r\n]+") do
-        local status, charge_str, time = string.match(s, '.+: (%a+), (%d?%d?%d)%%,?(.*)')
+        local status, charge_str,_ = string.match(s, '.+: (%a+), (%d?%d?%d)%%,?(.*)')
 
         if status == "Charging" then charging = true end
 
@@ -26,15 +26,20 @@ return signal_watch(command, interval, true, true, function(stdout, _, _, _)
     end
 
     local capacity = 0
-    for i, cap in ipairs(capacities) do
+    for _, cap in ipairs(capacities) do
         capacity = capacity + cap
     end
 
     local charge = 0
     local count = 0
     for _, batt in ipairs(battery_info) do
+        if batt.charge == 0 then
+            -- Skip this battery
+            goto continue
+        end
         charge = charge + batt.charge
         count = count + 1
+        :: continue ::
     end
 
     charge = math.floor(charge / count)

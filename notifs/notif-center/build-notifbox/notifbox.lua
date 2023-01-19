@@ -8,7 +8,7 @@ local button = require("fishlive.widget.button")
 local notifbox = {}
 
 notifbox.create = function(icon, n, width)
-    local time = os.date("%H:%M") 
+    local time = os.date("%H:%M")
     local box = {}
 
     local dismiss = button.create_image_onclick(beautiful.delete_grey_icon,
@@ -26,26 +26,26 @@ notifbox.create = function(icon, n, width)
                     {
                         {
                         {
-                                image = icon,
-                                resize = true,
-                                clip_shape = helpers.rrect(
-                                    beautiful.border_radius - 3),
-                                widget = wibox.widget.imagebox
+                            image = icon,
+                            resize = true,
+                            clip_shape = helpers.rrect(
+                                beautiful.border_radius - 3),
+                            widget = wibox.widget.imagebox
                         },
                             -- bg = beautiful.xcolor1,
                             strategy = 'exact',
                             height = 90,
                             width = 90,
                             widget = wibox.container.constraint
-                    }, 
+                    },
                     layout = wibox.layout.align.vertical
-                }, 
+                },
                     top = dpi(13),
                     left = dpi(15),
                     right = dpi(15),
                     bottom = dpi(13),
                 widget = wibox.container.margin
-            }, 
+            },
             {
                 {
                         nil,
@@ -67,17 +67,17 @@ notifbox.create = function(icon, n, width)
                                 },
                                 {
                                     {
-                        markup = time, 
+                                        markup = time,
                                         align = "right",
                                         font = beautiful.font,
-                        widget = wibox.widget.textbox
-                    }, 
+                                        widget = wibox.widget.textbox
+                                    },
                                     left = dpi(30),
                                     widget = wibox.container.margin
                                 },
-                    {
+                                {
                                     {
-                        dismiss,
+                                       dismiss,
                                         halign = "right",
                                         widget = wibox.container.place
                                     },
@@ -94,22 +94,22 @@ notifbox.create = function(icon, n, width)
                             },
                             layout = wibox.layout.fixed.vertical
                         },
-                        nil, 
-                        expand = "none", 
+                        nil,
+                        expand = "none",
                         layout = wibox.layout.align.vertical
-                    }, 
+                    },
                     margins = dpi(8),
                 widget = wibox.container.margin
-            }, 
+            },
             layout = wibox.layout.align.horizontal
-        }, 
+        },
             top = dpi(2),
             bottom = dpi(2),
             widget = wibox.container.margin
         },
         bg = beautiful.xcolor0 .. "55",
         shape = helpers.rrect(beautiful.border_radius),
-        widget = wibox.container.background 
+        widget = wibox.container.background
     }
 
     return box

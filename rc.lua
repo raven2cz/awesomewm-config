@@ -14,12 +14,12 @@ pcall(require, "luarocks.loader")
 local gears = require("gears")
 local awful = require("awful")
 require("awful.autofocus")
--- Widget and layout library
-local wibox = require("wibox")
 -- Theme handling library
 local beautiful = require("beautiful")
 -- Window Enhancements
 local lain = require("lain")
+-- Configuration
+local config = require("config")
 -- Fishlive Enhancements
 local fishlive = require("fishlive")
 -- Notification library
@@ -65,8 +65,8 @@ local function xmenu()
 end
 
 -- This is used later as the default terminal and editor to run.
-terminal = "alacritty" --"kitty" --"urxvt"
-terminal2 = "wezterm"
+terminal = config.user.terminal --"kitty" --"urxvt"
+terminal2 = config.user.terminal2nd
 editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = terminal2 .. " -e " .. editor
 
@@ -141,7 +141,9 @@ awful.layout.append_default_layout(bling.layout.mstab)
 fishlive.plugins.createTitlebarsNiceLib()
 
 -- Dashboard Component
-dashboard = require("fishlive.widget.dashboard")()
+if config.dashboard_enabled then 
+    dashboard = require("fishlive.widget.dashboard")()
+end
 
 -- Notification Center
 popup = require("notifs.notif-center.notif_popup")
@@ -386,7 +388,7 @@ awful.keyboard.append_global_keybindings({
     awful.key({ modkey }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal (alacritty)", group = "launcher"}),
     awful.key({ modkey, altkey }, "Return", function () awful.spawn(terminal2) end,
-              {description = "open a terminal2 (kitty)", group = "launcher"}),
+              {description = "open a terminal2 (wezterm)", group = "launcher"}),
     awful.key({ modkey }, "r", function () awful.screen.focused().mypromptbox:run() end,
               {description = "run prompt", group = "launcher"}),
     awful.key({ modkey }, "p", function() menubar.show() end,

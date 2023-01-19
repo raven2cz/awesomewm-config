@@ -25,18 +25,14 @@ local wibox = require("wibox")
 local lain = require("lain")
 -- Fishlive Utilities
 local fishlive = require("fishlive")
+local config = require("config")
 local colorscheme = require("fishlive.colorscheme")
 local collage = require("fishlive.collage")
-local fwidget = require("fishlive.widget")
 local fhelpers = require("fishlive.helpers")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require('menubar')
-local xdg_menu = require("archmenu")
 local hotkeys_popup = require("awful.hotkeys_popup")
-
--- Use Polybar instead of classic Awesome Bar
-local usePolybar = false
 
 -- Screen Resolution (fullhd=1920x1080+0+0, 4K=3840x2160+0+0, 2K=2048x1080+0+0)
 local scr_res = fishlive.util.screen_resolution()
@@ -580,10 +576,11 @@ screen.connect_signal("request::desktop_decoration", function(s)
   -- MAIN PANEL CONFIGURATION
   -------------------------------
   -- Create the wibox
-  if usePolybar then
+  if config.main_panel == 'polybar' then
     -- Polybar support
     awful.util.spawn(os.getenv("HOME") .. "/.config/polybar/launch.sh")
     s.mywibox = awful.wibar({ position = "top", height = 35, screen = s })
+  elseif config.main_panel == 'none' then --nothing to do
   else
     -- Add widgets to the wibox
     --awful.util.spawn("killall -q polybar")

@@ -29,8 +29,13 @@ It is primarily targeted at power users, developers and any people dealing with 
 * AwesomeWM Trailer
 [[https://youtu.be/4KKdbwZ8GQ4][images/awesome-trailer.jpg]]
 
+* Dashboard Component Trailer
+[[https://youtu.be/9BOGT9Ufbe0][images/awesomewm-dashboard.jpg]]
+
 * TABLE OF CONTENTS :toc:
-- [[#fishlives-awesomewm-config][Fishlive's AwesomeWM Config]]
+- [[#raven2czs-awesomewm-config][Raven2cz's AwesomeWM Config]]
+- [[#awesomewm-trailer][AwesomeWM Trailer]]
+- [[#dashboard-component-trailer][Dashboard Component Trailer]]
 - [[#awesomewm-themes-configuration][AwesomeWM Themes Configuration]]
   - [[#multicolor-theme][Multicolor Theme]]
   - [[#80s-onedark-theme][80s OneDark Theme]]
@@ -38,6 +43,9 @@ It is primarily targeted at power users, developers and any people dealing with 
 - [[#guide-and-installation][Guide and Installation]]
 - [[#dependencies][Dependencies]]
 - [[#features][Features]]
+- [[#dashboard-component][Dashboard Component]]
+  - [[#dashboard-dependencies][Dashboard dependencies]]
+- [[#keybindings-overview][Keybindings Overview]]
 - [[#multicolor-theme-screenshot][Multicolor Theme Screenshot]]
 - [[#80s-onedark-theme-screenshots][80s OneDark Theme Screenshots]]
 - [[#amazing-theme-screenshots][Amazing Theme Screenshots]]
@@ -110,6 +118,29 @@ git subtree pull --prefix sharedtags git@github.com:Drauthius/awesome-sharedtags
 + rofi-themes - support dynamic change for all implemented color schemes (see link rofi-themes in dependencies chapter)
 + bling - supports for tab views similar as i3 tabbing support
 + *image collage feature* - integrate image collage to each tag as part of wallpaper with dynamic toggling images
++ *dashboard component* - complete ontop dashboard with many wiboxes: disks, news, terminal, player, controls, calendar, taskslist, etc.
+
+* Dashboard Component
+A dashboard component for AwesomeWM is a collection of wiboxes, which are panels that can be used to display various information and controls. These wiboxes are include:
+
+- A time wibox, which could display the current time in a digital format. This wibox could also include a clock widget, which could be configured to display the time in various formats, switching between minutes and second processing.
+- A calendar wibox, which could display a calendar for the current month. This wibox could also include a widget that allows users to navigate to different months and view their schedules (opened topic).
+- A controls wibox, which could include buttons or widgets for controlling various aspects of the system, such as volume, brightness, and power.
+- A player wibox, which could display the currently playing song and provide controls for playing, pausing, and skipping songs.
+- A tasklist wibox, which could display a list of currently running applications and allow users to switch between them, add favourites applications and icons.
+- A terminal wibox, which could include a terminal emulator that allows users to interact with the command line and chat-gpt.
+- A news wibox, to show actual news. Actual implementation shows just fortune news.
+- A collage wibox, beautiful preview of images in defined folder, theme folder, selected folder.
+- Right panel wibox for exit control commands.
+- And many others.
+
+Each of these wiboxes could be customized with different colors, fonts, and layouts, fully supports *Multicolor Theme Changes*, to create a cohesive and visually pleasing dashboard. Additionally, the dashboard component could also include the ability to toggle the visibility of the some wiboxes. Support for HiDPI resolutions.
+
+** Dashboard dependencies
+In default, the dashboard is activated, shortcut ~mod+z~, exit ~Esc~, or click to ~HOST/PC panel~ right-bottom corner. All user system configuration is included in a central file ~config.lua~. Feature activity is a parameter ~config.dashboard_enabled~.
+#+BEGIN_SRC bash
+paru -S acpi brightnessctl playerctl
+#+END_SRC
 
 * Keybindings Overview
 [[images/keybinding1.png]]
