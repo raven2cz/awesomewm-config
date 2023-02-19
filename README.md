@@ -140,6 +140,7 @@ Notes
 2. Because of constraints in the X server, *awesome* does not allow
    toggling clients on tags allocated to other screens. Having a client on
    multiple tags and moving one of the tags will cause the client to move as well.
+3. When selecting a tag on a different screen with `sharedtags.viewonly`, the tag is pulled to the current screen. To instead move focus to the other screen and view the tag there, use `sharedtags.jumpto(tag)`. This can be used with a seperate bind that calls `sharedtags.movetag(tag, screen)` to directly move a tag to another screen.
 
 API
 ---
