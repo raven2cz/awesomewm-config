@@ -15,7 +15,6 @@ local awful      = require("awful")
 local gears      = require("gears")
 local beautiful  = require("beautiful")
 local xresources = require("beautiful.xresources")
-local dpi        = xresources.apply_dpi
 local wibox      = require("wibox")
 local naughty    = require("naughty")
 
@@ -576,6 +575,13 @@ function helpers.spawn(command, class, tag, test)
     end
     client.connect_signal("manage", callback)
     awful.util.spawn_with_shell(command)
+end
+
+--- String operations
+
+-- trim all left right whitespaces from given string
+function helpers.all_trim(s)
+    return s:match"^%s*(.*)":match"(.-)%s*$"
 end
 
 -- }}}

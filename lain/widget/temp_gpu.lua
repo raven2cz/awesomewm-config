@@ -7,7 +7,7 @@
 
 local helpers  = require("lain.helpers")
 local wibox    = require("wibox")
-local tonumber = tonumber
+local helpers  = require("fishlive.helpers")
 
 -- {gputemp} temperature info
 -- lain.widget.temp_gpu
@@ -20,7 +20,7 @@ local function factory(args)
 
     function temp.update()
         helpers.async({"/home/box/bin/gputemp"}, function(f)
-            coretemp_now = f or "N/A"
+            coretemp_now = helpers.all_trim(f) or "N/A"
             widget = temp.widget
             settings()
         end)

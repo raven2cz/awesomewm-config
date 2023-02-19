@@ -12,8 +12,21 @@ local function dashboard()
     local sig_brightness = require("fishlive.signal.brightness")
     local sig_battery = require("fishlive.signal.battery")
     local sig_playerctl = require("fishlive.signal.playerctl")
+    local sig_storage = require("fishlive.signal.storage")
     local sig_news = require("fishlive.signal.news")
+    local sig_cputemp = require("fishlive.signal.cputemp")
     local sig_terminal = require("fishlive.signal.terminal")
+    -- append timer instance of signal to this table
+    local sigs = {
+        sig_volume,
+        sig_brightness,
+        sig_battery,
+        sig_playerctl,
+        sig_storage,
+        sig_news,
+        sig_cputemp,
+        sig_terminal.t
+     }
 
     -- dashboard widgets
     local leftdock = require("fishlive.widget.dashboard.docks.left")
@@ -22,6 +35,8 @@ local function dashboard()
     local calendar = require("fishlive.widget.dashboard.calendar")
     local time = require("fishlive.widget.dashboard.time")
     local storage = require("fishlive.widget.dashboard.storage")
+    local cpu = require("fishlive.widget.dashboard.cpu")
+    local mem_net = require("fishlive.widget.dashboard.mem_net")
     local volume = require("fishlive.widget.dashboard.volume")
     local brightness = require("fishlive.widget.dashboard.brightness")
     local battery = require("fishlive.widget.dashboard.battery")
@@ -67,26 +82,18 @@ local function dashboard()
     keygrabber = getKeygrabber()
 
     dashboard.signals_on = function()
-        sig_volume:start()
-        sig_brightness:start()
-        sig_battery:start()
-        sig_playerctl:start()
-        sig_news:start()
-        sig_terminal.t:start()
-
+        for _,v in pairs(sigs) do
+            v:start()
+        end
         calendar.reset()
         collage.show()
         keygrabber:start()
     end
 
     dashboard.signals_off = function()
-        sig_volume:stop()
-        sig_brightness:stop()
-        sig_battery:stop()
-        sig_playerctl:stop()
-        sig_news:stop()
-        sig_terminal.t:stop()
-
+        for _,v in pairs(sigs) do
+            v:stop()
+        end
         calendar.reset()
         collage.hide()
         keygrabber:stop()
@@ -102,6 +109,7 @@ local function dashboard()
         if dashboard.visible then
             keygrabber = getKeygrabber()
             dashboard.signals_on()
+            awesome.emit_signal("dashboard::open")
         else
             dashboard.signals_off()
         end
@@ -128,6 +136,8 @@ local function dashboard()
                             layout = wibox.layout.fixed.vertical
                         },
                         {
+                            nil,
+                            {
                             drawBox({
                                 volume(sig_volume),
                                 brightness(sig_brightness),
@@ -137,6 +147,14 @@ local function dashboard()
                             }, dpi(200), dpi(114)),
                             drawBox(storage(config.dashboard_monitor_storage), dpi(200), dpi(114)),
                             layout = wibox.layout.fixed.vertical
+                            },
+                            {
+                               drawBox(cpu(), dpi(200), dpi(114)),
+                               drawBox(mem_net(), dpi(200), dpi(114)),
+                               nil,
+                               layout = wibox.layout.fixed.vertical
+                            },
+                            layout = wibox.layout.fixed.horizontal
                         },
                         {
                             drawBox(time, dpi(260), dpi(48)),

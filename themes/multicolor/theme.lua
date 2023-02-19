@@ -29,6 +29,7 @@ local config = require("config")
 local colorscheme = require("fishlive.colorscheme")
 local collage = require("fishlive.collage")
 local fhelpers = require("fishlive.helpers")
+local broker = require("fishlive.signal.broker")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require('menubar')
@@ -249,6 +250,9 @@ memicon:set_markup(markup.fontfg(theme.font_larger, wboxColor, ""))
 local mem = lain.widget.mem({
   settings = function()
     widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, " " .. mem_now.used .. " MB "))
+    broker.emit_signal("broker::mem", {
+      value = mem_now
+    })
   end
 })
 local memWibox = wiboxBox1(memicon, mem.widget, wboxColor, theme.widgetbar_fg, 2, 3, underLineSize, wiboxMargin)
@@ -260,6 +264,9 @@ cpuicon:set_markup(markup.fontfg(theme.font_larger, wboxColor, ""))
 local cpu = lain.widget.cpu({
   settings = function()
     widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, " " .. cpu_now.usage .. " % "))
+    broker.emit_signal("broker::cpu", {
+      value = cpu_now
+    })
   end
 })
 local cpuWibox = wiboxBox1(cpuicon, cpu.widget, wboxColor, theme.widgetbar_fg, 3, 4, underLineSize, wiboxMargin)
@@ -270,12 +277,18 @@ local tempicon = wibox.widget.textbox();
 tempicon:set_markup(markup.fontfg(theme.font_larger, wboxColor, ""))
 local tempcpu = lain.widget.temp_ryzen({
   settings = function()
-    widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, " cpu " .. coretemp_now .. "°C "))
+    widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, " cpu " .. tostring(coretemp_now) .. "˚C"))
+    broker.emit_signal("broker::cputemp", {
+      value = coretemp_now
+    })
   end
 })
 local tempgpu = lain.widget.temp_gpu({
   settings = function()
-    widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, " gpu " .. coretemp_now .. "°C "))
+    widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, " gpu " .. tostring(coretemp_now) .. "˚C"))
+    broker.emit_signal("broker::gputemp", {
+      value = coretemp_now
+    })
   end
 })
 local tempWibox = wiboxBox2(tempicon, tempcpu.widget, tempgpu.widget, wboxColor, theme.widgetbar_fg, 4, 4, underLineSize, wiboxMargin)
@@ -321,6 +334,9 @@ neticon:set_markup(markup.fontfg(theme.font_larger, wboxColor, ""))
 local net = lain.widget.net({
   settings = function()
     widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, string.format("%#7.1f", net_now.sent) .. " ﰵ " .. string.format("%#7.1f", net_now.received) .. " ﰬ "))
+    broker.emit_signal("broker::net", {
+      value = net_now
+    })
   end
 })
 local netWibox = wiboxBox1(neticon, net.widget, wboxColor, theme.widgetbar_fg, 3, 3, underLineSize, wiboxMargin)

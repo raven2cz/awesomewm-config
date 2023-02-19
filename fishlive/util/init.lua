@@ -10,7 +10,6 @@
 --]]
 
 local io = io
-local awful = require("awful")
 
 -- fishlive utilities submodule
 -- fishlive.util

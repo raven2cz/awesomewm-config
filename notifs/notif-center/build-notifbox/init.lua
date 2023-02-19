@@ -12,7 +12,7 @@ local notifbox_layout = wibox.widget {
     layout = require("fishlive.widget.overflow").vertical,
     scrollbar_width = 2,
     spacing = 7,
-    scroll_speed = 10
+    scroll_speed = 15
 }
 
 notifbox_layout.forced_width = width

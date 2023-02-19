@@ -49,7 +49,7 @@ local config = {
   user = user,
   terminal_cmds = terminal_cmds,
   weather_coordinates = { 49.261749, 13.903450 },
-  dashboard_monitor_storage = {"/", "/home", "/efi" },
+  dashboard_monitor_storage = {"/", "/home", "/efi", "/tmp" },
   main_panel = 'wibar', -- variants: wibar, polybar, none
   --{{{ Features Activity
   dashboard_enabled = true,
