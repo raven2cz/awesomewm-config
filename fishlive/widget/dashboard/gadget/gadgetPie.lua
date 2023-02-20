@@ -1,8 +1,14 @@
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local dpi = require("beautiful.xresources").apply_dpi
+local helpers = require("fishlive.helpers")
 
 local function createGadgetPie(title, value, detailText, maxValue)
+    -- solve type conversion problems
+    if type(value) == "string" then
+      value = helpers.all_trim(value)
+    end
+    value = tonumber(value) or 0
     local max_value = maxValue or 100
     local percent = math.floor(value / max_value * 100)
     return wibox.widget{
