@@ -17,6 +17,7 @@ local beautiful  = require("beautiful")
 local xresources = require("beautiful.xresources")
 local wibox      = require("wibox")
 local naughty    = require("naughty")
+local gtable     = require("gears.table")
 
 local debug      = require("debug")
 local io         = { lines = io.lines, open  = io.open }
@@ -584,6 +585,126 @@ function helpers.all_trim(s)
     return s:match"^%s*(.*)":match"(.-)%s*$"
 end
 
+function helpers.trim(s)
+    return s and s:gsub("^%s*(.-)%s*$", "%1") or nil
+end
+
+function helpers.trim_start(s)
+    return s and s:gsub("^%s*(.-)", "%1") or nil
+end
+
+function helpers.trim_end(s)
+    return s and s:gsub("(.-)%s*$", "%1") or nil
+end
+
 -- }}}
+
+local function find_geometry_core(widget, drawable, hierarchy)
+    local hierarchy_widget = hierarchy:get_widget()
+    if hierarchy_widget == widget then
+        local width, height = hierarchy:get_size()
+        local matrix = hierarchy:get_matrix_to_device()
+        local x, y, w, h = matrix:transform_rectangle(0, 0, width, height)
+        return {
+            drawable = drawable,
+            hierarchy = hierarchy,
+            widget = hierarchy_widget,
+            widget_width = width,
+            widget_height = height,
+            x = x,
+            y = y,
+            width = w,
+            height = h,
+        }
+    end
+
+    for _, child in ipairs(hierarchy:get_children()) do
+        local geometry = find_geometry_core(widget, drawable, child)
+        if geometry then
+            return geometry
+        end
+    end
+end
+
+function helpers.find_geometry(widget, wibox)
+    local drawable = wibox and wibox._drawable
+    local hierarchy = drawable and drawable._widget_hierarchy
+    if not hierarchy then
+        return
+    end
+    return find_geometry_core(widget, drawable, hierarchy)
+end
+
+local function is_under_pointer_core(widget, x, y, hierarchy)
+    local matrix = hierarchy:get_matrix_from_device()
+    local x1, y1 = matrix:transform_point(x, y)
+    local x2, y2, w2, h2 = hierarchy:get_draw_extents()
+    if x1 < x2 or x1 >= x2 + w2 then
+        return
+    end
+    if y1 < y2 or y1 >= y2 + h2 then
+        return
+    end
+
+    if widget == hierarchy:get_widget() then
+        local width, height = hierarchy:get_size()
+        return x1 >= 0 and y1 >= 0 and x1 <= width and y1 <= height
+    end
+
+    for _, child in ipairs(hierarchy:get_children()) do
+        local result = is_under_pointer_core(widget, x, y, child)
+        if result ~= nil then
+            return result
+        end
+    end
+end
+
+function helpers.is_under_pointer(widget)
+    local wibox = mouse.current_wibox
+    if not wibox then
+        return
+    end
+
+    local drawable = wibox._drawable
+    local hierarchy = drawable and drawable._widget_hierarchy
+    if not hierarchy then
+        return
+    end
+
+    local coords = mouse:coords()
+    local geometry = wibox:geometry()
+    local border_width = wibox.border_width
+    local x = coords.x - geometry.x - border_width
+    local y = coords.y - geometry.y - border_width
+    return is_under_pointer_core(widget, x, y, hierarchy)
+end
+
+function helpers.crush_clone(source, crush)
+    if not source then
+        return crush or {}
+    end
+    if not crush then
+        return gtable.clone(source, true)
+    end
+
+    local clone = {}
+    local source_keys = {}
+    for k in pairs(source) do
+        source_keys[k] = true
+    end
+    for k, v in pairs(crush) do
+        source_keys[k] = nil
+        clone[k] = v
+    end
+    for k in pairs(source_keys) do
+        local value = source[k]
+        if type(value) == "table" then
+            clone[k] = gtable.clone(value, true)
+        else
+            clone[k] = value
+        end
+    end
+    return clone
+end
 
 return helpers

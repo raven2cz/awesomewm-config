@@ -95,10 +95,19 @@ function widget.click_to_hide(widget, hide_fct, only_outside)
         if only_outside and object == widget then
             return
         end
-        widget.visible = false
+        if widget.get_active_menu then
+          if only_outside and object == widget:get_active_menu() then
+            return
+          end
+        end
+        if widget.hide then
+          widget:hide()
+        else
+          widget.visible = false
+        end
     end
 
-    local click_bind = awful.button({ }, 1, hide_fct)
+    local click_bind = awful.button({}, 1, hide_fct)
 
     -- when the widget is visible, we hide it on button press
     widget:connect_signal('property::visible', function(w)
@@ -112,12 +121,6 @@ function widget.click_to_hide(widget, hide_fct, only_outside)
                 wibox.connect_signal("button::press", hide_fct)
             end
     end)
-
-	only_outside = only_outside or false
-
-	hide_fct = hide_fct or function()
-		widget.visible = false
-	end
 end
 
 function widget.click_to_hide_menu(menu, hide_fct, outside_only)

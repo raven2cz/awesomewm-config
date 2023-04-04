@@ -59,11 +59,6 @@ naughty.connect_signal("request::display_error", function(message, startup)
 end)
 -- }}}
 
--- MainMenu XMENU
-local function xmenu()
-    awful.spawn.with_shell(os.getenv("HOME") .. "/.config/xmenu/xmenu.sh")
-end
-
 -- This is used later as the default terminal and editor to run.
 terminal = config.user.terminal --"kitty" --"urxvt"
 terminal2 = config.user.terminal2nd
@@ -137,6 +132,9 @@ beautiful.init(gears.filesystem.get_configuration_dir().."/themes/"..themeName..
 bling = require("bling")
 awful.layout.append_default_layout(bling.layout.mstab)
 
+-- MainMenu
+local main_menu = require("fishlive.widget.mebox.menu.main")
+
 -- Nice titlebars
 fishlive.plugins.createTitlebarsNiceLib()
 
@@ -151,7 +149,7 @@ popup = require("notifs.notif-center.notif_popup")
 
 -- {{{ Mouse bindings
 awful.mouse.append_global_mousebindings({
-    awful.button({}, 3, function() xmenu() end),
+    awful.button({}, 3, function() main_menu:toggle(nil, { source = "mouse" }) end),
     awful.button({}, 4, awful.tag.viewprev),
     awful.button({}, 5, awful.tag.viewnext),
     awful.button({ modkey, altkey }, 4, function ()
@@ -360,7 +358,7 @@ awful.keyboard.append_global_keybindings({
 awful.keyboard.append_global_keybindings({
     awful.key({ modkey, ctrlkey }, "s", hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
-    awful.key({ modkey }, "w", function () xmenu() end,
+    awful.key({ modkey }, "w", function () main_menu:toggle(nil, { source = "mouse" }) end,
               {description = "show main menu", group = "awesome"}),
     awful.key({ modkey }, "q", function () fishlive.widget.exit_screen() end,
               {description = "exit screen", group = "awesome"}),
