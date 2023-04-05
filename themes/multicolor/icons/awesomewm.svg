@@ -1,0 +1,18 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M 8 8 
+    h 48
+    v 48 
+    h -13 
+    v -19 
+    h -19 
+    v 6 
+    h 13 
+    v 13 
+    h -29 
+    v -29 
+    h 35 
+    v -6 
+    h -35 
+    v -13
+    z" />
+</svg>

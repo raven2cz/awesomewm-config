@@ -7,6 +7,8 @@ local apps = {
     browser = "firefox-developer-edition",
     fileexplorer = "dolphin",
     musicplayer = "pragha",
+    editor = "code",
+    ide = "gtk-launch jetbrains-idea-docker.desktop",
     settings = "code /home/box/.config/awesome/"
 }
 

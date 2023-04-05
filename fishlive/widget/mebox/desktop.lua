@@ -180,6 +180,7 @@ function desktop_utils.get_icon_lookup_paths_uncached()
         table.unpack(glib.get_system_data_dirs()), -- $XDG_DATA_DIRS, typically /usr/{,local/}share
     }, "icons")
     add_with_dir(paths, glib.get_system_data_dirs(), "pixmaps")
+    add_with_dir(paths, glib.get_home_dir(), ".cache/xdg-xmenu/icons")
 
     local icon_theme_paths = {}
     for _, theme_dir in ipairs(theme_priority) do

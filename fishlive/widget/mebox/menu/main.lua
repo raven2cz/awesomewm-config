@@ -16,9 +16,15 @@ local menu_items = {}
 
 table.insert(menu_items, mebox.header("Scripts"))
 table.insert(menu_items, {
-    text = "Update Notes",
-    icon = beautiful.dir .. "/icons/console-line.svg",
+    text = "Dashboard",
+    icon = beautiful.dir .. "/icons/dashboard.svg",
     icon_color = beautiful.base08,
+    callback = function() awesome.emit_signal("dashboard::toggle") end,
+})
+table.insert(menu_items, {
+    text = "Update Notes",
+    icon = beautiful.dir .. "/icons/file-document-edit.svg",
+    icon_color = beautiful.base07,
     callback = function() awful.spawn("notes_sync_notif") end,
 })
 table.insert(menu_items, mebox.separator)
@@ -30,22 +36,28 @@ table.insert(menu_items, {
     callback = function() awful.spawn(config.user.terminal) end,
 })
 table.insert(menu_items, {
+    text = "web browser",
+    icon = beautiful.dir .. "/icons/firefox.svg",
+    icon_color = beautiful.base0B,
+    callback = function() awful.spawn(config.apps.browser) end,
+})
+table.insert(menu_items, {
     text = "file manager",
     icon = beautiful.dir .. "/icons/folder.svg",
     icon_color = beautiful.base09,
     callback = function() awful.spawn(config.apps.fileexplorer) end,
 })
--- table.insert(menu_items, {
---     text = "text editor",
---     icon = beautiful.dir .. "/icons/file-document-edit.svg",
---     icon_color = beautiful.palette.white,
---     callback = function() awful.spawn(config.apps.editor) end,
--- })
 table.insert(menu_items, {
-    text = "web browser",
-    icon = beautiful.dir .. "/icons/web.svg",
-    icon_color = beautiful.base0B,
-    callback = function() awful.spawn(config.apps.browser) end,
+    text = "editor",
+    icon = beautiful.dir .. "/icons/visual-studio-code.svg",
+    icon_color = beautiful.base07,
+    callback = function() awful.spawn(config.apps.editor) end,
+})
+table.insert(menu_items, {
+    text = "ide",
+    icon = beautiful.dir .. "/icons/intellij.svg",
+    icon_color = beautiful.base0D,
+    callback = function() awful.spawn(config.apps.ide) end,
 })
 table.insert(menu_items, mebox.separator)
 table.insert(menu_items, {
@@ -69,6 +81,13 @@ table.insert(menu_items, {
     icon_color = beautiful.base0A,
     callback = function() awful.spawn("reboot") end,
 })
+table.insert(menu_items, {
+    text = "Lock",
+    icon = beautiful.dir .. "/icons/lock.svg",
+    icon_color = beautiful.base0B,
+    callback = function() awful.spawn("lock.sh") end,
+})
+
 
 main_menu = mebox {
     click_to_hide = true,

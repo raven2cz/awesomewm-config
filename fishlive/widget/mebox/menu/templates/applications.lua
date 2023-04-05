@@ -1,3 +1,12 @@
+--[[
+    David Kosorin (kosorin) - https://github.com/kosorin
+    kosorin/awesome-rice is licensed under the
+    GNU General Public License v3.0
+    https://github.com/kosorin/awesome-rice/blob/main/LICENSE
+    (Yet another) Config for Awesome window manager.
+    Complete code date: 
+    03/15/2023
+]]
 local capi = {
     awesome = awesome,
 }
@@ -74,7 +83,7 @@ local application_menu_categories = {
     settings = {
         id = "Settings",
         name = "settings",
-        icon_name = "applications-utilities",
+        icon_name = "applications-system",
         icon_color = beautiful.base18,
     },
     tools = {
