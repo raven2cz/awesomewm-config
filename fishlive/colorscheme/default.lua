@@ -20,7 +20,7 @@ theme.baseColors = {
   theme.base18,
   theme.base1A,
 }
-fishlive.util.shuffle(theme.baseColors)
+fishlive.helpers.shuffle(theme.baseColors)
 -- }}}
 
 -- {{{ Styles

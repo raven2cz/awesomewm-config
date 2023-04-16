@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------
 -- @author Antonio Terceiro
--- @copyright 2009, 2011-2012, 2023 Antonio Terceiro, Alexander Yakushev, SkyyySi, me ;)
+-- @copyright 2009, 2011-2012, 2023 Antonio Terceiro, Alexander Yakushev, SkyyySi, David Kosorin ;)
 ---------------------------------------------------------------------------
 
 local capi = {

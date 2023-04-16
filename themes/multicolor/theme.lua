@@ -36,7 +36,7 @@ local menubar = require('menubar')
 local hotkeys_popup = require("awful.hotkeys_popup")
 
 -- Screen Resolution (fullhd=1920x1080+0+0, 4K=3840x2160+0+0, 2K=2048x1080+0+0)
-local scr_res = fishlive.util.screen_resolution()
+local scr_res = fhelpers.screen_resolution()
 local isFullhd = scr_res == "1920x1080+0+0"
 
 -- {{{ Main
@@ -160,7 +160,7 @@ local wppath_user = os.getenv("HOME").."/Pictures/wallpapers/user-wallpapers/"
 local wppath_colorscheme = os.getenv("HOME").."/Pictures/wallpapers/public-wallpapers/colorscheme/"..theme.scheme_id.."/"
 local notifpath = os.getenv("HOME").."/Pictures/wallpapers/public-wallpapers/portrait/"
 local notifpath_user = notifpath..theme.scheme_id.."/"
-if not fishlive.util.is_dir(notifpath_user) then notifpath_user = notifpath.."default/" end
+if not fhelpers.is_dir(notifpath_user) then notifpath_user = notifpath.."default/" end
 local notif_user = {}
 -- Set wallpaper for each tag
 local wp_selected = {
@@ -405,7 +405,7 @@ theme.menu_portrait_create = function()
 end
 
 -- Main Launcher Menus --
-local menuTheme = fishlive.util.copyTable(theme)
+local menuTheme = fhelpers.copyTable(theme)
 menuTheme["font"] = theme.menu_font
 menuTheme["height"] = 22
 menuTheme["width"] = 350
@@ -749,7 +749,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
   -- WALLPAPER PER TAG and USER WALLS keybinding
   -----------------------------------------------
   -- Try to load notification icons
-  notif_user = fishlive.util.scandirArgs{dir=notifpath_user, fileExt="*.{png,jpg}"}
+  notif_user = fhelpers.scandirArgs{dir=notifpath_user, fileExt="*.{png,jpg}"}
 
   -- User Wallpaper Changer
   local wp_user_params = {
@@ -784,7 +784,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
     for i=1,#wps do
       imgsources[i] = wppath .. wps[i]
     end
-    fishlive.util.shuffle(imgsources)
+    fhelpers.shuffle(imgsources)
     collage.registerTagCollage({
       screen = screen,
       collage_template = collage_template,
@@ -795,7 +795,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
   -- Portraits Collage for Dev Tag
   local sel_portrait = fhelpers.first_line(os.getenv("HOME")..'/.portrait') or 'joy'
   local wppath_sel_portrait = notifpath .. sel_portrait .. "/"
-  local portraits = fishlive.util.getImgsFromDir(notifpath, sel_portrait)
+  local portraits = fhelpers.getImgsFromDir(notifpath, sel_portrait)
   if isFullhd then
     collageTag(wppath_sel_portrait, portraits, {4}, {
       { max_height = 450, posx = 10, posy = 40 },
@@ -821,7 +821,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
     { max_height = 400, posx = 1220, posy = 1370 },
   })
   -- Collage of user wallpapers
-  -- collageTag(wppath_user, fishlive.util.scandir(wppath_user), {3}, {
+  -- collageTag(wppath_user, fhelpers.scandir(wppath_user), {3}, {
   --   { max_width = 800, posx = 100, posy = 100 },
   --   { max_width = 1200, posx = 100, posy = 800 },
   --   { max_width = 800, posx = 3740, posy = 1700, align = "bottom-right" },

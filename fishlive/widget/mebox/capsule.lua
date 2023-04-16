@@ -12,7 +12,7 @@ local gtable = require("gears.table")
 local wibox = require("wibox")
 local base = require("wibox.widget.base")
 local noice = require("fishlive.widget.mebox.noice")
-local theme = require("fishlive.widget.mebox.mebox_theme")
+local theme = require("fishlive.widget.mebox.theme.capsule_theme")
 
 
 local module = { mt = {} }

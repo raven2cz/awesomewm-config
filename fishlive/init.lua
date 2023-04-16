@@ -11,8 +11,8 @@ Licensed under GNU General Public License v2
 --]]
 
 return {
+    helpers = require("fishlive.helpers"),
     layout = require("fishlive.layout"),
-    util = require("fishlive.util"),
     widget = require("fishlive.widget"),
     wallpaper = require("fishlive.wallpaper"),
     colorscheme = require("fishlive.colorscheme"),

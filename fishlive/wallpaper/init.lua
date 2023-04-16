@@ -9,7 +9,7 @@
 
 local awful = require("awful")
 local gears = require("gears")
-local util = require("fishlive.util")
+local helpers = require("fishlive.helpers")
 
 -- fishlive wallpaper submodule
 -- fishlive.wallpaper
@@ -19,7 +19,7 @@ local wallpaper = { _NAME = "fishlive.wallpaper" }
 function wallpaper.createUserWallpaper(t)
    local screen = t.screen
    local wppath_user = t.wppath_user
-   local wp_user = util.scandir(wppath_user)
+   local wp_user = helpers.scandir(wppath_user)
    local wp_user_idx = 0
    t.wp_user = wp_user
 

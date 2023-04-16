@@ -1,6 +1,6 @@
 local colorscheme = require "fishlive.colorscheme"
 
-menu = {}
+local menu = {}
 
 local function writeToFile(resource, content)
   local file = assert(io.open(resource, "w"))

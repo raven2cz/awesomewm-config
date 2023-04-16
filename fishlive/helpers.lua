@@ -6,7 +6,7 @@
      Licensed under GNU General Public License v2
       * (c) 2013, Luca CPZ
      Licensed under GNU General Public License v2
-      * (c) 2021, A.Fischer
+      * (c) 2023, A.Fischer
 --]]
 
 local spawn      = require("awful.spawn")
@@ -20,7 +20,8 @@ local naughty    = require("naughty")
 local gtable     = require("gears.table")
 
 local debug      = require("debug")
-local io         = { lines = io.lines, open  = io.open }
+local io         = io
+local io2        = { lines = io.lines, open = io.open }
 local pairs      = pairs
 local rawget     = rawget
 local table      = { sort  = table.sort, unpack = table.unpack }
@@ -28,7 +29,7 @@ local unpack     = table.unpack -- lua 5.1 retro-compatibility
 
 -- Fishlive helper functions for internal use
 -- fishlive.helpers
-local helpers = {}
+local helpers = { _NAME = "fishlive.helpers" }
 
 -- {{{ Modules loader
 
@@ -39,11 +40,100 @@ end
 
 -- }}}
 
+-- {{{ Directory operations
+
+-- return string content of the directory
+function helpers.scandir(directory)
+  local i, t, popen = 0, {}, io.popen
+  local pfile = popen('ls -a "'..directory..'"')
+  for filename in pfile:lines() do
+    i = i + 1
+    if i > 2 then t[i-2] = filename end
+  end
+  pfile:close()
+  return t
+end
+
+-- return string content of the directory with ls arguments and file extensions support
+function helpers.scandirArgs(lsargs)
+  local dir = lsargs.dir
+  local args = lsargs.args or ''
+  local fileExt = lsargs.fileExt or ''
+  local i, t, popen = 0, {}, io.popen
+  local pfile = popen('cd '..dir..'; ls '..args..' '..fileExt)
+  for filename in pfile:lines() do
+    i = i + 1
+    t[i] = filename
+  end
+  pfile:close()
+  return t
+end
+
+-- return extract path from the full filepath.
+-- This code will extract the path "path/to" from the filepath "path/to/myfile.txt"
+-- and store it in the variable "path". The "match" function uses
+-- a regular expression to match the pattern of the path,
+-- which in this case is any character (.) that appears one or more times (+) before
+-- the last forward slash (/) in the string, followed by any character
+-- that is not a forward slash ([^/]*) and a file extension (.%w+).
+-- The $ sign at the end of the pattern ensures that the match is at the end of the string.
+function helpers.getPathFrom(filepath)
+    return string.match(filepath, "(.+)/[^/]*%.%w+$")
+end
+
+-- check if folder exists --
+function helpers.is_dir(path)
+    local f = io.open(path, "r")
+    if f == nil then return false end
+    local ok, err, code = f:read(1)
+    f:close()
+    return code == 21
+end
+
+-- return images from the defined directoru
+function helpers.getImgsFromDir(dir, subdir)
+  local fulldir
+  if subdir then
+    fulldir = dir .. subdir .. "/"
+  else
+    fulldir = dir .. "/"
+  end
+  local imgNames = helpers.scandirArgs{dir=fulldir, fileExt='*.{png,jpg}'}
+  local imgsources = {}
+  for i=1,#imgNames do
+    imgsources[i] = fulldir .. imgNames[i]
+  end
+  return imgNames, imgsources
+end
+
+-- return copied table of the instance
+function helpers.copyTable(t)
+  local u = {}
+  for k, v in pairs(t) do u[k] = v end
+  return setmetatable(u, getmetatable(t))
+end
+
+function helpers.screen_resolution()
+  return io.popen("echo $(xwininfo -root | grep 'geometry' | awk '{print $2;}')"):read("*all"):gsub("%s+", "")
+end
+
+-- get max screen_resolution X coordination
+function helpers.screen_res_x()
+  return io.popen("echo $(xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1)"):read("*all"):gsub("%s+", "")
+end
+
+-- get max screen_resolution Y coordination
+function helpers.screen_res_y()
+  return io.popen("echo $(xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2)"):read("*all"):gsub("%s+", "")
+end
+
+-- }}}
+
 -- {{{ File operations
 
 -- check if the file exists and is readable
 function helpers.file_exists(path)
-    local file = io.open(path, "rb")
+    local file = io2.open(path, "rb")
     if file then file:close() end
     return file ~= nil
 end
@@ -51,7 +141,7 @@ end
 -- get a table with all lines from a file
 function helpers.lines_from(path)
     local lines = {}
-    for line in io.lines(path) do
+    for line in io2.lines(path) do
         lines[#lines + 1] = line
     end
     return lines
@@ -60,7 +150,7 @@ end
 -- get a table with all lines from a file matching regexp
 function helpers.lines_match(regexp, path)
     local lines = {}
-    for line in io.lines(path) do
+    for line in io2.lines(path) do
         if string.match(line, regexp) then
             lines[#lines + 1] = line
         end
@@ -70,7 +160,7 @@ end
 
 -- get first line of a file
 function helpers.first_line(path)
-    local file, first = io.open(path, "rb"), nil
+    local file, first = io2.open(path, "rb"), nil
     if file then
         first = file:read("*l")
         file:close()
@@ -80,7 +170,7 @@ end
 
 -- get first non empty line from a file
 function helpers.first_nonempty_line(path)
-    for line in io.lines(path) do
+    for line in io2.lines(path) do
         if #line then return line end
     end
     return nil
@@ -140,6 +230,27 @@ end
 
 -- }}}
 
+--{{{ String operations
+
+-- trim all left right whitespaces from given string
+function helpers.all_trim(s)
+    return s:match"^%s*(.*)":match"(.-)%s*$"
+end
+
+function helpers.trim(s)
+    return s and s:gsub("^%s*(.-)%s*$", "%1") or nil
+end
+
+function helpers.trim_start(s)
+    return s and s:gsub("^%s*(.-)", "%1") or nil
+end
+
+function helpers.trim_end(s)
+    return s and s:gsub("(.-)%s*$", "%1") or nil
+end
+
+--}}}
+
 -- {{{ A map utility
 
 helpers.map_table = {}
@@ -152,9 +263,46 @@ function helpers.get_map(element)
     return helpers.map_table[element]
 end
 
+function helpers.crush_clone(source, crush)
+    if not source then
+        return crush or {}
+    end
+    if not crush then
+        return gtable.clone(source, true)
+    end
+
+    local clone = {}
+    local source_keys = {}
+    for k in pairs(source) do
+        source_keys[k] = true
+    end
+    for k, v in pairs(crush) do
+        source_keys[k] = nil
+        clone[k] = v
+    end
+    for k in pairs(source_keys) do
+        local value = source[k]
+        if type(value) == "table" then
+            clone[k] = gtable.clone(value, true)
+        else
+            clone[k] = value
+        end
+    end
+    return clone
+end
+
 -- }}}
 
 -- {{{ Misc
+
+-- Fisher-Yates shuffle of given table
+function helpers.shuffle(tbl)
+    for i = #tbl, 2, -1 do
+      local j = math.random(i)
+      tbl[i], tbl[j] = tbl[j], tbl[i]
+    end
+    return tbl
+end
 
 -- check if an element exist on a table
 function helpers.element_in_table(element, tbl)
@@ -578,27 +726,6 @@ function helpers.spawn(command, class, tag, test)
     awful.util.spawn_with_shell(command)
 end
 
---- String operations
-
--- trim all left right whitespaces from given string
-function helpers.all_trim(s)
-    return s:match"^%s*(.*)":match"(.-)%s*$"
-end
-
-function helpers.trim(s)
-    return s and s:gsub("^%s*(.-)%s*$", "%1") or nil
-end
-
-function helpers.trim_start(s)
-    return s and s:gsub("^%s*(.-)", "%1") or nil
-end
-
-function helpers.trim_end(s)
-    return s and s:gsub("(.-)%s*$", "%1") or nil
-end
-
--- }}}
-
 local function find_geometry_core(widget, drawable, hierarchy)
     local hierarchy_widget = hierarchy:get_widget()
     if hierarchy_widget == widget then
@@ -677,34 +804,6 @@ function helpers.is_under_pointer(widget)
     local x = coords.x - geometry.x - border_width
     local y = coords.y - geometry.y - border_width
     return is_under_pointer_core(widget, x, y, hierarchy)
-end
-
-function helpers.crush_clone(source, crush)
-    if not source then
-        return crush or {}
-    end
-    if not crush then
-        return gtable.clone(source, true)
-    end
-
-    local clone = {}
-    local source_keys = {}
-    for k in pairs(source) do
-        source_keys[k] = true
-    end
-    for k, v in pairs(crush) do
-        source_keys[k] = nil
-        clone[k] = v
-    end
-    for k in pairs(source_keys) do
-        local value = source[k]
-        if type(value) == "table" then
-            clone[k] = gtable.clone(value, true)
-        else
-            clone[k] = value
-        end
-    end
-    return clone
 end
 
 return helpers

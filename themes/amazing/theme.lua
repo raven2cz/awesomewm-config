@@ -22,7 +22,6 @@ local lain = require("lain")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require('menubar')
-local xdg_menu = require("archmenu")
 
 -- Use Polybar instead of classic Awesome Bar
 local usePolybar = false

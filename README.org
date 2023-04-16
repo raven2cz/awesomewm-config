@@ -119,6 +119,7 @@ git subtree pull --prefix sharedtags git@github.com:Drauthius/awesome-sharedtags
 + bling - supports for tab views similar as i3 tabbing support
 + *image collage feature* - integrate image collage to each tag as part of wallpaper with dynamic toggling images
 + *dashboard component* - complete ontop dashboard with many wiboxes: disks, news, terminal, player, controls, calendar, taskslist, etc.
++ *mebox* - powerful menu component* - Kosorin creates very powerful menu framework. I temporary overtake his solution, waiting to his official library. Source: [[https://github.com/kosorin/awesome-rice][kosorin/awesome-rice]]
 
 * Dashboard Component
 A dashboard component for AwesomeWM is a collection of wiboxes, which are panels that can be used to display various information and controls. These wiboxes are include:

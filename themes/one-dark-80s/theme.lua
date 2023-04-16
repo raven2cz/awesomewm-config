@@ -24,7 +24,6 @@ local fishlive = require("fishlive")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require('menubar')
-local xdg_menu = require("archmenu")
 
 -- Use Polybar instead of classic Awesome Bar
 local usePolybar = false
@@ -83,7 +82,7 @@ theme.baseColors = {
   theme.base18,
   theme.base1A,
 }
-fishlive.util.shuffle(theme.baseColors)
+fishlive.helpers.shuffle(theme.baseColors)
 
 theme.fg_normal  = theme.base06
 theme.fg_focus   = theme.base1A
@@ -825,9 +824,9 @@ screen.connect_signal("request::desktop_decoration", function(s)
   gears.wallpaper.maximized(wppath .. wp, s, false)
 
   -- Try to load user wallpapers
-  wp_user = fishlive.util.scandir(wppath_user)
+  wp_user = fishlive.helpers.scandir(wppath_user)
   -- Try to load notification icons
-  notif_user = fishlive.util.scandir(notifpath_user)
+  notif_user = fishlive.helpers.scandir(notifpath_user)
 
   -- Change wallpaper per tag
   theme.change_wallpaper_per_tag()

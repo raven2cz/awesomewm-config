@@ -8,7 +8,7 @@ local signal = "signal::news"
 
 return function(sig_news)
 
-  local maxheight = (fishlive.util.screen_res_y() - 650) / 2
+  local maxheight = (fishlive.helpers.screen_res_y() - 650) / 2
 
   local news_textbox = wibox.widget({
     bg = beautiful.bg_normal,

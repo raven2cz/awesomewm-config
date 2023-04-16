@@ -11,7 +11,7 @@ local awful = require("awful")
 local gears = require("gears")
 local wibox = require("wibox")
 local surface = require("gears.surface")
-local util = require("fishlive.util")
+local helpers = require("fishlive.helpers")
 
 -- fishlive collage submodule
 -- fishlive.collage
@@ -130,9 +130,9 @@ function collage.placeCollageImage(reqimgwidth, reqimgheight, posx, posy, align,
         awful.spawn.with_shell('qimgv "'..imgsrcs[imgidx]..'"')
       elseif button == 2 then
         awesome.emit_signal("dashboard::close")
-        awful.spawn.with_line_callback("zenity --file-selection --directory --filename="..util.getPathFrom(imgsrcs[imgidx]), {
+        awful.spawn.with_line_callback("zenity --file-selection --directory --filename="..helpers.getPathFrom(imgsrcs[imgidx]), {
           stdout = function(dir)
-            _, imgsrcs = util.getImgsFromDir(dir)
+            _, imgsrcs = helpers.getImgsFromDir(dir)
             imgidx = 1
           end
         })

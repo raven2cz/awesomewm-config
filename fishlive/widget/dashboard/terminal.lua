@@ -17,8 +17,8 @@ local function parse_colors(output)
 end
 
 return function(sig_terminal)
-  local maxwidth = fishlive.util.screen_res_x() * 0.5
-  local maxheight = (fishlive.util.screen_res_y() - 650) / 2
+  local maxwidth = fishlive.helpers.screen_res_x() * 0.5
+  local maxheight = (fishlive.helpers.screen_res_y() - 650) / 2
 
   local terminal_textbox = wibox.widget {
     bg = beautiful.bg_normal,

@@ -631,7 +631,7 @@ client.connect_signal("request::default_keybindings", function()
        -- Store debug information
         awful.key({ modkey, "Shift" }, "d", function (c)
                 --naughty.notify {
-                --    text = fishlive.util.screen_res_y()
+                --    text = fishlive.helpers.screen_res_y()
                 --}
                 local val = awesome.systray()
                 local file = io.open(os.getenv("HOME") .. "/.config/awesome/debug.txt", "a")
@@ -874,9 +874,9 @@ end)
 
 -- Store notifications to the file
 naughty.connect_signal("added", function(n)
-    local file = io.open(os.getenv("HOME") .. "/.config/awesome/naughty_history", "a")
-    file:write(n.title .. ": " .. n.message .. "\n")
-    file:close()
+    -- local file = io.open(os.getenv("HOME") .. "/.config/awesome/naughty_history", "a")
+    -- file:write(n.title .. ": " .. n.id .. " " .. n.message .. "\n")
+    -- file:close()
 end)
 
 -- }}}

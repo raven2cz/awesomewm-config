@@ -9,8 +9,8 @@ return {
         if imgbox == nil then
             local notifpath = os.getenv("HOME").."/Pictures/wallpapers/public-wallpapers/portrait/"
             local sel_portrait = fhelpers.first_line(os.getenv("HOME")..'/.portrait') or 'joy'
-            local _, imgsources = fishlive.util.getImgsFromDir(notifpath, sel_portrait)
-            local xres = fishlive.util.screen_res_x()
+            local _, imgsources = fishlive.helpers.getImgsFromDir(notifpath, sel_portrait)
+            local xres = fishlive.helpers.screen_res_x()
 
             imgbox = collage.placeCollageImage(xres/5.48, xres/5.48,
               xres-(3840/xres)^2 * 20, xres/3840 * 60, "top-right", imgsources, 1, true)
