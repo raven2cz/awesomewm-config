@@ -67,6 +67,12 @@ table.insert(menu_items, {
     cache_submenu = false,
     submenu = menu_templates.applications.shared,
 })
+table.insert(menu_items, {
+    text = "config",
+    icon = beautiful.dir .. "/icons/apps.svg",
+    icon_color = beautiful.base0D,
+    submenu = menu_templates.config.shared,
+})
 table.insert(menu_items, mebox.separator)
 table.insert(menu_items, mebox.header("Power/Session"))
 table.insert(menu_items, {
