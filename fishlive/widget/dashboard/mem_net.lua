@@ -8,10 +8,10 @@ local function createMem(mem)
   return createGadgetPie("MEM %", mem.used, mem.used.."MB", mem.total)
 end
 local function createNetSent(net)
-  return createGadgetPie("NET ﰵ", string.format("%1.1f", net.sent), string.format("%1.1f", net.sent), 1000)
+  return createGadgetPie("NET 󰜷", string.format("%1.1f", net.sent), string.format("%1.1f", net.sent), 1000)
 end
 local function createNetReceived(net)
-  return createGadgetPie("NET ﰬ", string.format("%1.1f", net.received), string.format("%1.1f", net.received), 1000)
+  return createGadgetPie("NET 󰜮", string.format("%1.1f", net.received), string.format("%1.1f", net.received), 1000)
 end
 
 local brokerListrs = {}

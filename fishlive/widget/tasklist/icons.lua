@@ -13,7 +13,7 @@ return {
     },
     dolphin = {
         class = "dolphin",
-        icon = "",
+        icon = "󱢴",
         color = beautiful.base0D
     },
     spotify = {
@@ -38,7 +38,7 @@ return {
     },
     discord = {
         class = "discord",
-        icon = "ﭮ",
+        icon = "󰙯",
         color = beautiful.base09
     }
 }

@@ -333,7 +333,7 @@ local neticon = wibox.widget.textbox();
 neticon:set_markup(markup.fontfg(theme.font_larger, wboxColor, "󰈀"))
 local net = lain.widget.net({
   settings = function()
-    widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, string.format("%#7.1f", net_now.sent) .. " ﰵ " .. string.format("%#7.1f", net_now.received) .. " ﰬ "))
+    widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, string.format("%#7.1f", net_now.sent) .. " 󰜷 " .. string.format("%#7.1f", net_now.received) .. " 󰜮 "))
     broker.emit_signal("broker::net", {
       value = net_now
     })
