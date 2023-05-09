@@ -58,12 +58,12 @@ end
 
 -- {{{ Styles
 -- Global font
-theme.font             = "Iosevka Nerd Font 9"
-theme.font_larger      = "Iosevka Nerd Font 11"
-theme.font_notify      = "mononoki Nerd Font 11"
-theme.menu_font        = "mononoki Nerd Font 11"
-theme.tabbar_font      = "Iosevka Nerd Font 11"
-theme.icon_font        = "Iosevka Nerd Font "
+theme.font             = "Iosevka Nerd Font Propo 9"
+theme.font_larger      = "Iosevka Nerd Font Propo 11"
+theme.font_notify      = "mononoki Nerd Font Propo 11"
+theme.menu_font        = "mononoki Nerd Font Propo 11"
+theme.tabbar_font      = "Iosevka Nerd Font Propo 11"
+theme.icon_font        = "Iosevka Nerd Font Propo "
 theme.operator_font    = "OperatorMono Book "
 -- Dashboard font
 theme.font_board_reg   = "Roboto Regular "
@@ -212,7 +212,7 @@ local wiboxBox2 = fishlive.widget.wiboxBox2IconUnderline
 -- Archupdates count indicator
 local wboxColor = theme.baseColors[9]
 local archupdateText = wibox.widget.textbox();
-archupdateText:set_markup(markup.fontfg(theme.font_larger, wboxColor, ""))
+archupdateText:set_markup(markup.fontfg(theme.font_larger, wboxColor, "󰏗"))
 local arch_updates = wibox.widget {
   widget = wibox.widget.textbox,
   markup = "<span>...</span>",
@@ -260,7 +260,7 @@ local memWibox = wiboxBox1(memicon, mem.widget, wboxColor, theme.widgetbar_fg, 2
 -- CPU
 wboxColor = theme.baseColors[4]
 local cpuicon = wibox.widget.textbox();
-cpuicon:set_markup(markup.fontfg(theme.font_larger, wboxColor, ""))
+cpuicon:set_markup(markup.fontfg(theme.font_larger, wboxColor, ""))
 local cpu = lain.widget.cpu({
   settings = function()
     widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, " " .. cpu_now.usage .. " % "))
@@ -312,7 +312,7 @@ local volicon = wibox.widget.textbox();
 theme.volume = lain.widget.alsa({
   settings = function()
     if volume_now.status == "off" then
-      volicon:set_markup(markup.fontfg(theme.font_larger, alsaColor, "ﱝ"))
+      volicon:set_markup(markup.fontfg(theme.font_larger, alsaColor, ""))
     elseif tonumber(volume_now.level) == 0 then
       volicon:set_markup(markup.fontfg(theme.font_larger, alsaColor, ""))
     elseif tonumber(volume_now.level) <= 25 then
@@ -330,7 +330,7 @@ local alsaWibox = wiboxBox1(volicon, theme.volume.widget, alsaColor, theme.widge
 -- Net
 wboxColor = theme.baseColors[8]
 local neticon = wibox.widget.textbox();
-neticon:set_markup(markup.fontfg(theme.font_larger, wboxColor, ""))
+neticon:set_markup(markup.fontfg(theme.font_larger, wboxColor, "󰈀"))
 local net = lain.widget.net({
   settings = function()
     widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, string.format("%#7.1f", net_now.sent) .. " ﰵ " .. string.format("%#7.1f", net_now.received) .. " ﰬ "))
@@ -344,7 +344,7 @@ local netWibox = wiboxBox1(neticon, net.widget, wboxColor, theme.widgetbar_fg, 3
 -- Textclock widget
 wboxColor = theme.baseColors[9]
 local clockicon = wibox.widget.textbox();
-clockicon:set_markup(markup.fontfg(theme.font_larger, wboxColor, ""))
+clockicon:set_markup(markup.fontfg(theme.font_larger, wboxColor, "󱛡"))
 local mytextclock = wibox.widget.textclock(markup.fontfg(theme.font, theme.widgetbar_fg, " %a %d-%m-%Y") .. markup.fontfg(theme.font_larger, theme.clock_fg, " %H:%M:%S "), 1)
 local clockWibox = wiboxBox1(clockicon, mytextclock, wboxColor, theme.widgetbar_fg, 0, 0, underLineSize, wiboxMargin)
 
@@ -432,7 +432,7 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 screen.connect_signal("request::desktop_decoration", function(s)
   local tags = {
     icons = {
-      "", "", "", "", "懲", "摒", "", "", ""
+      "", "", "", "", "懲", "", "󰈸", "󰇧", ""
     },
     names = { "/main", "/w3", "/apps", "/dev", "/water", "/air", "/fire", "/earth", "/love" },
     layouts = {

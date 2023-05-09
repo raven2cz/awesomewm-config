@@ -158,7 +158,7 @@ local reboot    = big_button_widget("", "[R]eboot", exit_actions["reboot"])
 local hibernate = big_button_widget("", "[H]ibernate", exit_actions["hibernate"])
 local suspend   = big_button_widget("", "[S]uspend", exit_actions["suspend"])
 local refresh   = big_button_widget("", "Re[f]resh", exit_actions["refresh"])
-local exit      = big_button_widget("", "[E]xit",exit_actions["exit"])
+local exit      = big_button_widget("󰗼", "[E]xit",exit_actions["exit"])
 local lock      = big_button_widget("", "[L]ock", exit_actions["lock"])
 
 -- Item placement

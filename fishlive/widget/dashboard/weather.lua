@@ -17,24 +17,24 @@ local function get_icon(condition)
     local icon
 
     if (condition == "Thunderstorm") then
-        icon = "朗"
+        icon = ""
     elseif (condition == "Drizzle") then
-        icon = "殺"
+        icon = "󰖗"
     elseif (condition == "Rain") then
-        icon = "歹"
+        icon = ""
     elseif (condition == "Snow") then
-        icon = "流"
+        icon = "󰖘"
     elseif (condition == "Clear") then
         local time = os.date("*t")
         if time.hour > 6 and time.hour < 18 then
-            icon = "滛"
+            icon = "󰖙"
         else
-            icon = "望"
+            icon = "󰖔"
         end
     elseif (condition == "Clouds") then
-        icon = "摒"
+        icon = ""
     else
-        icon = "敖"
+        icon = "󰖑"
     end
 
     return icon

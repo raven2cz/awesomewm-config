@@ -14,7 +14,7 @@ return function(width, height)
     }
     
     local icon = wibox.widget {
-        markup = "<span foreground='"..beautiful.fg_focus.."'>漣</span>",
+        markup = "<span foreground='"..beautiful.fg_focus.."'></span>",
         font = beautiful.icon_font.."24",
         widget = wibox.widget.textbox
     }
