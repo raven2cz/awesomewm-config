@@ -95,6 +95,9 @@ theme.bar_height = dpi(22)
 -- }}}
 
 -- {{{ Icons
+-- Desktop Icons
+theme.icon_theme = "Adwaita"
+
 -- {{{ Taglist
 theme.taglist_squares_sel   = theme.dir .. "/taglist/squarefz.png"
 theme.taglist_squares_unsel = theme.dir .. "/taglist/squarez.png"
@@ -635,6 +638,14 @@ screen.connect_signal("request::desktop_decoration", function(s)
         s.mylayoutsmenu,
       },
     }
+  end
+
+  --------------------------
+  -- DESKTOP ICONS
+  --------------------------
+  -- Desktop 
+  if config.desktop_enabled then
+    require("fishlive.widget.desktop").add_icons({screen = s})
   end
 
   --------------------------

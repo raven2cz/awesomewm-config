@@ -55,6 +55,7 @@ local config = {
   main_panel = 'wibar', -- variants: wibar, polybar, none
   --{{{ Features Activity
   dashboard_enabled = true,
+  desktop_enabled = false,
   --}}}
 }
 
