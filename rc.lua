@@ -327,7 +327,7 @@ awful.keyboard.append_global_keybindings({
               {description="decrease gaps between windows", group="awesome"}),
 
     -- Widgets popups
-    awful.key({ altkey }, "h", function () if beautiful.fs then beautiful.fs.show(7) end end,
+    awful.key({ modkey }, "h", function () if beautiful.fs then beautiful.fs.show(7) end end,
               {description = "show filesystem", group = "widgets"}),
     -- ALSA volume control
     awful.key({ modkey, altkey }, "k", function ()
