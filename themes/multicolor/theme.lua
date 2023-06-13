@@ -161,8 +161,9 @@ theme.mstab_tabbar_position = "top"
 local wppath = os.getenv("HOME").."/Pictures/wallpapers/public-wallpapers/"
 local wppath_user = os.getenv("HOME").."/Pictures/wallpapers/user-wallpapers/"
 local wppath_colorscheme = os.getenv("HOME").."/Pictures/wallpapers/public-wallpapers/colorscheme/"..theme.scheme_id.."/"
+local sel_portrait = fhelpers.first_line(os.getenv("HOME")..'/.portrait') or 'joy'
 local notifpath = os.getenv("HOME").."/Pictures/wallpapers/public-wallpapers/portrait/"
-local notifpath_user = notifpath..theme.scheme_id.."/"
+local notifpath_user = notifpath..sel_portrait.."/"
 if not fhelpers.is_dir(notifpath_user) then notifpath_user = notifpath.."default/" end
 local notif_user = {}
 -- Set wallpaper for each tag
@@ -804,7 +805,6 @@ screen.connect_signal("request::desktop_decoration", function(s)
     })
   end
   -- Portraits Collage for Dev Tag
-  local sel_portrait = fhelpers.first_line(os.getenv("HOME")..'/.portrait') or 'joy'
   local wppath_sel_portrait = notifpath .. sel_portrait .. "/"
   local portraits = fhelpers.getImgsFromDir(notifpath, sel_portrait)
   if isFullhd then
