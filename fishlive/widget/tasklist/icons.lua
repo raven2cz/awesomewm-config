@@ -3,7 +3,7 @@ local beautiful = require("beautiful")
 return {
     firefox = {
         class = "firefoxdeveloperedition",
-        icon = "",
+        icon = "",
         color = beautiful.base0A,
     },
     wezterm = {
@@ -18,7 +18,7 @@ return {
     },
     spotify = {
         class = "spotify",
-        icon = "阮",
+        icon = "",
         color = beautiful.base0B
     },
     intellij = {
