@@ -653,7 +653,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
   -- NAUGHTY CONFIGURATION
   --------------------------
   naughty.config.defaults.ontop = true
-  naughty.config.defaults.icon_size = dpi(32)
+  naughty.config.defaults.icon_size = dpi(360)
   naughty.config.defaults.timeout = 10
   naughty.config.defaults.hover_timeout = 300
   naughty.config.defaults.title = 'System Notification Title'
