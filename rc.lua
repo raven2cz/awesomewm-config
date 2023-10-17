@@ -42,6 +42,7 @@ local cyclefocus = require("cyclefocus")
 local dpi = require("beautiful.xresources").apply_dpi
 
 local io = io
+local cairo = require("lgi").cairo
 
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
@@ -802,6 +803,22 @@ ruled.client.connect_signal("request::rules", function()
         properties = {
             tag = screen[1].tags[4],
         },
+    }
+
+    ruled.client.append_rule {
+        rule_any = {
+            name = { "GLava" }
+        },
+        properties = {
+            focusable = false,
+            ontop = true,
+            skip_taskbar = true
+        },
+        callback = function(c)
+            local img = cairo.ImageSurface(cairo.Format.A1, 0, 0)
+            c.shape_input = img._native
+            img.finish()
+        end
     }
 end)
 
