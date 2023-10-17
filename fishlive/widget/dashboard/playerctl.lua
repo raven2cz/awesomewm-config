@@ -30,19 +30,19 @@ return function(width, height)
 
     local previous = wibox.widget {
         font = beautiful.icon_font.."20",
-        markup = "󰒮",
+        markup = "玲",
         widget = wibox.widget.textbox
     }
 
     local play_pause = wibox.widget {
         font = beautiful.icon_font.."20",
-        markup = "",
+        markup = "契",
         widget = wibox.widget.textbox
     }
 
     local next = wibox.widget {
         font = beautiful.icon_font.."20",
-        markup = "󰒭",
+        markup = "怜",
         widget = wibox.widget.textbox
     }
 
@@ -60,9 +60,9 @@ return function(width, height)
 
     awesome.connect_signal("signal::playerctl::play_pause_result", function(status)
         if status:lower() == "playing" then
-            play_pause.markup = "󰏤"
+            play_pause.markup = ""
         else
-            play_pause.markup = "󰐊"
+            play_pause.markup = "契"
         end
     end)
 

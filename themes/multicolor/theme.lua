@@ -757,6 +757,10 @@ screen.connect_signal("request::desktop_decoration", function(s)
   end
   )
 
+  naughty.connect_signal("request::action_icon", function(a, _, hints)
+      a.icon = menubar.utils.lookup_icon(hints.id)
+  end)
+
   -----------------------------------------------
   -- WALLPAPER PER TAG and USER WALLS keybinding
   -----------------------------------------------
