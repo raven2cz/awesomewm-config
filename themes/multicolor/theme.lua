@@ -58,12 +58,12 @@ end
 
 -- {{{ Styles
 -- Global font
-theme.font             = "Iosevka Nerd Font Propo 9"
-theme.font_larger      = "Iosevka Nerd Font Propo 11"
+theme.font             = "Iosevka NFP 9"
+theme.font_larger      = "Iosevka NFP 11"
 theme.font_notify      = "mononoki Nerd Font Propo 11"
 theme.menu_font        = "mononoki Nerd Font Propo 11"
-theme.tabbar_font      = "Iosevka Nerd Font Propo 11"
-theme.icon_font        = "Iosevka Nerd Font Propo "
+theme.tabbar_font      = "Iosevka NFP 11"
+theme.icon_font        = "Iosevka NFP "
 theme.operator_font    = "OperatorMono Book "
 -- Dashboard font
 theme.font_board_reg   = "Roboto Regular "
