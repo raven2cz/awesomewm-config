@@ -17,7 +17,7 @@ run clipmenud
 run /usr/bin/emacs --daemon
 run ~/.config/conky/start_conky ~/.config/conky/MX-CoreBlue/conkyrc2core 
 run remmina -i
-run picom --no-frame-pacing --config $HOME/.config/picom/picom.conf
+run picom --config $HOME/.config/picom/picom.conf
 if ! pgrep -f cloud-drive-ui; then synology-drive start; fi
 if ! pgrep -f volctl; then volctl; fi
 run `bash -c '[[ ! -z "$LAPTOP" ]] && xinput set-prop 19 325 1.0'`
