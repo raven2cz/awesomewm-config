@@ -10,6 +10,11 @@
 
 local theme_name = "multicolor"
 
+local capi = {
+  awesome = awesome,
+  screen = screen,
+  client = client
+}
 local theme_assets = require("beautiful.theme_assets")
 local awful = require("awful")
 local gfs = require("gears.filesystem")
@@ -30,6 +35,7 @@ local colorscheme = require("fishlive.colorscheme")
 local collage = require("fishlive.collage")
 local fhelpers = require("fishlive.helpers")
 local broker = require("fishlive.signal.broker")
+local active_corners = require("fishlive.active_corners")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require('menubar')
@@ -222,7 +228,7 @@ local arch_updates = wibox.widget {
   markup = "<span>...</span>",
   font = theme.font
 }
-awesome.connect_signal("signal::archupdates", function(count)
+capi.awesome.connect_signal("signal::archupdates", function(count)
   arch_updates.markup = " <span>" .. count .. "</span>"
 end)
 local archupdateWibox = wiboxBox1(archupdateText, arch_updates, wboxColor, theme.widgetbar_fg, 3, 6, underLineSize, wiboxMargin)
@@ -374,12 +380,12 @@ local separator = wibox.widget.textbox()
 
 -- {{{ Menu - Press Button Awesome
 -- Create a launcher widget and a main menu
-myawesomemenu = {
+local myawesomemenu = {
   { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
   { "manual", terminal .. " -e man awesome" },
-  { "edit config", editor_cmd .. " " .. awesome.conffile },
-  { "restart", awesome.restart },
-  { "quit", function() awesome.quit() end },
+  { "edit config", editor_cmd .. " " .. capi.awesome.conffile },
+  { "restart", capi.awesome.restart },
+  { "quit", function() capi.awesome.quit() end },
 }
 
 -- Colorscheme Menu
@@ -413,13 +419,13 @@ local menuTheme = fhelpers.copyTable(theme)
 menuTheme["font"] = theme.menu_font
 menuTheme["height"] = 22
 menuTheme["width"] = 350
-mylauncher = awful.widget.launcher({
+local mylauncher = awful.widget.launcher({
   image = theme.awesome_icon,
   menu = awful.menu({
     items = {
       { "Awesome", myawesomemenu, theme.awesome_icon },
       { "ColorScheme", colorscheme.menu.prepare_colorscheme_menu() },
-      { "Applications", xdgmenu },
+      { "PortraitsScheme", colorscheme.menu.prepare_portrait_menu() },
       { "Open Terminal", terminal }
     },
     theme = menuTheme
@@ -428,12 +434,12 @@ mylauncher = awful.widget.launcher({
 -- }}}
 
 -- Keyboard map indicator and switcher
-mykeyboardlayout = awful.widget.keyboardlayout()
+local mykeyboardlayout = awful.widget.keyboardlayout()
 
 -------------------------------------
 -- DESKTOP and PANELS CONFIGURATION
 -------------------------------------
-screen.connect_signal("request::desktop_decoration", function(s)
+capi.screen.connect_signal("request::desktop_decoration", function(s)
   local tags = {
     icons = {
       "", "", "", "", "懲", "", "󰈸", "󰇧", ""
@@ -454,8 +460,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
 
   -- Each screen has its own tag table.
   local tagCount = isFullhd and 4 or #tags.names
-  for s = 1,screen.count() do
-    tags[s] = awful.tag({table.unpack(tags.names,1,tagCount)}, s, {table.unpack(tags.layouts,1,tagCount)})
+  for ss = 1,capi.screen.count() do
+    tags[ss] = awful.tag({table.unpack(tags.names,1,tagCount)}, ss, {table.unpack(tags.layouts,1,tagCount)})
     -- Set additional optional parameters for each tag
     --tags[s][1].column_count = 2
   end
@@ -497,14 +503,14 @@ screen.connect_signal("request::desktop_decoration", function(s)
     buttons = {
       awful.button({}, 1, function(t) t:view_only() end),
       awful.button({ modkey }, 1, function(t)
-        if client.focus then
-          client.focus:move_to_tag(t)
+        if capi.client.focus then
+          capi.client.focus:move_to_tag(t)
         end
       end),
       awful.button({}, 3, awful.tag.viewtoggle),
       awful.button({ modkey }, 3, function(t)
-        if client.focus then
-          client.focus:toggle_tag(t)
+        if capi.client.focus then
+          capi.client.focus:toggle_tag(t)
         end
       end),
       awful.button({}, 4, function(t) awful.tag.viewprev(t.screen) end),
@@ -642,6 +648,18 @@ screen.connect_signal("request::desktop_decoration", function(s)
   end
 
   --------------------------
+  -- ACTIVE CORNERS
+  --------------------------
+  if config.active_corners_enabled then
+    active_corners.init(s, {
+      -- bottom_right corner
+      br = function()
+        capi.awesome.emit_signal("dashboard::toggle")
+      end,
+    })
+  end
+
+  --------------------------
   -- DESKTOP ICONS
   --------------------------
   -- Desktop 
@@ -769,21 +787,21 @@ screen.connect_signal("request::desktop_decoration", function(s)
 
   -- User Wallpaper Changer
   local wp_user_params = {
-    screen = screen,
+    screen = capi.screen,
     wppath_user = wppath_user
   }
   theme.change_wallpaper_user = fishlive.wallpaper.createUserWallpaper(wp_user_params)
 
   -- Colorscheme Wallpaper Changer
   local wp_colorscheme_params = {
-    screen = screen,
+    screen = capi.screen,
     wppath_user = wppath_colorscheme
   }
   theme.change_wallpaper_colorscheme = fishlive.wallpaper.createUserWallpaper(wp_colorscheme_params)
 
   -- Register Tag Wallpaper Changer
   fishlive.wallpaper.registerTagWallpaper({
-    screen = screen,
+    screen = capi.screen,
     wp_selected = wp_selected,
     wp_random = wp_random,
     wppath = wppath,
@@ -802,7 +820,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
     end
     fhelpers.shuffle(imgsources)
     collage.registerTagCollage({
-      screen = screen,
+      screen = capi.screen,
       collage_template = collage_template,
       imgsources = imgsources,
       tagids = tagids,

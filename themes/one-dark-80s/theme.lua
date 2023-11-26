@@ -472,7 +472,7 @@ local separator = wibox.widget.textbox()
 
 -- {{{ Menu - Press Button Awesome
 -- Create a launcher widget and a main menu
-myawesomemenu = {
+local myawesomemenu = {
   { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
   { "manual", terminal .. " -e man awesome" },
   { "edit config", editor_cmd .. " " .. awesome.conffile },
@@ -480,17 +480,17 @@ myawesomemenu = {
   { "quit", function() awesome.quit() end },
 }
 
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, theme.awesome_icon },
+local mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, theme.awesome_icon },
   { "Applications", xdgmenu },
   { "open terminal", terminal }
 }
 })
 theme.mymainmenu = mymainmenu
 
-mylauncher = awful.widget.launcher({ image = theme.awesome_icon, menu = mymainmenu })
+local mylauncher = awful.widget.launcher({ image = theme.awesome_icon, menu = mymainmenu })
 
 -- Keyboard map indicator and switcher
-mykeyboardlayout = awful.widget.keyboardlayout()
+local mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- Set Wallpapers
 --[[

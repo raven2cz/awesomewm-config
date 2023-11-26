@@ -1,6 +1,6 @@
 --  _ __ __ ___   _____ _ __
 -- | '__/ _` \ \ / / _ \ '_  \  Antonin Fischer (raven2cz)
--- | | | (_| |\ V /  __/ | | |  https://tonda-fischer.online/
+-- | | | (_| |\ V /  __/ | | |  https://fishlive.org/
 -- |_|  \__,_| \_/ \___|_| |_|  https://github.com/raven2cz
 --
 -- A customized rc.lua for awesomewm-git (master branch) (https://awesomewm.org//)
@@ -130,7 +130,7 @@ beautiful.init(gears.filesystem.get_configuration_dir().."themes/"..themeName.."
 
 -- {{{ Libraries Configuration after beautiful.init()
 -- Bling (must be after beautiful.init())
-bling = require("bling")
+local bling = require("bling")
 awful.layout.append_default_layout(bling.layout.mstab)
 
 -- MainMenu
@@ -140,12 +140,13 @@ local main_menu = require("fishlive.widget.mebox.menu.main")
 fishlive.plugins.createTitlebarsNiceLib()
 
 -- Dashboard Component
+local dashboard
 if config.dashboard_enabled then 
     dashboard = require("fishlive.widget.dashboard")()
 end
 
 -- Notification Center
-popup = require("notifs.notif-center.notif_popup")
+local popup = require("notifs.notif-center.notif_popup")
 -- }}}
 
 -- {{{ Mouse bindings

@@ -19,4 +19,5 @@ return {
     collage = require("fishlive.collage"),
     plugins = require("fishlive.plugins"),
     signal = require("fishlive.signal"),
+    active_corners = require("fishlive.active_corners"),
 }
