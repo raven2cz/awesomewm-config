@@ -27,6 +27,7 @@ return {
   "monokai_pro",
   "nord",
   "one_dark",
+  "one-piece",
   "sandman",
   "solarized_dark",
   "witcher"
