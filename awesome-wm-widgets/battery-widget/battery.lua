@@ -119,6 +119,9 @@ local function worker(user_args)
             screen = mouse.screen
         }
     end
+    local function isNaN(value)
+        return value ~= value
+    end
     local last_battery_check = os.time()
     local batteryType = "battery-good-symbolic"
 
@@ -165,7 +168,11 @@ local function worker(user_args)
         charge = charge / capacity
 
         if show_current_level then
+            if isNaN(charge) then
+                level_widget.text = "N/A"
+            else
             level_widget.text = string.format('%d%%', charge)
+            end
         end
 
         if (charge >= 1 and charge < 15) then

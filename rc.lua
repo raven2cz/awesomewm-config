@@ -44,6 +44,11 @@ local dpi = require("beautiful.xresources").apply_dpi
 local io = io
 local cairo = require("lgi").cairo
 
+-- Debug support
+if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
+    require("lldebugger").start()
+end
+
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")

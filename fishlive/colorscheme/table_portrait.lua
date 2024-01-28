@@ -7,6 +7,7 @@
 --]]
 return {
   "arcane",
+  "art",
   "default",
   "digital-landscapes",
   "doom_one",
