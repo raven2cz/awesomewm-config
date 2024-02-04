@@ -18,6 +18,7 @@ return {
   "fantasy-women-4",
   "fantasy-women-5",
   "fantasy-women-6",
+  "fantasy-women-7",
   "gruvbox_dark_soft",
   "guweiz",
   "joy",
