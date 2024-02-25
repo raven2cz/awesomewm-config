@@ -60,26 +60,38 @@ local function salvage(tag)
     capi.screen[newscreen]:emit_signal("tag::history::update")
 end
 
+-- Gets an index for ordering tags.
+-- @param tag The tag to get an index for
+-- @return An int representing the tags index in the tag list
+local function getidx(tag)
+    if tag.sharedtagindex then
+        -- Add arbitrarily large number to always be at the end
+        return tag.sharedtagindex + 10
+    else
+        return tag.index
+    end
+end
+
 --- Create one new tag with sharedtags metadata.
 -- This is mostly useful for setups with dynamic tag adding.
 -- @tparam number i The tag (global/shared) index
 -- @tparam table t The tag definition table for awful.tag.add
 -- @treturn table The created tag.
 function sharedtags.add(i, t)
-   t = awful.util.table.clone(t, false) -- shallow copy for modification
-   t.screen = (t.screen and t.screen <= capi.screen.count()) and t.screen or capi.screen.primary
-   t.sharedtagindex = i
-   local tag = awful.tag.add(t.name or i, t)
+    t = awful.util.table.clone(t, false) -- shallow copy for modification
+    t.screen = (t.screen and t.screen <= capi.screen.count()) and t.screen or capi.screen.primary
+    t.sharedtagindex = i
+    local tag = awful.tag.add(t.name or i, t)
 
-   -- If no tag is selected for this screen, then select this one.
-   if not tag.screen.selected_tag then
-      tag:view_only() -- Updates the history as well.
-   end
+    -- If no tag is selected for this screen, then select this one.
+    if not tag.screen.selected_tag then
+        tag:view_only() -- Updates the history as well.
+    end
 
-   -- Make sure to salvage the tag in case the screen disappears.
-   tag:connect_signal("request::screen", salvage)
+    -- Make sure to salvage the tag in case the screen disappears.
+    tag:connect_signal("request::screen", salvage)
 
-   return tag
+    return tag
 end
 
 --- Create new tag objects.
@@ -104,7 +116,7 @@ end
 function sharedtags.new(def)
     local tags = {}
 
-    for i,t in ipairs(def) do
+    for i, t in ipairs(def) do
         tags[i] = sharedtags.add(i, t)
 
         -- Create an alias between the index and the name.
@@ -148,10 +160,12 @@ function sharedtags.movetag(tag, screen)
 
         -- Also sort the tag in the taglist, by reapplying the index. This is just a nicety.
         local unpack = unpack or table.unpack
-        for _,s in ipairs({ screen, oldscreen or { tags = {} } }) do
+        for _, s in ipairs({ screen, oldscreen or { tags = {} } }) do
             local tags = { unpack(s.tags) } -- Copy
-            table.sort(tags, function(a, b) return a.sharedtagindex < b.sharedtagindex end)
-            for i,t in ipairs(tags) do
+            table.sort(tags, function(a, b)
+                return getidx(a) < getidx(b)
+            end)
+            for i, t in ipairs(tags) do
                 t.index = i
             end
         end
