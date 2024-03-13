@@ -36,10 +36,12 @@ local function update_metadata()
     local artist = ""
     local title = ""
     local status = ""
+    local album = ""
 
     if player:get_title() then
 	    artist = player:get_artist()
         title = player:get_title()
+        album = player:get_album()
         status = player.playback_status
 
         awful.spawn.easy_async_with_shell(art_script, function(out)
@@ -49,6 +51,7 @@ local function update_metadata()
             awesome.emit_signal(signal, {
                 artist = artist,
                 title = title,
+                album = album,
                 status = status,
                 image = album_path
             })
@@ -60,6 +63,7 @@ local function exit()
     awesome.emit_signal(signal, {
         artist = "",
         title = "",
+        album = "",
         status = "STOPPED",
         image = ""
     })

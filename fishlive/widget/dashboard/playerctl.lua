@@ -1,11 +1,15 @@
 local wibox = require("wibox")
+local awful = require("awful")
 local gears = require("gears")
 local beautiful = require("beautiful")
 local dpi = beautiful.xresources.apply_dpi
 
 local apply_borders = require("fishlive.widget.borders")
+local createMusicBox = require("fishlive.widget.dashboard.musicbox.musicBox")
 
 return function(width, height)
+    local music_data = nil
+
     local image = wibox.widget {
         image = beautiful.nocover_icon,
         forced_width = dpi(150),
@@ -15,33 +19,33 @@ return function(width, height)
 
     local artist = wibox.widget {
         markup = "Not playing",
-        font = beautiful.font_board_bold.."12",
+        font = beautiful.font_board_bold .. "12",
         align = "center",
         valign = "center",
         widget = wibox.widget.textbox
     }
 
     local title = wibox.widget {
-        font = beautiful.font_board_reg.."10",
+        font = beautiful.font_board_reg .. "10",
         align = "center",
         valign = "center",
         widget = wibox.widget.textbox
     }
 
     local previous = wibox.widget {
-        font = beautiful.icon_font.."20",
+        font = beautiful.icon_font .. "20",
         markup = "󰒮",
         widget = wibox.widget.textbox
     }
 
     local play_pause = wibox.widget {
-        font = beautiful.icon_font.."20",
+        font = beautiful.icon_font .. "20",
         markup = "󰐎",
         widget = wibox.widget.textbox
     }
 
     local next = wibox.widget {
-        font = beautiful.icon_font.."20",
+        font = beautiful.icon_font .. "20",
         markup = "󰒭",
         widget = wibox.widget.textbox
     }
@@ -56,6 +60,26 @@ return function(width, height)
 
     next:connect_signal("button::press", function()
         awesome.emit_signal("signal::playerctl::next")
+    end)
+
+    -- Escapujeme speciální znaky pro shell
+    local function escape_shell_arg(arg)
+        return "'" .. string.gsub(arg, "'", "'\\''") .. "'"
+    end
+
+    image:connect_signal("button::press", function(c, _, _, button, _, _)
+        if button == 1 then -- left mouse click to show floating window with album image and description
+            createMusicBox(music_data)
+        end
+        if button == 3 then -- right click to resize to call AI download of music resources to show related images
+            if music_data ~= nil then
+                local cmd = string.format("music_image_scraper_show %s %s %s", escape_shell_arg(music_data.title),
+                    escape_shell_arg(music_data.artist), escape_shell_arg(music_data.album))
+                awful.spawn.easy_async_with_shell(cmd, function(stdout)
+                    awesome.emit_signal("dashboard::close")
+                end)
+            end
+        end
     end)
 
     awesome.connect_signal("signal::playerctl::play_pause_result", function(status)
@@ -79,6 +103,8 @@ return function(width, height)
         else
             image:set_image(beautiful.nocover_icon)
         end
+
+        music_data = data
     end)
 
     local playerctl_widget = wibox.widget {

@@ -176,6 +176,9 @@ awful.mouse.append_global_mousebindings({
 
 -- Personal Awesome keys
 awful.keyboard.append_global_keybindings({
+    awful.key({ modkey }, "b", function() 
+        awful.screen.focused().mywibox.visible = not awful.screen.focused().mywibox.visible end,
+    {description = "wi(b)ar toggle", group = "awesome"}),
     awful.key({ modkey }, "z", function() awesome.emit_signal("dashboard::toggle") end,
        {description = "dashboard toggle", group = "awesome"}),
 
