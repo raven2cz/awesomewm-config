@@ -292,10 +292,9 @@ awful.keyboard.append_global_keybindings({
 
     -- Print Screen
     awful.key({}, "Print", function ()
-          awful.util.spawn("scrot -e 'mv $f ~/Pictures/screenshots/ 2>/dev/null'", false)
-          awful.util.spawn("notify-send \"SCROT\" \"Screenshot created!\"", false)
+          awful.spawn("flameshot gui")
         end,
-        {description="Make screenshot to ~/Pictures/screenshots/", group="awesome"}),
+        {description="Make screenshot by flameshot", group="awesome"}),
 
     -- Language Translation Support
     awful.key({ modkey, ctrlkey }, "t", function ()
