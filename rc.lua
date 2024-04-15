@@ -834,7 +834,30 @@ end)
 
 -- {{{ Manage new client
 
+-- Function to set icon by advanced business logic
+local set_client_icon = function (c)
+	local icon = menubar.utils.lookup_icon(c.instance)
+    local lower_icon = menubar.utils.lookup_icon(c.instance:lower())
+    --Check if the icon exists
+    if icon ~= nil then
+		local new_icon = gears.surface(icon)
+        c.icon = new_icon._native
+
+    --Check if the icon exists in the lowercase variety
+    elseif lower_icon ~= nil then
+        local new_icon = gears.surface(lower_icon)
+        c.icon = new_icon._native
+
+    --Check if the client already has an icon. If not, give it a default.
+    elseif c.icon == nil then
+        local new_icon = gears.surface(menubar.utils.lookup_icon("application-default-icon"))
+		c.icon = new_icon._native
+	end
+end
+
 client.connect_signal("manage", function(c)
+    -- Search the application icons by advanced logic
+    set_client_icon(c)
     -- Similar behaviour as other window managers DWM, XMonad.
     -- Master-Slave layout new client goes to the slave, master is kept
     -- If you need new slave as master press: ctrl + super + return
