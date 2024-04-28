@@ -8,6 +8,7 @@
 return {
   "arcane",
   "art",
+  "baldurs-gate-3",
   "default",
   "digital-landscapes",
   "doom_one",
