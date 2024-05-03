@@ -25,7 +25,7 @@ table.insert(menu_items, {
     text = "Update Notes",
     icon = beautiful.dir .. "/icons/file-document-edit.svg",
     icon_color = beautiful.base07,
-    callback = function() awful.spawn("notes_sync_notif") end,
+    callback = function() awful.spawn("notes_sync -o notify-send") end,
 })
 table.insert(menu_items, mebox.separator)
 table.insert(menu_items, mebox.header("Favorites"))
