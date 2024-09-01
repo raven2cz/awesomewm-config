@@ -141,6 +141,102 @@ end
 
 -- Optional Standard Tags Shortcuts
 function standard_taglist.keys(s)
+    awful.keyboard.append_global_keybindings({
+        awful.key({ modkey, ctrlkey, "Shift" }, "Right", function()
+                local screen = awful.screen.focused()
+                local t = screen.selected_tag
+                if t then
+                    local idx = t.index + 1
+                    if idx > #screen.tags then idx = 1 end
+                    if client.focus then
+                        client.focus:move_to_tag(screen.tags[idx])
+                        screen.tags[idx]:view_only()
+                    end
+                end
+            end,
+            { description = "move focused client to next tag and view tag", group = "tag" }),
+
+        awful.key({ modkey, ctrlkey, "Shift" }, "Left", function()
+                local screen = awful.screen.focused()
+                local t = screen.selected_tag
+                if t then
+                    local idx = t.index - 1
+                    if idx == 0 then idx = #screen.tags end
+                    if client.focus then
+                        client.focus:move_to_tag(screen.tags[idx])
+                        screen.tags[idx]:view_only()
+                    end
+                end
+            end,
+            { description = "move focused client to previous tag and view tag", group = "tag" }),
+
+        awful.key {
+            modifiers   = { modkey },
+            keygroup    = "numrow",
+            description = "only view tag",
+            group       = "tag",
+            on_press    = function(index)
+                local screen = awful.screen.focused()
+                local tag = screen.tags[index]
+                if tag then
+                    tag:view_only()
+                end
+            end,
+        },
+        awful.key {
+            modifiers   = { modkey, ctrlkey },
+            keygroup    = "numrow",
+            description = "toggle tag",
+            group       = "tag",
+            on_press    = function(index)
+                local screen = awful.screen.focused()
+                local tag = screen.tags[index]
+                if tag then
+                    awful.tag.viewtoggle(tag)
+                end
+            end,
+        },
+        awful.key {
+            modifiers   = { modkey, "Shift" },
+            keygroup    = "numrow",
+            description = "move focused client to tag",
+            group       = "tag",
+            on_press    = function(index)
+                if client.focus then
+                    local tag = client.focus.screen.tags[index]
+                    if tag then
+                        client.focus:move_to_tag(tag)
+                    end
+                end
+            end,
+        },
+        awful.key {
+            modifiers   = { modkey, ctrlkey, "Shift" },
+            keygroup    = "numrow",
+            description = "toggle focused client on tag",
+            group       = "tag",
+            on_press    = function(index)
+                if client.focus then
+                    local tag = client.focus.screen.tags[index]
+                    if tag then
+                        client.focus:toggle_tag(tag)
+                    end
+                end
+            end,
+        },
+        awful.key {
+            modifiers   = { modkey },
+            keygroup    = "numpad",
+            description = "select layout directly",
+            group       = "layout",
+            on_press    = function(index)
+                local t = awful.screen.focused().selected_tag
+                if t then
+                    t.layout = t.layouts[index] or t.layout
+                end
+            end,
+        }
+    })
 end
 
 return standard_taglist

@@ -8,13 +8,13 @@ function shared_taglist.create(s)
     -- Define layouts and shared tags with dynamic screen assignment
     if s.index == 1 then
         tags = sharedtags({
-            { name = "1", layout = awful.layout.layouts[2] },
-            { name = "2", layout = awful.layout.layouts[10] },
-            { name = "3", layout = awful.layout.layouts[1] },
-            { name = "4", layout = awful.layout.layouts[2] },
-            { name = "5", screen = 2, layout = awful.layout.layouts[2] },
+            { name = "1",                      layout = awful.layout.layouts[2] },
+            { name = "2",                      layout = awful.layout.layouts[10] },
+            { name = "3",                      layout = awful.layout.layouts[1] },
+            { name = "4",                      layout = awful.layout.layouts[2] },
+            { name = "5",                      screen = 2,                       layout = awful.layout.layouts[2] },
             { layout = awful.layout.layouts[2] },
-            { screen = 2, layout = awful.layout.layouts[2] }
+            { screen = 2,                      layout = awful.layout.layouts[2] }
           })
     end
 
@@ -44,52 +44,52 @@ end
 -- Optional Shared Tags Shortcuts
 function shared_taglist.keys(s)
     -- Shared Tags Keybindings
-    -- for i = 1, 9 do
-    --     awful.keyboard.append_global_keybindings({
-    --         -- View tag only.
-    --         awful.key({ modkey }, "#" .. i + 9,
-    --                 function ()
-    --                         local screen = awful.screen.focused()
-    --                         local tag = tags[i]
-    --                         if tag then
-    --                         sharedtags.viewonly(tag, screen)
-    --                         end
-    --                 end,
-    --                 {description = "view tag #"..i, group = "tag"}),
-    --         -- Toggle tag display.
-    --         awful.key({ modkey, ctrlkey }, "#" .. i + 9,
-    --                 function ()
-    --                     local screen = awful.screen.focused()
-    --                     local tag = tags[i]
-    --                     if tag then
-    --                         sharedtags.viewtoggle(tag, screen)
-    --                     end
-    --                 end,
-    --                 {description = "toggle tag #" .. i, group = "tag"}),
-    --         -- Move client to tag.
-    --         awful.key({ modkey, "Shift" }, "#" .. i + 9,
-    --                 function ()
-    --                     if client.focus then
-    --                         local tag = tags[i]
-    --                         if tag then
-    --                             client.focus:move_to_tag(tag)
-    --                         end
-    --                     end
-    --                 end,
-    --                 {description = "move focused client to tag #"..i, group = "tag"}),
-    --         -- Toggle tag on focused client.
-    --         awful.key({ modkey, ctrlkey, "Shift" }, "#" .. i + 9,
-    --                 function ()
-    --                     if client.focus then
-    --                         local tag = tags[i]
-    --                         if tag then
-    --                             client.focus:toggle_tag(tag)
-    --                         end
-    --                     end
-    --                 end,
-    --                 {description = "toggle focused client on tag #" .. i, group = "tag"})
-    --     })
-    -- end
+    for i = 1, 9 do
+        awful.keyboard.append_global_keybindings({
+            -- View tag only.
+            awful.key({ modkey }, "#" .. i + 9,
+                function()
+                    local screen = awful.screen.focused()
+                    local tag = tags[i]
+                    if tag then
+                        sharedtags.viewonly(tag, screen)
+                    end
+                end,
+                { description = "view tag #" .. i, group = "tag" }),
+            -- Toggle tag display.
+            awful.key({ modkey, ctrlkey }, "#" .. i + 9,
+                function()
+                    local screen = awful.screen.focused()
+                    local tag = tags[i]
+                    if tag then
+                        sharedtags.viewtoggle(tag, screen)
+                    end
+                end,
+                { description = "toggle tag #" .. i, group = "tag" }),
+            -- Move client to tag.
+            awful.key({ modkey, "Shift" }, "#" .. i + 9,
+                function()
+                    if client.focus then
+                        local tag = tags[i]
+                        if tag then
+                            client.focus:move_to_tag(tag)
+                        end
+                    end
+                end,
+                { description = "move focused client to tag #" .. i, group = "tag" }),
+            -- Toggle tag on focused client.
+            awful.key({ modkey, ctrlkey, "Shift" }, "#" .. i + 9,
+                function()
+                    if client.focus then
+                        local tag = tags[i]
+                        if tag then
+                            client.focus:toggle_tag(tag)
+                        end
+                    end
+                end,
+                { description = "toggle focused client on tag #" .. i, group = "tag" })
+        })
+    end
 end
 
 return shared_taglist
