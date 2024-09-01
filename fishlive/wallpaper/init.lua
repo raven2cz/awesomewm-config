@@ -49,6 +49,7 @@ end
 function wallpaper.registerTagWallpaper(t)
   local screen = t.screen
   local wp_selected = t.wp_selected
+  local wp_portrait = t.wp_portrait
   local wp_random = t.wp_random
   local wppath = t.wppath
   local wp_user_params = t.wp_user_params
@@ -57,8 +58,10 @@ function wallpaper.registerTagWallpaper(t)
 
   -- For each screen
   for scr in screen do
+    -- Detect if the screen is in portrait mode
+    local is_portrait = scr.geometry.width < scr.geometry.height
     -- Set actual wallpaper for first tag and screen
-    local wp = wp_selected[1]
+    local wp = is_portrait and wp_portrait[1] or wp_selected[1]
     if wp == "random" then wp = wp_random[1] end
     awesome.emit_signal("wallpaper::change", wppath .. wp)
     gears.wallpaper.maximized(wppath .. wp, scr, false)
@@ -85,11 +88,11 @@ function wallpaper.registerTagWallpaper(t)
           end
           wp = wp_colorscheme_params.wallpaper_user
         else
-          wp = wppath .. wp_selected[t]
+          wp = wppath .. (is_portrait and wp_portrait[t] or wp_selected[t])
         end
         --gears.wallpaper.fit(wppath .. wp_selected[t], s)
         awesome.emit_signal("wallpaper::change", wp)
-        gears.wallpaper.maximized(wp, s, false)
+        gears.wallpaper.maximized(wp, scr, false)
       end)
     end
   end

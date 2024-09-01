@@ -497,7 +497,6 @@ awful.keyboard.append_global_keybindings({
         { description = "select previous", group = "layout" }),
 })
 
-
 awful.keyboard.append_global_keybindings({
     awful.key({ modkey, ctrlkey, "Shift" }, "Right", function()
       local screen = awful.screen.focused()

@@ -20,4 +20,5 @@ return {
     plugins = require("fishlive.plugins"),
     signal = require("fishlive.signal"),
     active_corners = require("fishlive.active_corners"),
+    display_session = require("fishlive.display_session"),
 }
