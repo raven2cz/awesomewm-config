@@ -4,20 +4,22 @@ local sharedtags = require("sharedtags")
 local shared_taglist = {}
 local tags
 
-function shared_taglist.create(s)
+function shared_taglist.init_environment(dsconfig)
     -- Define layouts and shared tags with dynamic screen assignment
-    if s.index == 1 then
-        tags = sharedtags({
-            { name = "1",                      layout = awful.layout.layouts[2] },
-            { name = "2",                      layout = awful.layout.layouts[10] },
-            { name = "3",                      layout = awful.layout.layouts[1] },
-            { name = "4",                      layout = awful.layout.layouts[2] },
-            { name = "5",                      screen = 2,                       layout = awful.layout.layouts[2] },
-            { layout = awful.layout.layouts[2] },
-            { screen = 2,                      layout = awful.layout.layouts[2] }
-          })
-    end
+    tags = sharedtags({
+        { bidx = 1,   name = "1",                      screen = 1, layout = awful.layout.layouts[13] },
+        { bidx = 2,   name = "2",                      screen = 1, layout = awful.layout.layouts[2] },
+        { bidx = 3,   name = "3",                      screen = 1, layout = awful.layout.layouts[2] },
+        { bidx = 4,   name = "4",                      screen = 1, layout = awful.layout.suit.floating },
+        { bidx = 5,   name = "5",                      screen = 2, layout = awful.layout.layouts[12] },
+        { bidx = 6,   name = "6",                      screen = 2, layout = awful.layout.layouts[12] },
+        { bidx = 7,   name = "7",                      screen = 2, layout = awful.layout.layouts[2] },
+        { bidx = 8,   name = "8",                      screen = 2, layout = awful.layout.layouts[2] },
+        { bidx = 9,   name = "9",                      screen = 1, layout = awful.layout.layouts[9] },
+    })
+end
 
+function shared_taglist.create(s)
     -- Create the shared taglist widget
     return awful.widget.taglist {
         screen  = s,

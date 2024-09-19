@@ -31,10 +31,8 @@ local markup = lain.util.markup
 -- Fishlive Utilities
 local fishlive = require("fishlive")
 local colorscheme = require("fishlive.colorscheme")
-local collage = require("fishlive.collage")
 local fhelpers = require("fishlive.helpers")
 local broker = require("fishlive.signal.broker")
-local active_corners = require("fishlive.active_corners")
 -- Display Session Settings
 local dsession = require("fishlive.display_session")
 -- Component UI Factory FRM
@@ -55,6 +53,7 @@ local dsconfig = dsession.load_display_session()
 dsconfig.theme = theme
 dsconfig.theme_name = theme_name
 dsconfig.isFullhd = scr_res == "1920x1080+0+0"
+theme.dsconfig = dsconfig
 -- }}}
 
 -- Fishlive Signals - producents-consuments
@@ -116,7 +115,7 @@ theme.taglist_squares_unsel = theme.dir .. "/taglist/squarez.png"
 
 -- {{{ Misc
 theme.awesome_icon          = theme_assets.awesome_icon(
-    theme.menu_height, theme.awesome_icon_bg, theme.awesome_icon_fg
+  theme.menu_height, theme.awesome_icon_bg, theme.awesome_icon_fg
 )
 theme.menu_submenu_icon     = themes_path .. "default/submenu.png"
 -- }}}
@@ -172,7 +171,7 @@ theme.mstab_tabbar_position = "top"
 local wppath                = os.getenv("HOME") .. "/Pictures/wallpapers/public-wallpapers/"
 local wppath_user           = os.getenv("HOME") .. "/Pictures/wallpapers/user-wallpapers/"
 local wppath_colorscheme    = os.getenv("HOME") ..
-"/Pictures/wallpapers/public-wallpapers/colorscheme/" .. theme.scheme_id .. "/"
+    "/Pictures/wallpapers/public-wallpapers/colorscheme/" .. theme.scheme_id .. "/"
 local sel_portrait          = fhelpers.first_line(os.getenv("HOME") .. '/.portrait') or 'joy'
 local notifpath             = os.getenv("HOME") .. "/Pictures/wallpapers/public-wallpapers/portrait/"
 local notifpath_user        = notifpath .. sel_portrait .. "/"
@@ -181,6 +180,10 @@ if not fhelpers.is_dir(notifpath_user) then notifpath_user = notifpath .. "defau
 -- Try to load notification icons
 theme.notifpath_user = notifpath_user
 theme.notif_user = fhelpers.scandirArgs { dir = notifpath_user, fileExt = "*.{png,jpg}" }
+
+-- Portraits Collage for Tags
+theme.wppath_sel_portrait = notifpath .. sel_portrait .. "/"
+theme.portraits = fhelpers.getImgsFromDir(notifpath, sel_portrait)
 
 -- Set wallpaper for each tag
 local wp_selected = {
@@ -374,20 +377,25 @@ local net = lain.widget.net({
 })
 local netWibox = wiboxBox1(neticon, net.widget, wboxColor, theme.widgetbar_fg, 3, 3, underLineSize, wiboxMargin)
 
--- Textclock widget
-wboxColor = theme.baseColors[9]
-local clockicon = wibox.widget.textbox();
-clockicon:set_markup(markup.fontfg(theme.font_larger, wboxColor, "󱛡"))
-local mytextclock = wibox.widget.textclock(
-markup.fontfg(theme.font, theme.widgetbar_fg, " %a %d-%m-%Y") ..
-markup.fontfg(theme.font_larger, theme.clock_fg, " %H:%M:%S "), 1)
-local clockWibox = wiboxBox1(clockicon, mytextclock, wboxColor, theme.widgetbar_fg, 0, 0, underLineSize, wiboxMargin)
-
 -- Calendar widget
 local cw = calendar_widget({
   theme = 'outrun',
   placement = 'top_right'
 })
+
+-- Textclock widget
+wboxColor = theme.baseColors[9]
+local clockicon = wibox.widget.textbox();
+clockicon:set_markup(markup.fontfg(theme.font_larger, wboxColor, "󱛡"))
+local mytextclock = wibox.widget.textclock(
+  markup.fontfg(theme.font, theme.widgetbar_fg, " %a %d-%m-%Y") ..
+  markup.fontfg(theme.font_larger, theme.clock_fg, " %H:%M:%S "), 1
+)
+-- bind calendar with clock widget
+mytextclock:connect_signal("button::press", function(_, _, _, button)
+  if button == 1 then cw.toggle() end
+end)
+local clockWibox = wiboxBox1(clockicon, mytextclock, wboxColor, theme.widgetbar_fg, 0, 0, underLineSize, wiboxMargin)
 
 -- Spotify widget
 local spotifyWibox = spotify_widget({
@@ -402,6 +410,7 @@ local systray = wibox.widget.systray()
 systray.base_size = theme.bar_height
 -- Separators
 local separator = wibox.widget.textbox()
+separator:set_text("   ")
 
 -- {{{ Menu - Press Button Awesome
 -- Create a launcher widget and a main menu
@@ -416,11 +425,11 @@ local myawesomemenu = {
 -- Colorscheme Menu
 theme.menu_colorschemes_create = function()
   local menu = awful.menu({
-      items = colorscheme.menu.prepare_colorscheme_menu(),
-      theme = {
-          height = dpi(18),
-          width  = dpi(200)
-      }
+    items = colorscheme.menu.prepare_colorscheme_menu(),
+    theme = {
+      height = dpi(18),
+      width  = dpi(200)
+    }
   })
   fishlive.widget.click_to_hide_menu(menu, nil, true)
   return menu
@@ -429,11 +438,11 @@ end
 -- Portrait Menu
 theme.menu_portrait_create = function()
   local menu = awful.menu({
-      items = colorscheme.menu.prepare_portrait_menu(),
-      theme = {
-          height = dpi(18),
-          width  = dpi(200)
-      }
+    items = colorscheme.menu.prepare_portrait_menu(),
+    theme = {
+      height = dpi(18),
+      width  = dpi(200)
+    }
   })
   fishlive.widget.click_to_hide_menu(menu, nil, true)
   return menu
@@ -458,6 +467,13 @@ local mylauncher = awful.widget.launcher({
 })
 -- }}}
 
+-- configure just once for 1st screeen
+local onlyOnce = function(func, s)
+  if s.index == 1 then
+    func()
+  end
+end
+
 -------------------------------------
 -- DESKTOP and PANELS CONFIGURATION
 -------------------------------------
@@ -465,12 +481,11 @@ capi.screen.connect_signal("request::desktop_decoration", function(s)
   --------------------------
   -- UI COMPONENTS CONFIGURATION
   --------------------------
-
   -- init naughty environment
-  factory.naughty(s, dsconfig)
+  factory.naughty(dsconfig, s)
 
   -- Create a taglist widget
-  s.mytaglist = factory.taglist(s, dsconfig)
+  s.mytaglist = factory.taglist(dsconfig, s)
 
   -- Create a promptbox for each screen
   s.mypromptbox = awful.widget.prompt()
@@ -494,24 +509,13 @@ capi.screen.connect_signal("request::desktop_decoration", function(s)
     }
   }
 
-  -- bind calendar with clock widget
-  mytextclock:connect_signal("button::press",
-    function(_, _, _, button)
-      if button == 1 then cw.toggle() end
-    end
-  )
-
-  -- separator type
-  separator:set_text("   ")
-
+  -------------------------------
+  -- MAIN PANEL CONFIGURATION
+  -------------------------------
   -- drop some widgets for small resolutions
   if dsconfig.isFullhd then
     tempWibox, netWibox, weatherWibox = nil, nil, nil
   end
-
-  -------------------------------
-  -- MAIN PANEL CONFIGURATION
-  -------------------------------
   -- Create the wibox
   if config.main_panel == 'polybar' then
     -- Polybar support
@@ -558,106 +562,17 @@ capi.screen.connect_signal("request::desktop_decoration", function(s)
     }
   end
 
-  --------------------------
-  -- ACTIVE CORNERS
-  --------------------------
-  if config.active_corners_enabled then
-    active_corners.init(s, {
-      -- bottom_right corner
-      br = function()
-        capi.awesome.emit_signal("dashboard::toggle")
-      end,
-    })
-  end
-
-  --------------------------
-  -- DESKTOP ICONS
-  --------------------------
-  -- Desktop 
-  if config.desktop_enabled then
-    require("fishlive.widget.desktop").add_icons({ screen = s })
-  end
-
-  -----------------------------------------------
-  -- WALLPAPER PER TAG and USER WALLS keybinding
-  -----------------------------------------------
-
-  -- User Wallpaper Changer
-  local wp_user_params = {
-    screen = capi.screen,
-    wppath_user = wppath_user
-  }
-  theme.change_wallpaper_user = fishlive.wallpaper.createUserWallpaper(wp_user_params)
-
-  -- Colorscheme Wallpaper Changer
-  local wp_colorscheme_params = {
-    screen = capi.screen,
-    wppath_user = wppath_colorscheme
-  }
-  theme.change_wallpaper_colorscheme = fishlive.wallpaper.createUserWallpaper(wp_colorscheme_params)
-
-  -- Register Tag Wallpaper Changer
-  fishlive.wallpaper.registerTagWallpaper({
-    screen = capi.screen,
+  -------------------------------------------------------------
+  -- WALLPAPERS PER SCREEN/TAG, Custom User and Coloscheme WS
+  -------------------------------------------------------------
+  factory.wallpapers(dsconfig, s, {
+    wppath_user = wppath_user,
+    wppath_colorscheme = wppath_colorscheme,
     wp_selected = wp_selected,
     wp_portrait = wp_portrait,
     wp_random = wp_random,
     wppath = wppath,
-    wp_user_params = wp_user_params,
-    wp_colorscheme_params = wp_colorscheme_params,
-    change_wallpaper_colorscheme = theme.change_wallpaper_colorscheme
   })
-
-  ---------------------------
-  -- Collage Images Feature
-  ---------------------------
-  local collageTag = function(wppath, wps, tagids, collage_template)
-    local imgsources = {}
-    for i = 1, #wps do
-      imgsources[i] = wppath .. wps[i]
-    end
-    fhelpers.shuffle(imgsources)
-    collage.registerTagCollage({
-      screen = capi.screen,
-      collage_template = collage_template,
-      imgsources = imgsources,
-      tagids = tagids,
-    })
-  end
-  -- Portraits Collage for Dev Tag
-  local wppath_sel_portrait = notifpath .. sel_portrait .. "/"
-  local portraits = fhelpers.getImgsFromDir(notifpath, sel_portrait)
-  if dsconfig.isFullhd then
-    collageTag(wppath_sel_portrait, portraits, { 4 }, {
-      { max_height = 450, posx = 10, posy = 40 },
-      { max_height = 450, posx = 10, posy = 500 },
-    })
-  else
-    collageTag(wppath_sel_portrait, portraits, { 4 }, {
-      { max_height = 600, posx = 100,  posy = 100 },
-      { max_height = 600, posx = 100,  posy = 800 },
-      { max_width = 600,  posx = 3740, posy = 2060, align = "bottom-right" },
-    })
-  end
-  -- Joy Collage for love Tag
-  collageTag(wppath_sel_portrait, portraits, { 9 }, {
-    { max_height = 800, posx = 100,  posy = 100 },
-    { max_height = 400, posx = 100,  posy = 930 },
-    { max_height = 400, posx = 450,  posy = 930 },
-    { max_height = 400, posx = 870,  posy = 100 },
-    { max_height = 400, posx = 1220, posy = 100 },
-    { max_height = 800, posx = 870,  posy = 530 },
-    { max_height = 760, posx = 100,  posy = 1370 },
-    { max_height = 400, posx = 870,  posy = 1370 },
-    { max_height = 400, posx = 1220, posy = 1370 },
-  })
-  -- Collage of user wallpapers
-  -- collageTag(wppath_user, fhelpers.scandir(wppath_user), {3}, {
-  --   { max_width = 800, posx = 100, posy = 100 },
-  --   { max_width = 1200, posx = 100, posy = 800 },
-  --   { max_width = 800, posx = 3740, posy = 1700, align = "bottom-right" },
-  -- })
-  -- }}}
 end)
 -- }}}
 

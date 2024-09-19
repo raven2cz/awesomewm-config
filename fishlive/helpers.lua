@@ -119,12 +119,14 @@ end
 
 -- get max screen_resolution X coordination
 function helpers.screen_res_x()
-  return io.popen("echo $(xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1)"):read("*all"):gsub("%s+", "")
+  --return io.popen("echo $(xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1)"):read("*all"):gsub("%s+", "")
+  return awful.screen.focused().geometry.width
 end
 
 -- get max screen_resolution Y coordination
 function helpers.screen_res_y()
-  return io.popen("echo $(xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2)"):read("*all"):gsub("%s+", "")
+  --return io.popen("echo $(xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2)"):read("*all"):gsub("%s+", "")
+  return awful.screen.focused().geometry.height
 end
 
 -- }}}
@@ -683,7 +685,7 @@ function helpers.hover_pointer(widget)
         local w = mouse.current_wibox
         old_cursor, old_wibox = w.cursor, w
         w.cursor = "hand2"
-        widget:get_children_by_id("custom_icon")[1].font = beautiful.icon_font.."31"
+        widget:get_children_by_id("custom_icon")[1].font = beautiful.icon_font.."29"
     end)
     widget:connect_signal("mouse::leave", function()
         if old_wibox then

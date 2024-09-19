@@ -12,16 +12,19 @@ local gears = require("gears")
 local wibox = require("wibox")
 local surface = require("gears.surface")
 local helpers = require("fishlive.helpers")
+local capi = {
+  screen = screen
+}
 
 -- fishlive collage submodule
 -- fishlive.collage
 local collage = { _NAME = "fishlive.collage" }
 
-function collage.align(align, posx, posy, imgwidth, imgheight)
+function collage.align(align, posx, posy, imgwidth, imgheight, screen)
   if align == "top-left" then uposx = posx; uposy = posy
   elseif align == "top-right" then uposx = posx - imgwidth; uposy = posy
-  elseif align == "bottom-left" then uposx = posx + imgwidth; uposy = posy - imgheight
-  elseif align == "bottom-right" then uposx = posx - imgwidth; uposy = posy - imgheight
+  elseif align == "bottom-left" then uposx = screen.geometry.width - posx + imgwidth; uposy = screen.geometry.height - posy - imgheight
+  elseif align == "bottom-right" then uposx = screen.geometry.width - posx - imgwidth; uposy = screen.geometry.height - posy - imgheight
   end
   return uposx, uposy
 end
@@ -68,22 +71,25 @@ function collage.calcShadow(imgwidth, imgheight, uposx, uposy)
   return width, height, x, y
 end
 
-function collage.placeCollageImage(reqimgwidth, reqimgheight, posx, posy, align, imgsrcs, imgidx, ontop)
+function collage.placeCollageImage(s, reqimgwidth, reqimgheight, posx, posy, align, imgsrcs, imgidx, ontop)
   local homeDir = os.getenv("HOME")
   local shadowsrc = homeDir .. "/.config/awesome/fishlive/collage/shadow.png"
   local imgsrc = imgsrcs[imgidx]
 
   local imgwidth, imgheight, imgratio = collage.calcImageRes(imgsrc, reqimgwidth, reqimgheight)
-  local uposx, uposy = collage.align(align, posx, posy, imgwidth, imgheight)
+  local uposx, uposy = collage.align(align, posx, posy, imgwidth, imgheight, s)
   local shwWidth, shwHeight, shwX, shwY = collage.calcShadow(imgwidth, imgheight, uposx, uposy)
   local ontop = ontop or false and true
 
+  local geom = s.geometry
+
   local imgboxShw = wibox({
+      screen = s,
       type = "desktop",
       width = shwWidth,
       height = shwHeight,
-      x = shwX,
-      y = shwY,
+      x = geom.x + shwX,
+      y = geom.y + shwY,
       visible = true,
       ontop = ontop,
       opacity = 1.00,
@@ -103,10 +109,11 @@ function collage.placeCollageImage(reqimgwidth, reqimgheight, posx, posy, align,
       }
   }
   local imgbox = wibox({
+      screen = s,
       type = "desktop",
       width = imgwidth,
       height = imgheight,
-      x = uposx,
+      x = geom.x + uposx,
       y = uposy,
       visible = true,
       ontop = ontop,
@@ -143,10 +150,11 @@ function collage.placeCollageImage(reqimgwidth, reqimgheight, posx, posy, align,
       if imgidx > #imgsrcs then imgidx = 1 end
       imgsrc = imgsrcs[imgidx]
       imgwidth, imgheight, imgratio = collage.calcImageRes(imgsrc, reqimgwidth, reqimgheight)
-      uposx, uposy = collage.align(align, posx, posy, imgwidth, imgheight)
+      uposx, uposy = collage.align(align, posx, posy, imgwidth, imgheight, s)
       shwWidth, shwHeight, shwX, shwY = collage.calcShadow(imgwidth, imgheight, uposx, uposy)
 
-      imgboxShw.x = shwX
+      imgboxShw.screen = s
+      imgboxShw.x = geom.x + shwX
       imgboxShw.y = shwY
       imgboxShw.width = shwWidth
       imgboxShw.height = shwHeight
@@ -156,9 +164,10 @@ function collage.placeCollageImage(reqimgwidth, reqimgheight, posx, posy, align,
       shwWibox.forced_height = shwHeight
       shwWibox.horizontal_fit_policy = "fit"
       shwWibox.vertical_fit_policy = "fit"
+      self.screen = s
       self.width = imgwidth
       self.height = imgheight
-      self.x = uposx
+      self.x = geom.x + uposx
       self.y = uposy
       self:get_children_by_id("img")[1].image = gears.surface.load_uncached(imgsrc)
   end)
@@ -166,20 +175,31 @@ function collage.placeCollageImage(reqimgwidth, reqimgheight, posx, posy, align,
   return { image = imgbox, shadow = imgboxShw }
 end
 
+-- function for search and find tag according to bidx or index
+local function find_tag_by_ids(id)
+  for scr in capi.screen do
+      -- check if bidx is used bidx (for shared tags)
+      local use_bidx = scr.tags[1] and scr.tags[1].bidx ~= nil
+
+      for _, tag in ipairs(scr.tags) do
+              if (use_bidx and tag.bidx == id) or (not use_bidx and scr.tags[id]) then
+                  return tag, scr  -- return found tag and its screen
+              end
+      end
+  end
+  return nil
+end
+
 -- Tag Collage Changer
 function collage.registerTagCollage(t)
-  local screen = t.screen
   local collage_template = t.collage_template
   local imgsources = t.imgsources
   local tagids = t.tagids
   local imgboxes = nil
 
-  -- For each screen
-  for scr in screen do
-    -- Go over each tag
-    for t = 1,#tagids do
-      local tag = scr.tags[tagids[t]]
-      if tag == nil then goto continue end
+  for t = 1,#tagids do
+    local tag = find_tag_by_ids(tagids[t])
+    if tag then
       tag:connect_signal("property::selected", function (tag)
         -- if not selected, hide collage
         if not tag.selected and imgboxes ~= nil then
@@ -196,6 +216,7 @@ function collage.registerTagCollage(t)
           imgboxes = {}
           for i = 1,#collage_template do
             imgboxes[i] = collage.placeCollageImage(
+              tag.screen,
               collage_template[i].max_width or -1,
               collage_template[i].max_height or -1,
               collage_template[i].posx or 0,
@@ -215,7 +236,6 @@ function collage.registerTagCollage(t)
           end
         end
       end)
-      ::continue::
     end
   end
 end

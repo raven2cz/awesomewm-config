@@ -8,6 +8,9 @@
 -- awesome_mode: api-level=4:screen=on
 -- If LuaRocks is installed, make sure that packages installed through it are
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
+
+--TODO:
+-- sharedtags: find listener for wallpaper update if the tag is moved to another screen. If tag is selected, notify is not sent.
 pcall(require, "luarocks.loader")
 
 -- Standard awesome library
@@ -33,10 +36,12 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 local treetile = require("treetile")
 -- local treetileBindings = require("treetile.bindings")
 local machi = require("layout-machi")
--- switching windows in the actual layout
---local machina = require("machina")()
 -- cycle focus clients
 local cyclefocus = require("cyclefocus")
+-- active corners feature
+local active_corners = require("fishlive.active_corners")
+-- Component UI Factory FRM
+local factory = require("fishlive.widget.factory")
 
 -- classes and services
 local dpi = require("beautiful.xresources").apply_dpi
@@ -64,6 +69,8 @@ naughty.connect_signal("request::display_error", function(message, startup)
     }
 end)
 -- }}}
+
+awesome.register_xproperty("MANUAL", "number");
 
 -- This is used later as the default terminal and editor to run.
 terminal               = config.user.terminal --"kitty" --"urxvt"
@@ -144,15 +151,33 @@ local main_menu = require("fishlive.widget.mebox.menu.main")
 -- Nice titlebars
 fishlive.plugins.createTitlebarsNiceLib()
 
--- Dashboard Component
-local dashboard
+-- Exit Screen Component Registry
+require("fishlive.widget.exit_screen")()
+
+-- Dashboard Component Registry
 if config.dashboard_enabled then
-    dashboard = require("fishlive.widget.dashboard")()
+    require("fishlive.widget.dashboard")()
+end
+
+-- Collage Component Registry
+if config.collage_enabled then
+    factory.collage(beautiful.dsconfig)
 end
 
 -- Notification Center
 local popup = require("notifs.notif-center.notif_popup")
--- }}}
+
+-- Active Corners
+if config.active_corners_enabled then
+    active_corners.init(awful.screen.focused(), { -- for main monitor only
+        br = function() awesome.emit_signal("dashboard::toggle") end, -- bottom_right corner
+    })
+end
+
+-- Desktop icons
+if config.desktop_enabled then
+    require("fishlive.widget.desktop").add_icons({ screen = awful.screen.focused() })
+end
 
 -- {{{ Mouse bindings
 awful.mouse.append_global_mousebindings({
@@ -213,79 +238,79 @@ awful.keyboard.append_global_keybindings({
 
     -- resize clients with arrows
     awful.key({ modkey, altkey }, "Right", function()
-        local c = client.focus
-        if awful.layout.get(c.screen).name ~= "treetile" then
-            awful.tag.incmwfact(0.05)
-        else
-            treetile.resize_horizontal(0.1)
-            -- increase or decrease by percentage of current width or height,
-            -- the value can be from 0.01 to 0.99, negative or postive
-        end
+            local c = client.focus
+            if awful.layout.get(c.screen).name ~= "treetile" then
+                awful.tag.incmwfact(0.05)
+            else
+                treetile.resize_horizontal(0.1)
+                -- increase or decrease by percentage of current width or height,
+                -- the value can be from 0.01 to 0.99, negative or postive
+            end
         end,
         { description = "layout.extends right", group = "layout" }),
     awful.key({ modkey, altkey }, "Left", function()
-        local c = client.focus
-        if awful.layout.get(c.screen).name ~= "treetile" then
-            awful.tag.incmwfact(-0.05)
-        else
-            treetile.resize_horizontal(-0.1)
-            -- increase or decrease by percentage of current width or height,
-            -- the value can be from 0.01 to 0.99, negative or postive
-        end
+            local c = client.focus
+            if awful.layout.get(c.screen).name ~= "treetile" then
+                awful.tag.incmwfact(-0.05)
+            else
+                treetile.resize_horizontal(-0.1)
+                -- increase or decrease by percentage of current width or height,
+                -- the value can be from 0.01 to 0.99, negative or postive
+            end
         end,
         { description = "layout.extends left", group = "layout" }),
     awful.key({ modkey, altkey }, "Up", function()
-        local c = client.focus
-        if awful.layout.get(c.screen).name ~= "treetile" then
-            awful.tag.incmwfact(0.05)
-        else
-            treetile.resize_vertical(-0.1)
-        end
+            local c = client.focus
+            if awful.layout.get(c.screen).name ~= "treetile" then
+                awful.tag.incmwfact(0.05)
+            else
+                treetile.resize_vertical(-0.1)
+            end
         end,
         { description = "layout.extends up", group = "layout" }),
     awful.key({ modkey, altkey }, "Down", function()
-        local c = client.focus
-        if awful.layout.get(c.screen).name ~= "treetile" then
-            awful.tag.incmwfact(-0.05)
-        else
-            treetile.resize_vertical(0.1)
-        end
+            local c = client.focus
+            if awful.layout.get(c.screen).name ~= "treetile" then
+                awful.tag.incmwfact(-0.05)
+            else
+                treetile.resize_vertical(0.1)
+            end
         end,
         { description = "layout.extends down", group = "layout" }),
 
     -- swap client with arrows
     awful.key({ modkey, "Shift" }, "Right", function()
-          awful.client.swap.byidx(1)
+            awful.client.swap.byidx(1)
         end,
         { description = "layout.client.swap right", group = "layout" }),
     awful.key({ modkey, "Shift" }, "Left", function()
-          awful.client.swap.byidx(-1)
+            awful.client.swap.byidx(-1)
         end,
         { description = "layout.client.swap left", group = "layout" }),
     awful.key({ modkey, "Shift" }, "Up", function()
-          awful.client.swap.byidx(1)
+            awful.client.swap.byidx(1)
         end,
         { description = "layout.client.swap up", group = "layout" }),
     awful.key({ modkey, "Shift" }, "Down", function()
-          awful.client.swap.byidx(-1)
+            awful.client.swap.byidx(-1)
         end,
         { description = "layout.client.swap down", group = "layout" }),
 
     -- focus client with arrows
     awful.key({ modkey, ctrlkey }, "Right", function()
-          awful.client.focus.bydirection("right")
+            awful.client.focus.bydirection("right")
         end,
         { description = "layout.client.focus right", group = "layout" }),
     awful.key({ modkey, ctrlkey }, "Left", function()
-          awful.client.focus.bydirection("left")
+            awful.client.focus.bydirection("left")
         end,
         { description = "layout.client.focus left", group = "layout" }),
     awful.key({ modkey, ctrlkey }, "Up", function()
-          awful.client.focus.bydirection("up")
+            awful.client.focus.bydirection("up")
         end,
         { description = "layout.client.focus up", group = "layout" }),
     awful.key({ modkey, ctrlkey }, "Down", function()
-          awful.client.focus.bydirection("down")
+            awful.client.focus.bydirection("down")
         end,
         { description = "layout.client.focus down", group = "layout" }),
 
@@ -293,25 +318,25 @@ awful.keyboard.append_global_keybindings({
 
     -- Print Screen
     awful.key({}, "Print", function()
-          awful.spawn("flameshot gui")
+            awful.spawn("flameshot gui")
         end,
         { description = "Make screenshot by flameshot", group = "awesome" }),
 
     -- Language Translation Support
     awful.key({ modkey, ctrlkey }, "t", function()
-          awful.util.spawn("notify-trans cs", false)
+            awful.util.spawn("notify-trans cs", false)
         end,
         { description = "translate to Czech", group = "awesome" }),
 
     -- Language Translation Support
     awful.key({ modkey, ctrlkey, "Shift" }, "t", function()
-          awful.util.spawn("notify-trans en tts", false)
+            awful.util.spawn("notify-trans en tts", false)
         end,
         { description = "translate to English TTS", group = "awesome" }),
 
     -- Language Translation Support
     awful.key({ modkey, altkey }, "t", function()
-          awful.util.spawn("notify-trans cs tts", false)
+            awful.util.spawn("notify-trans cs tts", false)
         end,
         { description = "translate to Czech TTS", group = "awesome" }),
 
@@ -370,7 +395,7 @@ awful.keyboard.append_global_keybindings({
         { description = "show help", group = "awesome" }),
     awful.key({ modkey }, "w", function() main_menu:toggle(nil, { source = "mouse" }) end,
         { description = "show main menu", group = "awesome" }),
-    awful.key({ modkey }, "q", function() fishlive.widget.exit_screen() end,
+    awful.key({ modkey }, "q", function() awesome.emit_signal("exit_screen::toggle") end,
         { description = "exit screen", group = "awesome" }),
     awful.key({ modkey }, "c", function() beautiful.menu_colorschemes_create():toggle() end,
         { description = "show colorschemes menu", group = "awesome" }),
@@ -385,12 +410,12 @@ awful.keyboard.append_global_keybindings({
     awful.key({ modkey, "Shift" }, "q", awesome.quit,
         { description = "quit awesome", group = "awesome" }),
     awful.key({ modkey, ctrlkey }, "x", function()
-        awful.prompt.run {
-            prompt       = "Run Lua code: ",
-            textbox      = awful.screen.focused().mypromptbox.widget,
-            exe_callback = awful.util.eval,
-            history_path = awful.util.get_cache_dir() .. "/history_eval"
-        }
+            awful.prompt.run {
+                prompt       = "Run Lua code: ",
+                textbox      = awful.screen.focused().mypromptbox.widget,
+                exe_callback = awful.util.eval,
+                history_path = awful.util.get_cache_dir() .. "/history_eval"
+            }
         end,
         { description = "lua execute prompt", group = "awesome" }),
     awful.key({ modkey }, "Return", function() awful.spawn(terminal) end,
@@ -433,12 +458,12 @@ awful.keyboard.append_global_keybindings({
     awful.key({ modkey, ctrlkey }, "k", function() awful.screen.focus_relative(-1) end,
         { description = "focus the previous screen", group = "screen" }),
     awful.key({ modkey, ctrlkey }, "n", function()
-              local c = awful.client.restore()
-              -- Focus restored client
-              if c then
+            local c = awful.client.restore()
+            -- Focus restored client
+            if c then
                 c:activate { raise = true, context = "key.unminimize" }
-              end
-          end,
+            end
+        end,
         { description = "restore minimized", group = "client" }),
 })
 
@@ -504,11 +529,19 @@ client.connect_signal("request::default_mousebindings", function()
             c:activate { context = "mouse_click" }
         end),
         awful.button({ modkey }, 1, function(c)
-            c:activate { context = "mouse_click", action = "mouse_move" }
-        end),
+                c:activate { context = "mouse_click", action = "mouse_move" }
+                c:set_xproperty("MANUAL", 1)
+            end,
+            function(c)
+                c:set_xproperty("MANUAL", 0)
+            end),
         awful.button({ modkey }, 3, function(c)
-            c:activate { context = "mouse_click", action = "mouse_resize" }
-        end),
+                c:activate { context = "mouse_click", action = "mouse_resize" }
+                c:set_xproperty("MANUAL", 1)
+            end,
+            function(c)
+                c:set_xproperty("MANUAL", 0)
+            end),
     })
 end)
 
@@ -549,7 +582,7 @@ end)
 
 client.connect_signal("request::default_keybindings", function()
     awful.keyboard.append_client_keybindings({
-       -- Store debug information
+        -- Store debug information
         awful.key({ modkey, "Shift" }, "d", function(c)
                 --naughty.notify {
                 --    text = fishlive.helpers.screen_res_y()
@@ -601,19 +634,19 @@ end)
 
 -- Steam bug with window outside of the screen
 client.connect_signal("property::position", function(c)
-     if c.class == 'Steam' then
-         local g = c.screen.geometry
-         if c.y + c.height > g.height then
-             c.y = g.height - c.height
+    if c.class == 'Steam' then
+        local g = c.screen.geometry
+        if c.y + c.height > g.height then
+            c.y = g.height - c.height
             naughty.notify {
-                 text = "restricted window: " .. c.name,
-             }
-         end
-         if c.x + c.width > g.width then
-             c.x = g.width - c.width
-         end
-     end
- end)
+                text = "restricted window: " .. c.name,
+            }
+        end
+        if c.x + c.width > g.width then
+            c.x = g.width - c.width
+        end
+    end
+end)
 -- }}}
 
 -- {{{ Rules
@@ -758,23 +791,23 @@ end)
 
 -- Function to set icon by advanced business logic
 local set_client_icon = function(c)
-	local icon = menubar.utils.lookup_icon(c.instance)
+    local icon = menubar.utils.lookup_icon(c.instance)
     local lower_icon = menubar.utils.lookup_icon(c.instance:lower())
     --Check if the icon exists
     if icon ~= nil then
-		local new_icon = gears.surface(icon)
+        local new_icon = gears.surface(icon)
         c.icon = new_icon._native
 
-    --Check if the icon exists in the lowercase variety
+        --Check if the icon exists in the lowercase variety
     elseif lower_icon ~= nil then
         local new_icon = gears.surface(lower_icon)
         c.icon = new_icon._native
 
-    --Check if the client already has an icon. If not, give it a default.
+        --Check if the client already has an icon. If not, give it a default.
     elseif c.icon == nil then
         local new_icon = gears.surface(menubar.utils.lookup_icon("application-default-icon"))
-		c.icon = new_icon._native
-	end
+        c.icon = new_icon._native
+    end
 end
 
 client.connect_signal("manage", function(c)

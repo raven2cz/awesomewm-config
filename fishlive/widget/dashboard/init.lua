@@ -47,15 +47,18 @@ local function dashboard()
     local terminal = require("fishlive.widget.dashboard.terminal")
     local collage = require("fishlive.widget.dashboard.collage")
 
+    local s = awful.screen.focused()
+    local geom = s.geometry
+
     local dashboard = wibox({
         visible = false,
         ontop = true,
         type = "dock",
-        screen = screen.focused,
-        x = 0,
-        y = beautiful.bar_height,
-        width = awful.screen.focused().geometry.width,
-        height = awful.screen.focused().geometry.height - beautiful.bar_height,
+        screen = s,
+        x = geom.x,
+        y = geom.y + beautiful.bar_height,
+        width = geom.width,
+        height = geom.height - beautiful.bar_height,
         bg = beautiful.base01 .. "cf"
     })
 
