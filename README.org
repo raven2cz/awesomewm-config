@@ -1,92 +1,75 @@
-#+AUTHOR: Antonin Fischer (raven2cz)
-#+DESCRIPTION: raven2cz's personal AwesomeWM config.
+# Raven2cz's AwesomeWM Config
 
-#+BEGIN_EXAMPLE
-██████╗  █████╗ ██╗   ██╗███████╗███╗   ██╗  Antonin Fischer (raven2cz)
-██╔══██╗██╔══██╗██║   ██║██╔════╝████╗  ██║  https://fishlive.org/
-██████╔╝███████║██║   ██║█████╗  ██╔██╗ ██║  https://arch-linux.cz/
-██╔══██╗██╔══██║╚██╗ ██╔╝██╔══╝  ██║╚██╗██║  https://github.com/raven2cz
-██║  ██║██║  ██║ ╚████╔╝ ███████╗██║ ╚████║
-╚═╝  ╚═╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═══╝
-#+END_EXAMPLE
+![AwesomeWM Logo](https://upload.wikimedia.org/wikipedia/commons/0/07/Awesome_logo.svg)
 
-#+HTML:<div align=center>
+[![AwesomeWM-git](https://img.shields.io/badge/AwesomeWM-git-blue.svg?logo=lua)](https://github.com/awesomeWM/awesome) [![License-MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-* Raven2cz's AwesomeWM Config
+Welcome to my AwesomeWM configuration files! This repository is a Git subtree mapped to the [raven2cz/dotfiles](https://github.com/raven2cz/dotfiles) project.
 
-[[https://github.com/awesomeWM/awesome][file:https://img.shields.io/badge/AwesomeWM-git-blue.svg?logo=lua]] [[LICENSE][https://img.shields.io/badge/License-MIT-yellow.svg]]
+AwesomeWM is a highly configurable, next-generation framework window manager for X. It is very fast, extensible, and licensed under the **GNU GPLv2** license. It is primarily targeted at power users, developers, and any people dealing with everyday computing tasks who want to have fine-grained control over their graphical environment.
 
-#+HTML:</div>
+## Table of Contents
 
-#+HTML:<a href="https://awesomewm.org/"><img alt="AwesomeWM Logo" height="160" align = "left" src="https://upload.wikimedia.org/wikipedia/commons/0/07/Awesome_logo.svg"></a>
+- [Themes Configuration](#themes-configuration)
+  - [Multicolor Theme](#multicolor-theme)
+  - [80s OneDark Theme](#80s-onedark-theme)
+  - [Amazing Theme](#amazing-theme)
+- [Guide and Installation](#guide-and-installation)
+- [Dependencies](#dependencies)
+- [Features](#features)
+- [New Features](#new-features)
+- [Dashboard Component](#dashboard-component)
+  - [Dashboard Dependencies](#dashboard-dependencies)
+- [Keybindings Overview](#keybindings-overview)
+- [Screenshots](#screenshots)
+  - [Multicolor Theme](#multicolor-theme-screenshots)
+  - [80s OneDark Theme](#80s-onedark-theme-screenshots)
+  - [Amazing Theme](#amazing-theme-screenshots)
+- [Videos](#videos)
 
-Welcome to my AwesomeWM configuration files! My system is managed by Git Subtrees; this github repository is git subtree which is mapped to the [[https://github.com/raven2cz/dotfiles][raven2cz/dotfiles]] project.
+## Themes Configuration
 
-AwesomeWM is a highly configurable by LUA, next generation framework window manager for X. It is very fast, extensible and licensed under the ~GNU GPLv2~ license.
+AwesomeWM [git-master] configuration with new **Multicolor Theme**, **80s OneDark Theme**, and **Amazing Theme**.
 
-It is primarily targeted at power users, developers and any people dealing with every day computing tasks and who wants to have fine-grained control on their graphical environment.
+### Multicolor Theme
 
-* AwesomeWM Trailer
-[[https://youtu.be/4KKdbwZ8GQ4][images/awesome-trailer.jpg]]
+The Multicolor Theme brings 15 of the best color schemes today! It includes 13 dark and soft themes and 2 light themes. You can find schemes like `nord`, `doom_one`, `tomorrow_night`, `palenight`, `dracula`, `dark one`, etc. The system binds together special Lua scripts that change additional applications together: `kitty`, `alacritty`, and more planned. In the `public-wallpaper` packages, there are 50 prepared wallpapers dependent on the selected color scheme. An important change is notification support with portraits matching the appropriate color scheme and image collages.
 
-* Dashboard Component Trailer
-[[https://youtu.be/9BOGT9Ufbe0][images/awesomewm-dashboard.jpg]]
+All color schemes are applied on-the-fly without restarting the session; you just select the appropriate color scheme, and the entire WM, wallpapers, and other apps are changed. Wallpapers can be swapped for the appropriate color scheme by `super+alt+C` forward, `super+ctrl+C` backward, and the color scheme table is shown by `super+c`.
 
-* TABLE OF CONTENTS :toc:
-- [[#raven2czs-awesomewm-config][Raven2cz's AwesomeWM Config]]
-- [[#awesomewm-trailer][AwesomeWM Trailer]]
-- [[#dashboard-component-trailer][Dashboard Component Trailer]]
-- [[#awesomewm-themes-configuration][AwesomeWM Themes Configuration]]
-  - [[#multicolor-theme][Multicolor Theme]]
-  - [[#80s-onedark-theme][80s OneDark Theme]]
-  - [[#amazing-theme][Amazing Theme]]
-- [[#guide-and-installation][Guide and Installation]]
-- [[#dependencies][Dependencies]]
-- [[#features][Features]]
-- [[#dashboard-component][Dashboard Component]]
-  - [[#dashboard-dependencies][Dashboard dependencies]]
-- [[#keybindings-overview][Keybindings Overview]]
-- [[#multicolor-theme-screenshot][Multicolor Theme Screenshot]]
-- [[#80s-onedark-theme-screenshots][80s OneDark Theme Screenshots]]
-- [[#amazing-theme-screenshots][Amazing Theme Screenshots]]
-- [[#videos---see-awesomewm-in-action][Videos - see AwesomeWM in action]]
+Tiling and Tab window support. Introduction is provided by YouTube video series and trailers; see links at the bottom of this article.
 
-* AwesomeWM Themes Configuration
-AwesomeWM [git-master] configuration with new *Multicolor Theme*, *80s DarkOne Theme* and *Amazing Theme*.
+### 80s OneDark Theme
 
-** Multicolor Theme
-The multicolor theme brings 15 best colorschemes today! 13 dark and soft, 2 light themes. You can find here ~nord~, ~doom_one~, ~tomorrow_night~, ~palenight~, ~dracula~, ~dark one~ etc. The system binds together special lua script which change the additional applications together: ~kitty~, ~alacritty~ (and planned next). In the ~public-wallpaper~ packages are downloaded prepared 50 wallpapers depended on the selected color scheme. Last important change is notification support with portraits with appropriate color scheme and image collages too.
+This theme focuses on Atom colors and 80s pastel color schemes. It includes a new complex configuration of the main panel with many features and additional modifications of conky, xmenu, rofi, and alacritty settings.
 
-All color scheme are applied on-the-fly without restart station, you just select appropriate color scheme and whole WM, wallpapers and other apps are changed. The wallpapers can be swap for appropriate color scheme by ~super+alt+C~ forward, ~super+ctrl+C~ backward and color scheme table is shown by ~super+c~.
+### Amazing Theme
 
-Tiling and Tab window support. Introduction is provided by youtube video series and trailer, see links in the bottom of this article.
+The Amazing Theme focuses on green colors with gold highlights. Application styling and additional colors are based on Nordic Colors and the KDE Nordic Theme [An arctic, north-bluish color palette](https://www.nordtheme.com/).
 
-** 80s OneDark Theme
-The theme is focused to Atom colors and 80s pastel color schemes. New complex configuration of main panel with many features and additional modifications of conky, xmenu, rofi and alacritty settings.
+## Guide and Installation
 
-** Amazing Theme
-The theme is focused to green colors with gold highlights.
-Applications styling and additional colors are based on Nordic Colors and KDE Nordic Theme [[https://www.nordtheme.com/][An arctic, north-bluish color palette]].
+AwesomeWM walkthrough and installation instructions are part of the [Tux: Linux World Series](https://www.youtube.com/user/tondafischer/playlists). The series was primarily created for the Czech community. There were several requests from other communities for translation. AwesomeWM is part of translated episodes.
 
-* Guide and Installation
-AwesomeWM walkthrough and installation instructions are part of [[https://www.youtube.com/user/tondafischer/playlists][Tux: Linux World Series]]. The series was primarily created for czech community. There were several requests from other communities for translation. AwesomeWM is part of translated episodes.
-+ [[https://www.youtube.com/user/tondafischer/playlists][YouTube Series - Tux: Linux World Series]] - Complete introduction to Arch Linux and GNU/Linux for newbies and advanced users.
-+ [[https://github.com/raven2cz/tux][Tux: Linux World Documentation]] - Documentation and guides step by step for Tux Series.
-+ [[https://youtu.be/gPJQzUnSRxI][AwesomeWM Basics]] - Fundamental installation, default themes and keybindings. Lua and main principles about AW.
-+ [[https://youtu.be/gh6h9DvUJRI][AwesomeWM Ricins 1/2]] - Advanced configuration and installation of demo project Multicolor Theme. Architecture Design and top-bottom guide.
-+ [[https://youtu.be/1dNNwsOx6hU][AwesomeWM Demo Project and Keybindings]] - The demonstration project with full demo of advanced features and ergonomic keybidnings for advanced users.
+- [YouTube Series - Tux: Linux World Series](https://www.youtube.com/user/tondafischer/playlists) - Complete introduction to Arch Linux and GNU/Linux for newbies and advanced users.
+- [Tux: Linux World Documentation](https://github.com/raven2cz/tux) - Documentation and step-by-step guides for the Tux Series.
+- [AwesomeWM Basics](https://youtu.be/gPJQzUnSRxI) - Fundamental installation, default themes, and keybindings. Lua and main principles about AW.
+- [AwesomeWM Ricins 1/2](https://youtu.be/gh6h9DvUJRI) - Advanced configuration and installation of the demo project Multicolor Theme. Architecture design and top-down guide.
+- [AwesomeWM Demo Project and Keybindings](https://youtu.be/1dNNwsOx6hU) - Demonstration project with a full demo of advanced features and ergonomic keybindings for advanced users.
 
-* Dependencies
-+ AwesomeWm git-master branch
-+ picom standard version (no blur)
-+ fonts: Hack Nerd Font, Iosevka Nerd Font, mononoki Nerd Font, TerminessTTFNerdFontMono
-+ git subtrees projects included in ~pull-git-subtrees-awesome-config.sh~ script
-+ Global-colorscheme script frpm my github repo: https://github.com/raven2cz/global-colorscheme
-+ public-wallpapers are in github repo: https://github.com/raven2cz/public-wallpapers
-+ rofi-themes in github repo: https://github.com/raven2cz/rofi-themes
+## Dependencies
 
-These dependencies are automatically checkout with this project:
-#+BEGIN_SRC bash
+- **AwesomeWM** git-master branch
+- **picom** standard version (no blur)
+- **Fonts**: Hack Nerd Font, Iosevka Nerd Font, Mononoki Nerd Font, TerminessTTF Nerd Font Mono
+- **Git subtrees projects** included in `pull-git-subtrees-awesome-config.sh` script
+- **Global-colorscheme** script from my GitHub repo: [raven2cz/global-colorscheme](https://github.com/raven2cz/global-colorscheme)
+- **Public wallpapers** are in GitHub repo: [raven2cz/public-wallpapers](https://github.com/raven2cz/public-wallpapers)
+- **Rofi themes** in GitHub repo: [raven2cz/rofi-themes](https://github.com/raven2cz/rofi-themes)
+
+These dependencies are automatically checked out with this project:
+
+```bash
 #!/bin/bash
 git subtree pull --prefix awesome-wm-widgets git@github.com:streetturtle/awesome-wm-widgets.git master --squash
 git subtree pull --prefix cyclefocus git@github.com:blueyed/awesome-cyclefocus.git master --squash
@@ -95,81 +78,103 @@ git subtree pull --prefix layout-machi git@github.com:xinhaoyuan/layout-machi.gi
 git subtree pull --prefix machina git@github.com:basaran/awesomewm-machina.git master --squash
 git subtree pull --prefix nice git@github.com:mut-ex/awesome-wm-nice.git master --squash
 git subtree pull --prefix sharedtags git@github.com:Drauthius/awesome-sharedtags.git v4.0 --squash
-#+END_SRC
+```
 
-* Features
-+ treetile layout (fixed) from branch [[https://github.com/alfunx/awesome-treetile][alfunx/awesome-treetile]] - thanks Alfunx your fixes are awesome!
-+ machi layout from orig master [[https://github.com/xinhaoyuan/layout-machi][xinhaoyuan/layout-machi]] - thanks Xinhaoyuan your layout is best!
-+ lain layouts+basic-widgets from orig master (standard usage of lain awesome project) [[https://github.com/lcpz/lain][lcpz/lain]] - standard is still good :grinning:
-+ awesome-wm-widgets from streetturtle orig master (wheater, spotify used) [[https://github.com/streetturtle/awesome-wm-widgets][streetturtle/awesome-wm-widgets]]
-+ Shell Color Scripts and MANY advices from Derek Taylor [[https://gitlab.com/dwt1/shell-color-scripts][Shell Color Scripts]] - Derek your youtube channel is awesome, thanks a lot!
-+ *my new widgets for Ryzen processors and AMD Radeons graphic cards temperatures* (add to the lain widget folder)
-+ *change wallpapers for last active tag (if more tag selected, the last id is taken)*
-+ *random selection wallpaper for N.tag* - possibility to use word "random" for each tag and use new tables with random wallpapers. It is changed by tag switch.
-+ sophisticated keybindings for extension of lain and machi layouts. *Many keybindings tricks* for quick work. See keybindings help.
-+ *configured notification center* - notifications are configured and linked. In actual case, the history is stored to the naughty_history file.
-+ *notification center component* - notification center lua component is added according to original code creator: [[https://github.com/JavaCafe01/dotfiles][JavaCafe01/dotfiles]] Your style is great. Notify center is best!
-+ *Nice Titlebars component* - Nice wonderful titlebar component with many features added. Creator: [[https://github.com/mut-ex/awesome-wm-nice][mut-ex/awesome-wm-nice]]
-+ i3lock-blur for locking and suspend session.
-+ optimized for hidpi (4k) monitors.
-+ dynamic color schemes changes (15 best color schemes supported)
-+ notification portraits
-+ user, color scheme swap wallpapers
-+ rofi-themes - support dynamic change for all implemented color schemes (see link rofi-themes in dependencies chapter)
-+ bling - supports for tab views similar as i3 tabbing support
-+ *image collage feature* - integrate image collage to each tag as part of wallpaper with dynamic toggling images
-+ *dashboard component* - complete ontop dashboard with many wiboxes: disks, news, terminal, player, controls, calendar, taskslist, etc.
-+ *mebox* - powerful menu component* - Kosorin creates very powerful menu framework. I temporary overtake his solution, waiting to his official library. Source: [[https://github.com/kosorin/awesome-rice][kosorin/awesome-rice]]
+## Features
 
-* Dashboard Component
-A dashboard component for AwesomeWM is a collection of wiboxes, which are panels that can be used to display various information and controls. These wiboxes are include:
+- **Treetile layout (fixed)** from [alfunx/awesome-treetile](https://github.com/alfunx/awesome-treetile) - Thanks Alfunx for your fixes!
+- **Machi layout** from [xinhaoyuan/layout-machi](https://github.com/xinhaoyuan/layout-machi) - Thanks Xinhaoyuan for the great layout!
+- **Lain layouts and basic widgets** from [lcpz/lain](https://github.com/lcpz/lain) - Standard is still good 😃
+- **awesome-wm-widgets** from [streetturtle/awesome-wm-widgets](https://github.com/streetturtle/awesome-wm-widgets) (weather, Spotify used)
+- **Shell Color Scripts** and many advices from Derek Taylor [Shell Color Scripts](https://gitlab.com/dwt1/shell-color-scripts) - Derek, your YouTube channel is awesome, thanks a lot!
+- **New widgets for Ryzen processors and AMD Radeon graphics cards temperatures** (added to the Lain widget folder)
+- **Change wallpapers for the last active tag** (if more tags selected, the last ID is taken)
+- **Random selection wallpaper for N.tag** - possibility to use the word "random" for each tag and use new tables with random wallpapers. It changes by tag switch.
+- Sophisticated keybindings for extension of Lain and Machi layouts. Many keybinding tricks for quick work. See keybindings help.
+- **Configured notification center** - notifications are configured and linked. In the current case, the history is stored to the `naughty_history` file.
+- **Notification center component** - notification center Lua component added according to the original code creator: [JavaCafe01/dotfiles](https://github.com/JavaCafe01/dotfiles) - Your style is great. Notify center is the best!
+- **Nice Titlebars component** - Wonderful titlebar component with many features added. Creator: [mut-ex/awesome-wm-nice](https://github.com/mut-ex/awesome-wm-nice)
+- **i3lock-blur** for locking and suspending sessions.
+- Optimized for HiDPI (4K) monitors.
+- Dynamic color schemes changes (15 best color schemes supported)
+- Notification portraits
+- User, color scheme swap wallpapers
+- **rofi-themes** - support dynamic change for all implemented color schemes (see link to rofi-themes in the dependencies section)
+- **bling** - supports for tab views similar to i3 tabbing support
+- **Image collage feature** - integrate image collages to each tag as part of the wallpaper with dynamic toggling images
+- **Dashboard component** - complete ontop dashboard with many wiboxes: disks, news, terminal, player, controls, calendar, tasklist, etc.
+- **Mebox** - powerful menu component - Kosorin creates a very powerful menu framework. I temporarily adopted his solution, waiting for his official library. Source: [kosorin/awesome-rice](https://github.com/kosorin/awesome-rice)
 
-- A time wibox, which could display the current time in a digital format. This wibox could also include a clock widget, which could be configured to display the time in various formats, switching between minutes and second processing.
-- A calendar wibox, which could display a calendar for the current month. This wibox could also include a widget that allows users to navigate to different months and view their schedules (opened topic).
-- A controls wibox, which could include buttons or widgets for controlling various aspects of the system, such as volume, brightness, and power.
-- A player wibox, which could display the currently playing song and provide controls for playing, pausing, and skipping songs.
-- A tasklist wibox, which could display a list of currently running applications and allow users to switch between them, add favourites applications and icons.
-- A terminal wibox, which could include a terminal emulator that allows users to interact with the command line and chat-gpt.
-- A news wibox, to show actual news. Actual implementation shows just fortune news.
-- A collage wibox, beautiful preview of images in defined folder, theme folder, selected folder.
-- Right panel wibox for exit control commands.
-- And many others.
+## New Display Sessions and Component Framework Features
 
-Each of these wiboxes could be customized with different colors, fonts, and layouts, fully supports *Multicolor Theme Changes*, to create a cohesive and visually pleasing dashboard. Additionally, the dashboard component could also include the ability to toggle the visibility of the some wiboxes. Support for HiDPI resolutions.
+- **Complete integration of multi-monitor support** based on `awesomewm-sharedtags`. All components of this project now support dynamic layout settings and different monitor resolutions.
+- **Robust support for portrait layouts** in multi-monitor setups, accommodating monitors rotated by 90 degrees, which require different AwesomeWM layouts, wallpapers, collage arrangements, etc. This allows for completely separate configuration of portrait wallpapers for tags displayed in portrait mode.
+- **Automatic switching between Full HD and HiDPI modes**; the number and usage of components on the top panel adapt accordingly.
+- **Introduction of a simple yet effective component framework** that supports dynamic creation of components based on defined scopes, such as theme changes or multi-monitor setups. Simply include your component in the framework, and the factory method will handle the configuration and prepare the correct instance for immediate use where needed.
+- **Rewriting of major graphical components** to leverage the new component framework, significantly simplifying and generalizing the code. Strong support for multi-monitor setups and theme changes has been added.
+- **New controls for multi-monitor configurations** have been added. Collages and Tag Wallpapers have been improved. New display capabilities for the Dashboard and Exit Screen.
+- **Addition of the main control script `dotfiles/bin/display-config-switcher`**, in addition to modifications in `raven2cz/awesomewm-config`. This script allows easy definition of desired display layouts, which the AwesomeWM project can recognize. This makes it simple to set up "display sessions" for all your desktops and laptops and switch between them according to your current preferences, even if you don't want to use a connected monitor at the moment. A variety of different options that I use daily are already defined.
 
-** Dashboard dependencies
-In default, the dashboard is activated, shortcut ~mod+z~, exit ~Esc~, or click to ~HOST/PC panel~ right-bottom corner. All user system configuration is included in a central file ~config.lua~. Feature activity is a parameter ~config.dashboard_enabled~.
-#+BEGIN_SRC bash
+## Dashboard Component
+
+A dashboard component for AwesomeWM is a collection of wiboxes, which are panels that can be used to display various information and controls. These wiboxes include:
+
+- **Time Wibox**: Displays the current time in a digital format, with options to switch between minutes and seconds processing.
+- **Calendar Wibox**: Displays a calendar for the current month, with navigation to different months and viewing schedules (upcoming feature).
+- **Controls Wibox**: Includes buttons or widgets for controlling various aspects of the system, such as volume, brightness, and power.
+- **Player Wibox**: Displays the currently playing song and provides controls for playing, pausing, and skipping songs.
+- **Tasklist Wibox**: Displays a list of currently running applications and allows users to switch between them, add favorite applications and icons.
+- **Terminal Wibox**: Includes a terminal emulator that allows users to interact with the command line and ChatGPT.
+- **News Wibox**: Shows actual news; the current implementation shows just fortune news.
+- **Collage Wibox**: Beautiful preview of images in a defined folder, theme folder, or selected folder.
+- **Right Panel Wibox**: For exit control commands.
+- **And many others**.
+
+Each of these wiboxes can be customized with different colors, fonts, and layouts, fully supporting **Multicolor Theme Changes**, to create a cohesive and visually pleasing dashboard. Additionally, the dashboard component includes the ability to toggle the visibility of some wiboxes. Support for HiDPI resolutions.
+
+### Dashboard Dependencies
+
+By default, the dashboard is activated with the shortcut `mod+z`; exit with `Esc` or click on the `HOST/PC panel` at the right-bottom corner. All user system configuration is included in a central file `config.lua`. Feature activity is a parameter `config.dashboard_enabled`.
+
+```bash
 paru -S acpi brightnessctl playerctl
-#+END_SRC
+```
 
-* Keybindings Overview
-[[images/keybinding1.png]]
-[[images/keybinding2.png]]
+## Keybindings Overview
 
-* Multicolor Theme Screenshot
-[[images/awesome-multicolor-monokai_pro.jpg]]
-[[images/awesome-multicolor-theme.jpg]]
-[[images/collage-aw-lua-travel-enjoy-job-desktop.jpg]]
+![Keybindings 1](images/keybinding1.png)
+![Keybindings 2](images/keybinding2.png)
 
-* 80s OneDark Theme Screenshots
-[[images/one-dark-80s-1.jpg]]
-[[images/one-dark-80s-2.jpg]]
+## Screenshots
 
-* Amazing Theme Screenshots
-[[images/awesome-amazing-1.jpg]]
-[[images/awesome-amazing-2.jpg]]
+### Multicolor Theme Screenshots
 
-* Videos - see AwesomeWM in action
+![Multicolor Theme 1](images/awesome-multicolor-monokai_pro.jpg)
+![Multicolor Theme 2](images/awesome-multicolor-theme.jpg)
+![Collage Desktop](images/collage-aw-lua-travel-enjoy-job-desktop.jpg)
 
-[[https://youtu.be/-Fo7mB6_Wtg][http://i3.ytimg.com/vi/-Fo7mB6_Wtg/hqdefault.jpg]]
+### 80s OneDark Theme Screenshots
 
-[[https://youtu.be/1nyB85CiJUc][http://i3.ytimg.com/vi/1nyB85CiJUc/hqdefault.jpg]]
+![80s OneDark Theme 1](images/one-dark-80s-1.jpg)
+![80s OneDark Theme 2](images/one-dark-80s-2.jpg)
 
-[[https://youtu.be/SNJOeR7mxCI][https://i3.ytimg.com/vi/SNJOeR7mxCI/maxresdefault.jpg]]
+### Amazing Theme Screenshots
 
-[[https://youtu.be/QgjHP6Ju56k][https://i3.ytimg.com/vi/QgjHP6Ju56k/maxresdefault.jpg]]
+![Amazing Theme 1](images/awesome-amazing-1.jpg)
+![Amazing Theme 2](images/awesome-amazing-2.jpg)
 
-[[https://www.youtube.com/watch?v=YwvnJqN5s90][https://img.youtube.com/vi/YwvnJqN5s90/0.jpg]]
+## Videos
 
-[[https://youtu.be/Z0muY_lfFZU][images/youtube-machi-layout-hidden-feature.jpg]]
+See AwesomeWM in action:
+
+[![AwesomeWM Trailer](http://i3.ytimg.com/vi/-Fo7mB6_Wtg/hqdefault.jpg)](https://youtu.be/-Fo7mB6_Wtg)
+
+[![Video 2](http://i3.ytimg.com/vi/1nyB85CiJUc/hqdefault.jpg)](https://youtu.be/1nyB85CiJUc)
+
+[![Video 3](https://i3.ytimg.com/vi/SNJOeR7mxCI/maxresdefault.jpg)](https://youtu.be/SNJOeR7mxCI)
+
+[![Video 4](https://i3.ytimg.com/vi/QgjHP6Ju56k/maxresdefault.jpg)](https://youtu.be/QgjHP6Ju56k)
+
+[![Video 5](https://img.youtube.com/vi/YwvnJqN5s90/0.jpg)](https://www.youtube.com/watch?v=YwvnJqN5s90)
+
+[![Video 6](images/youtube-machi-layout-hidden-feature.jpg)](https://youtu.be/Z0muY_lfFZU)
