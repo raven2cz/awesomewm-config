@@ -129,6 +129,7 @@ git subtree pull --prefix sharedtags git@github.com:Drauthius/awesome-sharedtags
 - **Rewriting of major graphical components** to leverage the new component framework, significantly simplifying and generalizing the code. Strong support for multi-monitor setups and theme changes has been added.
 - **New controls for multi-monitor configurations** have been added. Collages and Tag Wallpapers have been improved. New display capabilities for the Dashboard and Exit Screen.
 - **Addition of the main control script `dotfiles/bin/display-config-switcher`**, in addition to modifications in `raven2cz/awesomewm-config`. This script allows easy definition of desired display layouts, which the AwesomeWM project can recognize. This makes it simple to set up "display sessions" for all your desktops and laptops and switch between them according to your current preferences, even if you don't want to use a connected monitor at the moment. A variety of different options that I use daily are already defined.
+- **Picom-git origin**: Enhanced support for new animations designed to avoid slowing down the computer while providing visual cues in situations where it might not be clear which window has changed or been maximized. The animations improve user orientation without impacting performance. This involves a completely new configuration in `dotfiles/.config/picom`, which must be integrated with settings in the AwesomeWM project to ensure proper cooperation.
 
 ## Dashboard Component
 
