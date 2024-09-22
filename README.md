@@ -4,9 +4,24 @@
 
 [![AwesomeWM-git](https://img.shields.io/badge/AwesomeWM-git-blue.svg?logo=lua)](https://github.com/awesomeWM/awesome) [![License-MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+```
+██████╗  █████╗ ██╗   ██╗███████╗███╗   ██╗  Antonin Fischer (raven2cz)
+██╔══██╗██╔══██╗██║   ██║██╔════╝████╗  ██║  https://fishlive.org/
+██████╔╝███████║██║   ██║█████╗  ██╔██╗ ██║  https://arch-linux.cz/
+██╔══██╗██╔══██║╚██╗ ██╔╝██╔══╝  ██║╚██╗██║  https://github.com/raven2cz
+██║  ██║██║  ██║ ╚████╔╝ ███████╗██║ ╚████║
+╚═╝  ╚═╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═══╝
+```
+
 Welcome to my AwesomeWM configuration files! This repository is a Git subtree mapped to the [raven2cz/dotfiles](https://github.com/raven2cz/dotfiles) project.
 
 AwesomeWM is a highly configurable, next-generation framework window manager for X. It is very fast, extensible, and licensed under the **GNU GPLv2** license. It is primarily targeted at power users, developers, and any people dealing with everyday computing tasks who want to have fine-grained control over their graphical environment.
+* AwesomeWM Trailer
+[![AwesomeWM Trailer](images/awesome-trailer.jpg)](https://youtu.be/4KKdbwZ8GQ4)
+
+* Dashboard Component Trailer
+[![Dashboard Component Trailer](images/awesomewm-dashboard.jpg)](https://youtu.be/9BOGT9Ufbe0)
+
 
 ## Table of Contents
 
@@ -105,7 +120,7 @@ git subtree pull --prefix sharedtags git@github.com:Drauthius/awesome-sharedtags
 - **Dashboard component** - complete ontop dashboard with many wiboxes: disks, news, terminal, player, controls, calendar, tasklist, etc.
 - **Mebox** - powerful menu component - Kosorin creates a very powerful menu framework. I temporarily adopted his solution, waiting for his official library. Source: [kosorin/awesome-rice](https://github.com/kosorin/awesome-rice)
 
-## New Display Sessions and Component Framework Features
+## New Features
 
 - **Complete integration of multi-monitor support** based on `awesomewm-sharedtags`. All components of this project now support dynamic layout settings and different monitor resolutions.
 - **Robust support for portrait layouts** in multi-monitor setups, accommodating monitors rotated by 90 degrees, which require different AwesomeWM layouts, wallpapers, collage arrangements, etc. This allows for completely separate configuration of portrait wallpapers for tags displayed in portrait mode.
