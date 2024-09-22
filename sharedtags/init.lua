@@ -170,6 +170,9 @@ function sharedtags.movetag(tag, screen)
             end
         end
 
+        -- Emit a custom signal after the tag has been moved
+        tag:emit_signal("tag::moved", oldscreen, screen)
+
         return true
     end
 
