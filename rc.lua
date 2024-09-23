@@ -75,7 +75,7 @@ awesome.register_xproperty("MANUAL", "number");
 -- This is used later as the default terminal and editor to run.
 terminal               = config.user.terminal --"kitty" --"urxvt"
 terminal2              = config.user.terminal2nd
-editor                 = os.getenv("EDITOR") or "nvim"
+editor                 = os.getenv("EDITOR") or "lvim"
 editor_cmd             = terminal2 .. " -e " .. editor
 
 -- Default modkey.
