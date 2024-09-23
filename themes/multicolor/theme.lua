@@ -200,13 +200,13 @@ local wp_selected = {
 -- Set wallpaper for each tag - Portrait monitor layout (rotate 90°)
 local wp_portrait = {
   "00049-cat-in-flowers.jpg",
+  "00050-the-witcher-ciri.jpg",
+  "00051-guweiz-shinobi.jpg",
+  "00052-shadowheart.jpg",
   "00049-cat-in-flowers.jpg",
-  "00049-cat-in-flowers.jpg",
-  "00049-cat-in-flowers.jpg",
-  "00049-cat-in-flowers.jpg",
-  "00049-cat-in-flowers.jpg",
-  "00049-cat-in-flowers.jpg",
-  "00049-cat-in-flowers.jpg",
+  "00050-the-witcher-ciri.jpg",
+  "00051-guweiz-shinobi.jpg",
+  "00052-shadowheart.jpg",
   "00049-cat-in-flowers.jpg",
 }
 -- Feature: place random wallpaper if the wp_selected has "random" text

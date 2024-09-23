@@ -114,7 +114,7 @@ function collage.placeCollageImage(s, reqimgwidth, reqimgheight, posx, posy, ali
       width = imgwidth,
       height = imgheight,
       x = geom.x + uposx,
-      y = uposy,
+      y = geom.y + uposy,
       visible = true,
       ontop = ontop,
       opacity = 1.0,
@@ -155,7 +155,7 @@ function collage.placeCollageImage(s, reqimgwidth, reqimgheight, posx, posy, ali
 
       imgboxShw.screen = s
       imgboxShw.x = geom.x + shwX
-      imgboxShw.y = shwY
+      imgboxShw.y = geom.y + shwY
       imgboxShw.width = shwWidth
       imgboxShw.height = shwHeight
       shwWibox = imgboxShw:get_children_by_id("shadow")[1]
@@ -168,7 +168,7 @@ function collage.placeCollageImage(s, reqimgwidth, reqimgheight, posx, posy, ali
       self.width = imgwidth
       self.height = imgheight
       self.x = geom.x + uposx
-      self.y = uposy
+      self.y = geom.y + uposy
       self:get_children_by_id("img")[1].image = gears.surface.load_uncached(imgsrc)
   end)
 
