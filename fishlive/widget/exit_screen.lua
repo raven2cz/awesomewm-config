@@ -20,19 +20,21 @@ local function exit_screen()
 
     -- Get screen geometry
     local s = awful.screen.focused()
-    local screen_width = s.geometry.width
-    local screen_height = s.geometry.height
+    local geo_x = s.geometry.x
+    local geo_y = s.geometry.y
+    local geo_width = s.geometry.width
+    local geo_height = s.geometry.height
 
     -- Create the widget
     local exit_screen = wibox({
-        x = 0,
-        y = 0,
+        x = geo_x,
+        y = geo_y,
         visible = false,
         ontop = true,
         type = "dock",
         screen = s,
-        height = screen_height,
-        width = screen_width
+        height = geo_height,
+        width = geo_width
     })
     exit_screen.bg = beautiful.bg_normal .. "cc" or "#000000cc"
     exit_screen.fg = beautiful.fg_normal or "#b2b2b2"
@@ -151,13 +153,17 @@ local function exit_screen()
     exit_screen.signals_on  = function()
         -- Get new screen geometry
         s = awful.screen.focused()
-        screen_width = s.geometry.width
-        screen_height = s.geometry.height
+        geo_x = s.geometry.x
+        geo_y = s.geometry.y
+        geo_width = s.geometry.width
+        geo_height = s.geometry.height
 
         -- Update the widget
         exit_screen.screen = s
-        exit_screen.height = screen_height
-        exit_screen.width = screen_width
+        exit_screen.x = geo_x
+        exit_screen.y = geo_y
+        exit_screen.height = geo_height
+        exit_screen.width = geo_width
 
         exit_screen_grabber:start()
     end

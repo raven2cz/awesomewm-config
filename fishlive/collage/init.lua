@@ -182,7 +182,7 @@ local function find_tag_by_ids(id)
       local use_bidx = scr.tags[1] and scr.tags[1].bidx ~= nil
 
       for _, tag in ipairs(scr.tags) do
-              if (use_bidx and tag.bidx == id) or (not use_bidx and scr.tags[id]) then
+              if (use_bidx and tag.bidx == id) or (not use_bidx and tag.index == id) then
                   return tag, scr  -- return found tag and its screen
               end
       end
