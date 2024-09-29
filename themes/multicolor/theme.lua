@@ -53,6 +53,7 @@ local dsconfig = dsession.load_display_session()
 dsconfig.theme = theme
 dsconfig.theme_name = theme_name
 dsconfig.isFullhd = scr_res == "1920x1080+0+0"
+dsconfig.isLaptop = os.getenv("LAPTOP")
 theme.dsconfig = dsconfig
 -- }}}
 
@@ -405,6 +406,11 @@ local spotifyWibox = spotify_widget({
   pause_icon = '/usr/share/icons/Papirus-Dark/24x24/panel/spotify-indicator.svg'
 })
 
+-- Battery widget
+local battery = nil
+if dsconfig.isLaptop then
+  battery = battery_widget({ display_notification = true, show_current_level = true, margin_right = 10 })
+end
 -- Systray
 local systray = wibox.widget.systray()
 systray.base_size = theme.bar_height
@@ -467,12 +473,6 @@ local mylauncher = awful.widget.launcher({
 })
 -- }}}
 
--- configure just once for 1st screeen
-local onlyOnce = function(func, s)
-  if s.index == 1 then
-    func()
-  end
-end
 
 -------------------------------------
 -- DESKTOP and PANELS CONFIGURATION
@@ -544,7 +544,7 @@ capi.screen.connect_signal("request::desktop_decoration", function(s)
         separator,
         todo_widget(),
         separator,
-        battery_widget({ display_notification = true, show_current_level = true, margin_right = 10 }),
+        battery,
         systray,
         separator,
         archupdateWibox,
