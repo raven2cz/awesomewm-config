@@ -791,22 +791,32 @@ end)
 
 -- Function to set icon by advanced business logic
 local set_client_icon = function(c)
-    local icon = menubar.utils.lookup_icon(c.instance)
-    local lower_icon = menubar.utils.lookup_icon(c.instance:lower())
-    --Check if the icon exists
+    local icon = nil
+    local lower_icon = nil
+
+    -- Check if c.instance exists before calling menubar.utils.lookup_icon
+    if c.instance then
+        icon = menubar.utils.lookup_icon(c.instance)
+        lower_icon = menubar.utils.lookup_icon(c.instance:lower())
+    end
+
+    -- Check if the icon exists
     if icon ~= nil then
         local new_icon = gears.surface(icon)
         c.icon = new_icon._native
 
-        --Check if the icon exists in the lowercase variety
+    -- Check if the lowercase icon exists
     elseif lower_icon ~= nil then
         local new_icon = gears.surface(lower_icon)
         c.icon = new_icon._native
 
-        --Check if the client already has an icon. If not, give it a default.
+    -- Check if the client already has an icon. If not, give it a default
     elseif c.icon == nil then
-        local new_icon = gears.surface(menubar.utils.lookup_icon("application-default-icon"))
-        c.icon = new_icon._native
+        local default_icon = menubar.utils.lookup_icon("application-default-icon")
+        if default_icon then
+            local new_icon = gears.surface(default_icon)
+            c.icon = new_icon._native
+        end
     end
 end
 
