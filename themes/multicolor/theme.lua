@@ -354,7 +354,7 @@ theme.volume = lain.widget.alsa({
     elseif tonumber(volume_now.level) <= 25 then
       volicon:set_markup(markup.fontfg(theme.font_larger, alsaColor, ""))
     elseif tonumber(volume_now.level) <= 70 then
-      volicon:set_markup(markup.fontfg(theme.font_larger, alsaColor, "墳"))
+      volicon:set_markup(markup.fontfg(theme.font_larger, alsaColor, ""))
     else
       volicon:set_markup(markup.fontfg(theme.font_larger, alsaColor, ""))
     end
