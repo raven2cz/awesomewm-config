@@ -9,6 +9,6 @@ return signal_watch(command, interval, true, true, function(stdout, _, _, _)
 
     awesome.emit_signal(signal, {
         value = value,
-        image = ""
+        image = "󰃠"
     })
 end)

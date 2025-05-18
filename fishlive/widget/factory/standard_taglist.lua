@@ -18,7 +18,7 @@ function standard_taglist.init_environment(dsconfig)
     theme = dsconfig.theme
     tags = {
         icons = {
-            "", "", "", "", "懲", "", "󰈸", "󰇧", ""
+            "", "", "", "", "󰖌", "", "󰈸", "󰇧", ""
         },
         names = { "/main", "/w3", "/apps", "/dev", "/water", "/air", "/fire", "/earth", "/love" },
         layouts = {

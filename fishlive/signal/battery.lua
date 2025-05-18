@@ -46,34 +46,34 @@ return signal_watch(command, interval, true, true, function(stdout, _, _, _)
 
     local icon
     if charging then
-        icon = ""
+        icon = "󰂄"
     elseif (charge >= 0 and charge < 10) then
-        icon = ""
+        icon = "󰂃"
         -- if 5 minutes have elapsed since the last warning
         if os.difftime(os.time(), last_battery_check) > 300 and charge < 3 and charge > 0 then
             last_battery_check = os.time()
             naughty.notify{ text = "Battery Warning! Status is "..charge.."%" }
         end
     elseif (charge < 20) then
-        icon = ""
+        icon = "󰁺"
     elseif charge < 30 then
-        icon = ""
+        icon = "󰁻"
     elseif charge < 40 then
-        icon = ""
+        icon = "󰁼"
     elseif charge < 50 then
-        icon = ""
+        icon = "󰁽"
     elseif charge < 60 then
-        icon = ""
+        icon = "󰁾"
     elseif charge < 70 then
-        icon = ""
+        icon = "󰁿"
     elseif charge < 80 then
-        icon = ""
+        icon = "󰂀"
     elseif charge < 90 then
-        icon = ""
+        icon = "󰂁"
     elseif charge < 100 then
-        icon = ""
+        icon = "󰂂"
     else
-        icon = ""
+        icon = "󰁹"
     end
 
     awesome.emit_signal(signal, {
