@@ -274,7 +274,8 @@ theme.fs = lain.widget.fs({
   settings = function()
     local fsp = string.format(" %3.2f %s ", fs_now["/"].free, fs_now["/"].units)
     widget:set_markup(markup.fontfg(theme.font, theme.widgetbar_fg, fsp))
-  end
+  end,
+  only = {"/","/home"}
 })
 local fsWibox = wiboxBox1(fsicon, theme.fs.widget, wboxColor, theme.widgetbar_fg, 2, 3, underLineSize, wiboxMargin)
 

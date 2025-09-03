@@ -7,33 +7,70 @@
 
 --]]
 
-local helpers    = require("lain.helpers")
-local Gio        = require("lgi").Gio
-local focused    = require("awful.screen").focused
-local wibox      = require("wibox")
-local naughty    = require("naughty")
-local gears      = require("gears")
-local math       = math
-local string     = string
-local tconcat    = table.concat
-local type       = type
-local query_size = Gio.FILE_ATTRIBUTE_FILESYSTEM_SIZE
-local query_free = Gio.FILE_ATTRIBUTE_FILESYSTEM_FREE
-local query_used = Gio.FILE_ATTRIBUTE_FILESYSTEM_USED
-local query      = query_size .. "," .. query_free .. "," .. query_used
+local helpers                   = require("lain.helpers")
+local Gio                       = require("lgi").Gio
+local focused                   = require("awful.screen").focused
+local wibox                     = require("wibox")
+local naughty                   = require("naughty")
+local gears                     = require("gears")
+local math                      = math
+local string                    = string
+local tconcat                   = table.concat
+local type                      = type
+local query_size                = Gio.FILE_ATTRIBUTE_FILESYSTEM_SIZE
+local query_free                = Gio.FILE_ATTRIBUTE_FILESYSTEM_FREE
+local query_used                = Gio.FILE_ATTRIBUTE_FILESYSTEM_USED
+local query                     = query_size .. "," .. query_free .. "," .. query_used
+local unix_mount_get_fs_type    = Gio.unix_mount_get_fs_type
+local unix_mount_get_mount_path = Gio.unix_mount_get_mount_path
 
 -- File systems info
 -- lain.widget.fs
 
 local function factory(args)
-    args     = args or {}
+    args             = args or {}
+    local only       = args.only
+    local skip_types = args.skip_types or {
+        autofs = true,
+        nfs = true,
+        nfs4 = true,
+        cifs = true,
+        smbfs = true,
+        sshfs = true,
+        ["fuse.gvfsd-fuse"] = true,
+        fuse = true,
+        gvfs = true,
+        davfs = true,
+        afpfs = true
+    }
+    local function should_skip(path, fstype)
+        if only then
+            local allow = false
+            for _, p in ipairs(only) do
+                if p == path then
+                    allow = true; break
+                end
+            end
+            if not allow then return true end
+        end
+        if not fstype then return false end
+        if skip_types[fstype] then return true end
+        if path:match("^/proc") or path:match("^/sys") or path:match("^/dev") or path:match("^/run") then return true end
+        if path:match("^/run/user/.+/gvfs") or path:match("^/net") then return true end
+        return false
+    end
 
     local fs = {
         widget = args.widget or wibox.widget.textbox(),
         units = {
-            [1] = "Kb", [2] = "Mb", [3] = "Gb",
-            [4] = "Tb", [5] = "Pb", [6] = "Eb",
-            [7] = "Zb", [8] = "Yb"
+            [1] = "Kb",
+            [2] = "Mb",
+            [3] = "Gb",
+            [4] = "Tb",
+            [5] = "Pb",
+            [6] = "Eb",
+            [7] = "Zb",
+            [8] = "Yb"
         }
     }
 
@@ -54,11 +91,11 @@ local function factory(args)
         end)
     end
 
-    local timeout   = args.timeout or 600
-    local partition = args.partition
-    local threshold = args.threshold or 99
-    local showpopup = args.showpopup or "on"
-    local settings  = args.settings or function() end
+    local timeout          = args.timeout or 600
+    local partition        = args.partition
+    local threshold        = args.threshold or 99
+    local showpopup        = args.showpopup or "on"
+    local settings         = args.settings or function() end
 
     fs.followtag           = args.followtag or false
     fs.notification_preset = args.notification_preset
@@ -77,31 +114,34 @@ local function factory(args)
 
         local notifypaths = {}
         for _, mount in ipairs(Gio.unix_mounts_get()) do
-            local path = Gio.unix_mount_get_mount_path(mount)
-            local root = Gio.File.new_for_path(path)
-            local info = root:query_filesystem_info(query)
+            local path = unix_mount_get_mount_path(mount)
+            local fstype = unix_mount_get_fs_type(mount)
+            if not should_skip(path, fstype) then
+                local root = Gio.File.new_for_path(path)
+                local info = root:query_filesystem_info(query)
 
-            if info then
-                local size = info:get_attribute_uint64(query_size)
-                local used = info:get_attribute_uint64(query_used)
-                local free = info:get_attribute_uint64(query_free)
+                if info then
+                    local size = info:get_attribute_uint64(query_size)
+                    local used = info:get_attribute_uint64(query_used)
+                    local free = info:get_attribute_uint64(query_free)
 
-                if size > 0 then
-                    local units = math.floor(math.log(size)/math.log(1024))
+                    if size > 0 then
+                        local units = math.floor(math.log(size) / math.log(1024))
 
-                    fs_now[path] = {
-                        units      = fs.units[units],
-                        percentage = math.floor(100 * used / size), -- used percentage
-                        size       = size / math.pow(1024, units),
-                        used       = used / math.pow(1024, units),
-                        free       = free / math.pow(1024, units)
-                    }
+                        fs_now[path] = {
+                            units      = fs.units[units],
+                            percentage = math.floor(100 * used / size),
+                            size       = size / math.pow(1024, units),
+                            used       = used / math.pow(1024, units),
+                            free       = free / math.pow(1024, units)
+                        }
 
-                    if fs_now[path].percentage > 0 then -- don't notify unused file systems
-                        notifypaths[#notifypaths+1] = path
+                        if fs_now[path].percentage > 0 then
+                            notifypaths[#notifypaths + 1] = path
 
-                        if #path > pathlen then
-                            pathlen = #path
+                            if #path > pathlen then
+                                pathlen = #path
+                            end
                         end
                     end
                 end
@@ -128,7 +168,8 @@ local function factory(args)
         local notifytable = { [1] = string.format(fmt, "path", "used", "free", "size") }
         fmt = "\n%-" .. tostring(pathlen) .. "s %3s%%\t%6.2f\t%6.2f %s"
         for _, path in ipairs(notifypaths) do
-            notifytable[#notifytable+1] = string.format(fmt, path, fs_now[path].percentage, fs_now[path].free, fs_now[path].size, fs_now[path].units)
+            notifytable[#notifytable + 1] = string.format(fmt, path, fs_now[path].percentage, fs_now[path].free,
+                fs_now[path].size, fs_now[path].units)
         end
 
         fs.notification_preset.text = tconcat(notifytable)
@@ -144,8 +185,8 @@ local function factory(args)
     end
 
     if showpopup == "on" then
-       fs.widget:connect_signal('mouse::enter', function () fs.show(0) end)
-       fs.widget:connect_signal('mouse::leave', function () fs.hide() end)
+        fs.widget:connect_signal('mouse::enter', function() fs.show(0) end)
+        fs.widget:connect_signal('mouse::leave', function() fs.hide() end)
     end
 
     helpers.newtimer(partition or "fs", timeout, fs.update)
