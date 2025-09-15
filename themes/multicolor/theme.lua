@@ -52,7 +52,7 @@ theme.icon_path = theme.dir .. "/icons/"
 local dsconfig = dsession.load_display_session()
 dsconfig.theme = theme
 dsconfig.theme_name = theme_name
-dsconfig.isFullhd = scr_res == "1920x1080+0+0"
+dsconfig.isFullhd = scr_res == "1920x1080+0+0" or scr_res == "1920x1200+0+0"
 dsconfig.isLaptop = os.getenv("LAPTOP")
 theme.dsconfig = dsconfig
 -- }}}
